@@ -1,70 +1,71 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:gravity="center_horizontal"
-    android:background="#121212">
+package com.rathure22;
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SNIPER GOLD v19"
-        android:textColor="#FFD700"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="12dp"/>
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.app.Activity;
 
-    <TextView
-        android:id="@+id/tvStatus"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Ready - Fixed Version"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        android:gravity="center"
-        android:padding="8dp"/>
+public class MainActivity extends Activity {
+    private TextView tvStatus, tvPrice, tvProfit;
+    private int multiplier = 1;
 
-    <TextView
-        android:id="@+id/tvPrice"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Price: --"
-        android:textColor="#FFFFFF"
-        android:layout_marginTop="8dp"/>
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        try {
+            setContentView(R.layout.activity_main);
+            
+            tvStatus = findViewById(R.id.tvStatus);
+            tvPrice = findViewById(R.id.tvPrice);
+            tvProfit = findViewById(R.id.tvProfit);
+            
+            Button btnAuto = findViewById(R.id.btnAuto);
+            Button btnLock = findViewById(R.id.btnLock);
+            Button btnAlarm = findViewById(R.id.btnAlarm);
+            Button btnX2 = findViewById(R.id.btnX2);
+            Button btnX3 = findViewById(R.id.btnX3);
+            Button btnX4 = findViewById(R.id.btnX4);
+            Button btnStart = findViewById(R.id.btnStart);
 
-    <TextView
-        android:id="@+id/tvProfit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Profit: --"
-        android:textColor="#00FF00"/>
+            if(tvStatus != null) tvStatus.setText("Fixed v19 Ready");
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="16dp">
-        <Button android:id="@+id/btnAuto" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="AUTO"/>
-        <Button android:id="@+id/btnLock" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="LOCK"/>
-        <Button android:id="@+id/btnAlarm" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="ALARM"/>
-    </LinearLayout>
+            if(btnAuto != null) btnAuto.setOnClickListener(v -> {
+                if(tvStatus != null) tvStatus.setText("AUTO Toggled");
+                Toast.makeText(this, "AUTO", Toast.LENGTH_SHORT).show();
+            });
+            if(btnLock != null) btnLock.setOnClickListener(v -> {
+                if(tvStatus != null) tvStatus.setText("LOCKED / UNLOCKED");
+            });
+            if(btnAlarm != null) btnAlarm.setOnClickListener(v -> {
+                if(tvStatus != null) tvStatus.setText("ALARM Active");
+            });
+            if(btnX2 != null) btnX2.setOnClickListener(v -> {
+                multiplier = 2;
+                if(tvStatus != null) tvStatus.setText("x2 Selected");
+            });
+            if(btnX3 != null) btnX3.setOnClickListener(v -> {
+                multiplier = 3;
+                if(tvStatus != null) tvStatus.setText("x3 Selected");
+            });
+            if(btnX4 != null) btnX4.setOnClickListener(v -> {
+                multiplier = 4;
+                if(tvStatus != null) tvStatus.setText("x4 Selected");
+            });
+            if(btnStart != null) btnStart.setOnClickListener(v -> {
+                if(tvStatus != null) tvStatus.setText("SNIPER RUNNING x" + multiplier);
+                if(tvPrice != null) tvPrice.setText("Price: $2650.45");
+                if(tvProfit != null) tvProfit.setText("Profit: $" + (multiplier * 15) + ".50");
+                Toast.makeText(this, "Sniper v19 x" + multiplier + " Started - No Crash", Toast.LENGTH_LONG).show();
+            });
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="8dp">
-        <Button android:id="@+id/btnX2" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="x2"/>
-        <Button android:id="@+id/btnX3" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="x3"/>
-        <Button android:id="@+id/btnX4" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="x4"/>
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/btnStart"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="START SNIPER"
-        android:layout_marginTop="20dp"/>
-</LinearLayout>
+        } catch (Exception e) {
+            // Crash protection
+            TextView errorView = new TextView(this);
+            errorView.setText("Error: " + e.getMessage());
+            errorView.setTextColor(0xFFFF0000);
+            setContentView(errorView);
+            Toast.makeText(this, "Fix: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+}
