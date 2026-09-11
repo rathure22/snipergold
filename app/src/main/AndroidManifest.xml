@@ -4,18 +4,32 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    android:gravity="center_horizontal">
+    android:gravity="center_horizontal"
+    android:background="#121212">
 
-    <TextView android:id="@+id/tvStatus" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Status Area" android:textSize="18sp" android:layout_marginBottom="8dp"/>
-    <TextView android:id="@+id/tvPrice" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Price: $0.00" android:textSize="16sp" android:layout_marginBottom="8dp"/>
-    <TextView android:id="@+id/tvProfit" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Profit: $0.00" android:textSize="16sp" android:layout_marginBottom="16dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SNIPER GOLD v19"
+        android:textColor="#FFD700"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="20dp"/>
 
-    <Button android:id="@+id/btnAuto" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Auto"/>
-    <Button android:id="@+id/btnLock" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Lock"/>
-    <Button android:id="@+id/btnAlarm" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Alarm"/>
-    <Button android:id="@+id/btnX2" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Multiplier x2"/>
-    <Button android:id="@+id/btnX3" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Multiplier x3"/>
-    <Button android:id="@+id/btnX4" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Multiplier x4"/>
-    <Button android:id="@+id/btnStart" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Start Sniper" android:layout_marginTop="16dp"/>
+    <TextView android:id="@+id/tvStatus" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Status Area - READY!" android:textColor="#FFFFFF" android:textSize="18sp" android:gravity="center" android:background="#333333" android:padding="12dp" android:layout_marginBottom="8dp"/>
+    <TextView android:id="@+id/tvPrice" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Price: $0.00" android:textColor="#00FF00" android:textSize="16sp" android:gravity="center" android:layout_marginBottom="8dp"/>
+    <TextView android:id="@+id/tvProfit" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Profit: $0.00" android:textColor="#00FF00" android:textSize="16sp" android:gravity="center" android:layout_marginBottom="20dp"/>
+
+    <Button android:id="@+id/btnAuto" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="AUTO" android:layout_marginBottom="8dp"/>
+    <Button android:id="@+id/btnLock" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="LOCK" android:layout_marginBottom="8dp"/>
+    <Button android:id="@+id/btnAlarm" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="ALARM" android:layout_marginBottom="16dp"/>
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+        <Button android:id="@+id/btnX2" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="x2" android:layout_marginEnd="4dp"/>
+        <Button android:id="@+id/btnX3" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="x3" android:layout_marginStart="4dp" android:layout_marginEnd="4dp"/>
+        <Button android:id="@+id/btnX4" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="x4" android:layout_marginStart="4dp"/>
+    </LinearLayout>
+
+    <Button android:id="@+id/btnStart" android:layout_width="match_parent" android:layout_height="60dp" android:text="START SNIPER" android:textSize="18sp" android:textStyle="bold" android:layout_marginTop="24dp" android:backgroundTint="#FFD700" android:textColor="#000000"/>
 
 </LinearLayout>
