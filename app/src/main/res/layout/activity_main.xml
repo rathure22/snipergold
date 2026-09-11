@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- snipergold dashboard - dark skin red #FF3B30 green #34C759 yellow #FFCC00 -->
+<!-- Place in res/layout/activity_main.xml -->
+<!-- Requires: implementation 'com.google.android.material:material:1.11.0' -->
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0F1115">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <!-- HEADER -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="◎ snipergold"
+                android:textColor="#E8C15A"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@android:drawable/ic_popup_reminder" android:layout_marginEnd="12dp" />
+            <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@android:drawable/ic_menu_recent_history" />
+        </LinearLayout>
+
+        <!-- LIVE SIGNALS MONITOR -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:cardCornerRadius="12dp"
+            app:cardBackgroundColor="#1C1F28"
+            app:strokeColor="#2A2E3A"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+                        android:text="LIVE SIGNALS MONITOR" android:textColor="#9AA0B0" android:textSize="10sp" android:textStyle="bold"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="18 LIVE • REALTIME" android:textColor="#34C759" android:textSize="10sp"
+                        android:background="@drawable/bg_green_outline" android:padding="6dp"/>
+                </LinearLayout>
+
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:text="Signal Monitor" android:textColor="white" android:textSize="16sp" android:textStyle="bold"
+                    android:layout_marginTop="10dp"/>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="horizontal" android:layout_marginTop="10dp">
+
+                    <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+                        android:text="● RED 5" android:textColor="#FF3B30" android:textStyle="bold"/>
+                    <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+                        android:text="● YELLOW 5" android:textColor="#FFCC00" android:textStyle="bold"/>
+                    <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+                        android:text="● GREEN 8" android:textColor="#34C759" android:textStyle="bold"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="18 Signals" android:textColor="#7A808E" android:textSize="11sp"/>
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- SIGNAL TIERS Master Pro Expert -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="10dp" app:cardCornerRadius="12dp" app:cardBackgroundColor="#1C1F28">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="vertical" android:padding="12dp">
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:text="Signal Tiers" android:textColor="white" android:gravity="center" android:textStyle="bold"/>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="horizontal" android:layout_marginTop="8dp">
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnMaster" style="@style/Widget.Material3.Button" android:layout_width="0dp" android:layout_weight="1" android:layout_height="40dp"
+                        android:text="Master" app:cornerRadius="8dp" android:backgroundTint="#E8C15A" android:layout_marginEnd="6dp"/>
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnPro" style="@style/Widget.Material3.Button.OutlinedButton" android:layout_width="0dp" android:layout_weight="1" android:layout_height="40dp"
+                        android:text="Pro" app:cornerRadius="8dp" android:layout_marginEnd="6dp"/>
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnExpert" style="@style/Widget.Material3.Button.OutlinedButton" android:layout_width="0dp" android:layout_weight="1" android:layout_height="40dp"
+                        android:text="Expert" app:cornerRadius="8dp"/>
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- REALTIME PICK -4 Lose +6 Win x2 x3 x4 -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="10dp" app:cardCornerRadius="12dp" app:cardBackgroundColor="#1C1F28"
+            app:strokeColor="#34C759" app:strokeWidth="0.8dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="vertical" android:padding="14dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                    <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+                        android:text="● REALTIME PICK" android:textColor="#34C759" android:textStyle="bold"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="UPDATED 2s ago" android:textColor="#34C759" android:textSize="10sp"/>
+                </LinearLayout>
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:text="Realtime Monitor • Pick Panel" android:textColor="white" android:textSize="12sp" android:layout_marginTop="6dp"/>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="horizontal" android:layout_marginTop="12dp" android:gravity="center">
+                    <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="↓ LOSE -4" android:textColor="#FF3B30" android:textSize="16sp" android:textStyle="bold"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="= $3 loss" android:textColor="#9AA0B0" android:textSize="11sp"/>
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="↑ WIN +6 OR MORE" android:textColor="#34C759" android:textSize="13sp" android:textStyle="bold"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="WIN • x2 x3 x4 MULTIPLIER" android:textColor="#9AA0B0" android:textSize="9sp"/>
+                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="6dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text=" x2 " android:textColor="#34C759" android:background="@drawable/bg_green_outline" android:layout_marginEnd="4dp" android:padding="4dp"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text=" x3 " android:textColor="#34C759" android:background="@drawable/bg_green_outline" android:layout_marginEnd="4dp" android:padding="4dp"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text=" x4 " android:textColor="#E8C15A" android:background="@drawable/bg_yellow_outline" android:padding="4dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- TRADE CONTROLS LOT SIZE + TIMEFRAME + STRATEGY -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="10dp" app:cardCornerRadius="12dp" app:cardBackgroundColor="#1C1F28">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="vertical" android:padding="12dp" android:gravity="center">
+
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:text="TRADE CONTROLS" android:textColor="#7A808E" android:gravity="center" android:textSize="10sp"/>
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:text="LOT SIZE" android:textColor="white" android:gravity="center" android:textStyle="bold" android:layout_marginTop="8dp"/>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp">
+                    <com.google.android.material.button.MaterialButton android:id="@+id/lot001" style="@style/Widget.Material3.Button.OutlinedButton" android:layout_width="0dp" android:layout_weight="1" android:layout_height="44dp" android:text="0.01" app:cornerRadius="10dp" android:layout_marginEnd="6dp"/>
+                    <com.google.android.material.button.MaterialButton android:id="@+id/lot002" style="@style/Widget.Material3.Button.OutlinedButton" android:layout_width="0dp" android:layout_weight="1" android:layout_height="44dp" android:text="0.02" app:cornerRadius="10dp" android:layout_marginEnd="6dp"/>
+                    <com.google.android.material.button.MaterialButton android:id="@+id/lot003" style="@style/Widget.Material3.Button.OutlinedButton" android:layout_width="0dp" android:layout_weight="1" android:layout_height="44dp" android:text="0.03" app:cornerRadius="10dp" android:layout_marginEnd="6dp"/>
+                    <com.google.android.material.button.MaterialButton android:id="@+id/lot040" style="@style/Widget.Material3.Button" android:layout_width="0dp" android:layout_weight="1" android:layout_height="44dp" android:text="0.40" app:cornerRadius="10dp" android:backgroundTint="#E8C15A"/>
+                </LinearLayout>
+
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:text="TIMEFRAME" android:textColor="white" android:gravity="center" android:textStyle="bold" android:layout_marginTop="12dp"/>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp">
+                    <com.google.android.material.button.MaterialButton android:id="@+id/tfM1" style="@style/Widget.Material3.Button.OutlinedButton" android:layout_width="0dp" android:layout_weight="1" android:layout_height="44dp" android:text="M1" app:cornerRadius="10dp" android:layout_marginEnd="6dp"/>
+                    <com.google.android.material.button.MaterialButton android:id="@+id/tfM5" android:layout_width="0dp" android:layout_weight="1" android:layout_height="44dp" android:text="M5" app:cornerRadius="10dp" android:backgroundTint="#34C759" android:layout_marginEnd="6dp"/>
+                    <com.google.android.material.button.MaterialButton android:id="@+id/tfM15" style="@style/Widget.Material3.Button.OutlinedButton" android:layout_width="0dp" android:layout_weight="1" android:layout_height="44dp" android:text="M15" app:cornerRadius="10dp" android:layout_marginEnd="6dp"/>
+                    <com.google.android.material.button.MaterialButton android:id="@+id/tfM30" style="@style/Widget.Material3.Button.OutlinedButton" android:layout_width="0dp" android:layout_weight="1" android:layout_height="44dp" android:text="M30" app:cornerRadius="10dp"/>
+                </LinearLayout>
+
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:text="STRATEGY" android:textColor="white" android:gravity="center" android:textStyle="bold" android:layout_marginTop="12dp"/>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp" android:gravity="center">
+                    <com.google.android.material.materialswitch.MaterialSwitch android:id="@+id/switchAuto" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="AUTO" android:textColor="white"/>
+                    <com.google.android.material.materialswitch.MaterialSwitch android:id="@+id/switchLock" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="LOCK" android:textColor="white"/>
+                    <com.google.android.material.materialswitch.MaterialSwitch android:id="@+id/switchAlarm" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="ALARM" android:textColor="white"/>
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- CHEATSHEET ENTRY -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="10dp" app:cardCornerRadius="12dp" app:cardBackgroundColor="#1C1F28"
+            app:strokeColor="#444A5A" app:strokeWidth="0.5dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="vertical" android:padding="12dp">
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:text="💡 CHEATSHEET • ENTRY" android:textColor="white" android:textStyle="bold"/>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp">
+                    <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+                        android:text="SL  20 pips" android:textColor="#FF3B30"/>
+                    <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+                        android:text="TP  50 pips" android:textColor="#34C759"/>
+                    <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="SIGNAL TIP" android:textColor="#E8C15A" android:textSize="10sp" android:textStyle="bold"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Trend aligns EMA21 • RSI>60 • Avoid News 14:30 UTC" android:textColor="#9AA0B0" android:textSize="10sp"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- SELL BUY -->
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:layout_marginTop="14dp">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSell" android:layout_width="0dp" android:layout_weight="1" android:layout_height="56dp"
+                android:text="↓ SELL" android:textSize="18sp" app:cornerRadius="12dp" android:backgroundTint="#FF3B30" android:layout_marginEnd="8dp"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnBuy" android:layout_width="0dp" android:layout_weight="1" android:layout_height="56dp"
+                android:text="↑ BUY" android:textSize="18sp" app:cornerRadius="12dp" android:backgroundTint="#34C759"/>
+        </LinearLayout>
+
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="Account: $1,248.32 • P/L: +$42.10 (+3.48%)\nWinrate 62% • Risk 1.5% • Max DD 4.2%"
+            android:textColor="#7A808E" android:gravity="center" android:textSize="11sp" android:layout_marginTop="12dp"/>
+
+    </LinearLayout>
+</ScrollView>
