@@ -1,5 +1,8 @@
-name: Build Debug APK
-on: [push]
+name: SNIPER GOLD v19 - Complete Build
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -9,23 +12,11 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: gradle
       - uses: android-actions/setup-android@v3
-      - name: Setup Gradle 8.7
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-version: 8.7
-      - name: Fix gradle.properties
-        run: |
-          echo "android.useAndroidX=true" > gradle.properties
-          echo "android.enableJetifier=true" >> gradle.properties
-          echo "android.suppressUnsupportedCompileSdk=34" >> gradle.properties
-          echo "org.gradle.jvmargs=-Xmx2048m" >> gradle.properties
-      - name: Build APK
-        run: |
-          echo "sdk.dir=$ANDROID_HOME" > local.properties
-          gradle :app:assembleDebug
+      - run: chmod +x gradlew
+      - run: ./gradlew assembleDebug --stacktrace
       - uses: actions/upload-artifact@v4
-        if: success()
         with:
           name: snipergold-v19-debug
-          path: app/build/outputs/apk/debug/app-debug.apk
+          path: app/build/outputs/apk/debug/*.apk
