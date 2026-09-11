@@ -174,9 +174,9 @@
                 <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
                     android:text="STRATEGY" android:textColor="white" android:gravity="center" android:textStyle="bold" android:layout_marginTop="12dp"/>
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp" android:gravity="center">
-                    <com.google.android.material.materialswitch.MaterialSwitch android:id="@+id/switchAuto" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="AUTO" android:textColor="white"/>
-                    <com.google.android.material.materialswitch.MaterialSwitch android:id="@+id/switchLock" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="LOCK" android:textColor="white"/>
-                    <com.google.android.material.materialswitch.MaterialSwitch android:id="@+id/switchAlarm" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="ALARM" android:textColor="white"/>
+                    <androidx.appcompat.widget.SwitchCompat android:id="@+id/switchAuto" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="AUTO" android:textColor="white"/>
+                    <androidx.appcompat.widget.SwitchCompat android:id="@+id/switchLock" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="LOCK" android:textColor="white"/>
+                    <androidx.appcompat.widget.SwitchCompat android:id="@+id/switchAlarm" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="ALARM" android:textColor="white"/>
                 </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
