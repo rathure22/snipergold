@@ -4,9 +4,9 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.activity.ComponentActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends ComponentActivity {
+public class MainActivity extends AppCompatActivity {
     private TextView tvStatus, tvPrice, tvProfit;
     private int multiplier = 1;
 
