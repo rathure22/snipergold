@@ -8,16 +8,13 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
     private TextView tvStatus, tvPrice, tvProfit;
     private int multiplier = 1;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
         tvStatus = findViewById(R.id.tvStatus);
         tvPrice = findViewById(R.id.tvPrice);
         tvProfit = findViewById(R.id.tvProfit);
-        
         Button btnAuto = findViewById(R.id.btnAuto);
         Button btnLock = findViewById(R.id.btnLock);
         Button btnAlarm = findViewById(R.id.btnAlarm);
@@ -25,13 +22,8 @@ public class MainActivity extends Activity {
         Button btnX3 = findViewById(R.id.btnX3);
         Button btnX4 = findViewById(R.id.btnX4);
         Button btnStart = findViewById(R.id.btnStart);
-
-        if (tvStatus != null) tvStatus.setText("Fixed v19 Ready - No Crash Black Gold!");
-
-        btnAuto.setOnClickListener(v -> { 
-            if (tvStatus != null) tvStatus.setText("AUTO Toggled"); 
-            Toast.makeText(this, "AUTO", Toast.LENGTH_SHORT).show(); 
-        });
+        if (tvStatus != null) tvStatus.setText("v19 FIXED - No Crash - Black Gold!");
+        btnAuto.setOnClickListener(v -> { tvStatus.setText("AUTO Toggled"); Toast.makeText(this, "AUTO", Toast.LENGTH_SHORT).show(); });
         btnLock.setOnClickListener(v -> tvStatus.setText("LOCKED"));
         btnAlarm.setOnClickListener(v -> tvStatus.setText("ALARM Active"));
         btnX2.setOnClickListener(v -> { multiplier = 2; tvStatus.setText("x2"); });
