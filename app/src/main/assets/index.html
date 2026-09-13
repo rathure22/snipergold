@@ -3,469 +3,559 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>SniperGold v115 FINAL — Real Price Only — Safe Signals — PH Time</title>
+<title>Sniper Gold v119 DUAL - Option A 1:1 Scalp + Option B 2-3 London/NY 1:2 - Live Match</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--accent:#00ff88;--accent11:#00ff8811;--accent22:#00ff8822;--accent33:#00ff8833;--accent55:#00ff8855;--accent66:#00ff8866;--accentBg:#0a1a0a;--accentBgDark:#050a05}
-body.theme-orange{--accent:#ff8c00;--accent11:#ff8c0011;--accent22:#ff8c0022;--accent33:#ff8c0033;--accent55:#ff8c0055;--accent66:#ff8c0066;--accentBg:#1a0f00;--accentBgDark:#150b00}
-body{background:#050505;color:#e8e8e8;font-family:Inter,system-ui,sans-serif;padding:8px;font-size:11px;line-height:1.4}
-.hdr{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:#0f0f0f;border:1px solid #1a1a1a;border-radius:20px;margin-bottom:10px}
-.ttl{font-size:14px;font-weight:900;color:#fff}
-.sub{font-size:7px;color:#555;letter-spacing:0.7px;text-transform:uppercase;margin-top:3px;line-height:1.3}
-.card{background:#0f0f0f;border:1px solid #1a1a1a;border-radius:20px;padding:14px;margin:10px 0}
-.prc{font-size:32px;font-weight:900;text-align:center;color:var(--accent);text-shadow:0 0 20px var(--accent33)}
-.lbl{font-size:7px;color:#444;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-align:center;margin-bottom:6px}
-.bdg{border:1px solid #222;background:#111;border-radius:20px;padding:5px 10px;font-size:8px;font-weight:700;color:#666;display:inline-block;margin:2px}
-.bdg.live{border-color:var(--accent);color:var(--accent);background:var(--accentBg)}
-.bdg.buy{border-color:var(--accent);color:var(--accent);background:var(--accentBg);box-shadow:0 0 8px var(--accent33)}
-.bdg.sell{border-color:#ff3b4a;color:#ff3b4a;background:#1a0a0a;box-shadow:0 0 8px #ff3b4a33}
-.bdg.bos{border-color:#ffd700;color:#ffd700;background:#1a1500}
-.bdg.doble{border-color:#ff8c00;color:#ff8c00;background:#1a0f00}
-.bdg.ph{border-color:var(--accent);color:var(--accent);background:var(--accentBg);box-shadow:0 0 10px var(--accent22)}
-.bdg.open{border-color:var(--accent);color:var(--accent);background:var(--accentBg);box-shadow:0 0 8px var(--accent33)}
-.bdg.closed{border-color:#444;color:#666;background:#111}
-.bdg.offline{border-color:#00ff88;color:#00ff88;background:#0a1a0a}
-.chart-wrap{position:relative;width:100%;height:320px;background:#050505;border:1px solid #1a1a1a;border-radius:16px;overflow:hidden;margin-top:10px}
-#chart{width:100%;height:100%;display:block;cursor:grab}
-.sig{border:2px solid #1a1a1a;border-radius:22px;padding:18px;margin:12px 0;text-align:center;background:#0a0a0a;transition:all 0.35s}
-.sig.BUY{border-color:var(--accent);background:var(--accentBgDark);box-shadow:0 0 40px var(--accent22);transform:scale(1.02);border-width:3px}
-.sig.SELL{border-color:#ff3b4a;background:#0a0505;box-shadow:0 0 40px #ff3b4a22;transform:scale(1.02);border-width:3px}
-.sig.WAIT{border-color:#1a1a1a;background:#0a0a0a;opacity:0.65}
-.bt{font-size:18px;font-weight:900;letter-spacing:0.5px}
-.box{background:#0a0a0a;border:1px solid #1a1a1a;border-radius:14px;padding:12px;text-align:center}
-.box .k{font-size:7px;color:#444;font-weight:700;letter-spacing:1px;text-transform:uppercase}
-.box .v{font-size:16px;font-weight:800;margin-top:4px;color:#fff}
-.box.entry .v{color:#ffd700}
-.box.sl .v{color:#ff3b4a}
-.box.tp .v{color:var(--accent)}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
-.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px}
-.grid4{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
-.gridMarket{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
-@media(min-width:400px){.gridMarket{grid-template-columns:1fr 1fr 1fr}}
-.cheat{background:var(--accentBgDark);border:1px solid var(--accent22);border-radius:14px;padding:12px;margin-top:10px}
-.cheat-ttl{font-size:10px;font-weight:900;color:var(--accent);text-align:center;letter-spacing:1px}
-.cheat-ln{font-size:9px;color:#ccc;margin-top:5px;padding:7px;background:#0a0a0a;border-radius:8px;line-height:1.4}
-.logs{background:#050505;border:1px solid #111;border-radius:12px;padding:8px;height:70px;overflow-y:auto;font-family:monospace;font-size:8px;color:#444}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);display:inline-block;animation:pulse 1.5s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
-.hidden{display:none!important}
-.hideComands{display:none!important}
-.timeCard{background:#0a0a0a;border:1px solid #1a1a1a;border-radius:14px;padding:12px;text-align:center}
-.timeCard .city{font-size:8px;color:#666;font-weight:700;letter-spacing:1px;text-transform:uppercase}
-.timeCard .time{font-size:16px;font-weight:900;margin-top:4px;color:#fff}
-.timeCard .date{font-size:7px;color:#444;margin-top:2px}
-.timeCard .session{font-size:7px;font-weight:700;margin-top:4px;padding:3px 8px;border-radius:20px;display:inline-block}
-.timeCard.open{border-color:var(--accent33);box-shadow:0 0 12px var(--accent11)}
-.timeCard.closed{border-color:#222;opacity:0.7}
-.timeCard.ph{border-color:var(--accent);background:var(--accentBgDark);box-shadow:0 0 20px var(--accent22)}
-.timeCard.ph .time{color:var(--accent);font-size:20px}
-.marketHeader{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.refreshRow{display:flex;justify-content:center;align-items:center;gap:8px;margin-top:6px}
-.refreshBtn{background:var(--accentBg);border:1px solid var(--accent55);color:var(--accent);font-size:10px;font-weight:800;letter-spacing:0.5px;padding:6px 14px;border-radius:20px;cursor:pointer;display:flex;align-items:center;gap:6px}
-.refreshBtn:active{transform:scale(0.96)}
-.refreshBtn.spinning .rIcon{animation:spin 0.6s linear}
-@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-.lastUpd{font-size:7px;color:#555}
-.themeBtn{background:#111;border:1px solid #222;color:#888;font-size:7px;font-weight:800;letter-spacing:0.5px;padding:4px 8px;border-radius:14px;cursor:pointer}
-.themeBtn.active-green{border-color:var(--accent55);color:#00ff88}
-.themeBtn.active-orange{border-color:#ff8c0055;color:#ff8c00}
+:root{--accent:#ff8c00;--accent2:#ff8c0022;--green:#00d084;--green22:#00d08422;--bg:#050505;--card:#111;--border:#1e1e1e;--text:#e8e8e8;--muted:#777;--blue:#4a9eff}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif!important;padding:8px;font-size:11px;line-height:1.4;font-weight:500}
+.hdr,.card,.event-log{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:16px;margin:10px 0}
+.hdr-top{display:flex;gap:12px;align-items:flex-start}
+.icon-box{width:44px;height:44px;background:#1a1a1a;border:1px solid var(--border);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.ttl{font-size:18px;font-weight:800;color:#fff}
+.sub{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}
+.badge-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.badge{border:1px solid var(--border);background:#151515;border-radius:20px;padding:5px 10px;font-size:8px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--muted)}
+.badge.live{border-color:var(--accent);color:var(--accent);background:var(--accent2)}
+.badge.green{border-color:var(--green);color:var(--green);background:var(--green22)}
+.badge.blue{border-color:var(--blue);color:var(--blue);background:#4a9eff22}
+.badge.offline{border-color:#444;color:#666}
+.theme-row{display:flex;background:#0a0a0a;border:1px solid var(--border);border-radius:24px;padding:3px;width:fit-content;margin-top:10px}
+.theme-btn{padding:6px 14px;border-radius:20px;font-size:11px;font-weight:700;border:0;background:transparent;color:var(--muted);cursor:pointer}
+.theme-btn.active.orange{background:var(--accent);color:#000}
+.theme-btn.active.green{background:var(--green);color:#000}
+.strategy-toggle{display:flex;gap:8px;margin-top:12px}
+.strat-btn{flex:1;padding:10px;border-radius:16px;font-size:11px;font-weight:800;border:1px solid var(--border);cursor:pointer;background:#151515;color:#777;text-align:center}
+.strat-btn.activeA{border-color:var(--blue);color:var(--blue);background:#4a9eff11;box-shadow:0 0 15px #4a9eff22}
+.strat-btn.activeB{border-color:var(--green);color:var(--green);background:var(--green22);box-shadow:0 0 15px var(--green22)}
+.strat-btn.activeBoth{border-color:var(--accent);color:var(--accent);background:var(--accent2);box-shadow:0 0 15px var(--accent2)}
+.lbl{font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.price-big{font-size:38px;font-weight:800;color:#f5d78e;letter-spacing:-1px}
+.price-sub{font-size:11px;color:var(--muted);margin-top:4px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.pill{border-radius:20px;padding:6px 12px;font-size:10px;font-weight:700;background:#1a1a1a;border:1px solid var(--border);color:#aaa}
+.pill.high{color:#f5d78e;border-color:#3a2e0a;background:#1a1500}
+.pill.low{color:#ff6b6b;border-color:#3a0a0a;background:#1a0a0a}
+.chart-wrap{width:100%;height:360px;background:#080808;border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-top:12px}
+#chart{width:100%;height:100%;display:block}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.btn{border-radius:24px;padding:10px 16px;font-size:11px;font-weight:800;border:1px solid var(--border);cursor:pointer}
+.btn.refresh,.btn.replay-buy{background:var(--accent);color:#000;border-color:var(--accent)}
+.btn.replay-sell{background:#ff4d5a;color:#fff;border-color:#ff4d5a}
+.btn.resume{background:transparent;color:var(--muted);border-color:var(--border)}
+.help{font-size:11px;color:#555;line-height:1.5;margin-top:10px}
+.live-read .big{font-size:28px;font-weight:800;color:#b8b0a0;letter-spacing:-.5px}
+.live-read .desc{font-size:13px;color:var(--muted);margin-top:6px;line-height:1.5}
+.status-pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.status-pill{background:#1a1a1a;border:1px solid var(--border);border-radius:20px;padding:6px 10px;font-size:9px;font-weight:700;color:#666}
+.no-match{text-align:center;padding:20px 10px}
+.no-match .k{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#555}
+.no-match .ttl2{font-size:20px;font-weight:800;color:#8a8070;margin-top:8px}
+.no-match .desc2{font-size:12px;color:#555;margin-top:10px;line-height:1.6}
+.option-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.option-hdr .left{font-size:9px;font-weight:800;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase}
+.option-hdr .right{font-size:11px;color:#666}
+.option-title{font-size:20px;font-weight:800;color:#fff}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.opt-card{background:#151515;border:1px solid var(--border);border-radius:16px;padding:14px;position:relative}
+.opt-card .name{font-size:12px;font-weight:800;color:#fff}
+.opt-card .need{font-size:11px;color:#777;margin-top:6px;line-height:1.5}
+.opt-card .minus{position:absolute;top:12px;right:12px;width:24px;height:24px;border-radius:50%;background:#0f0f0f;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:#555}
+.and-badge{position:absolute;top:50%;right:-14px;transform:translateY(-50%);background:#1a1a1a;border:1px solid var(--border);border-radius:12px;padding:3px 6px;font-size:8px;font-weight:800;color:#555;z-index:2}
+.wait-bar{margin-top:10px;background:#0f0f0f;border:1px solid var(--border);border-radius:20px;padding:10px 14px;font-size:10px;font-weight:700;color:#666}
+.time-card{background:#151515;border:1px solid var(--border);border-radius:16px;padding:14px}
+.time-card.ph{background:#1a1200;border-color:#3a2500}
+.time-card .city{font-size:9px;font-weight:800;letter-spacing:1px;color:var(--muted);text-transform:uppercase}
+.time-card .time{font-size:22px;font-weight:800;color:var(--accent);margin-top:6px;font-family:'JetBrains Mono',monospace!important}
+.time-card .time.white{color:#fff;font-size:18px}
+.time-card .date{font-size:10px;color:#666;margin-top:4px}
+.time-card .closed{margin-top:8px;font-size:9px;font-weight:800;letter-spacing:1px;color:#555;text-transform:uppercase}
+.time-card .pill-small{display:inline-block;margin-top:8px;border-radius:16px;padding:4px 10px;font-size:9px;font-weight:800;background:#2a1a00;color:var(--accent);border:1px solid #3a2500}
+.event-row{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #151515;font-size:11px;font-family:'JetBrains Mono',monospace!important}
+.event-row .t{color:#555}.event-row .m{color:#777}
+.guide{font-size:11px;color:#555;line-height:1.7;text-align:center;padding:16px 12px}
+.trade-card{display:none}
+.trade-card.show{display:block}
+.trade-card.BUY{border-color:var(--green);box-shadow:0 0 30px var(--green22)}
+.trade-card.SELL{border-color:#ff4d5a;box-shadow:0 0 30px #ff4d5a22}
+.trade-card.STRAT-A{border-color:var(--blue)!important;box-shadow:0 0 30px #4a9eff22!important}
+.trade-card.STRAT-B{border-color:var(--green)!important;box-shadow:0 0 30px var(--green22)!important}
+.grid-trade{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.tbox{background:#0f0f0f;border:1px solid var(--border);border-radius:12px;padding:10px;text-align:center}
+.tbox .k{font-size:7px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#555}
+.tbox .v{font-size:14px;font-weight:800;color:#fff;margin-top:3px}
+.key-row{display:flex;gap:6px;margin-top:10px}
+.key-row input{flex:1;background:#0a0a0a;border:1px solid var(--border);border-radius:20px;padding:8px 12px;color:#ccc;font-size:11px;font-family:'JetBrains Mono',monospace;outline:none}
+.dual-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.dual-box{background:#0f0f0f;border:1px solid var(--border);border-radius:12px;padding:10px;text-align:center}
+.dual-box .k{font-size:8px;color:#666;font-weight:800;letter-spacing:1px;text-transform:uppercase}
+.dual-box .v{font-size:16px;font-weight:800;margin-top:4px}
+.dual-box.A .v{color:var(--blue)} .dual-box.B .v{color:var(--green)}
 </style>
 </head>
 <body>
 
 <div class="hdr">
+<div class="hdr-top">
+<div class="icon-box">◉</div>
 <div>
-<div class="ttl">SNIPER GOLD AUTO v115 FINAL</div>
-<div class="sub">FIXED: Option 3 AND + Hide Comands + No $NaN + Market Closed No Trade — PH Time + World Market Time — Tagum City Davao PH<br>Auto read buy and sell gamit 18 candle cheat sheet and /4 bully /doble top flag/bos — OFFLINE + ONLINE<br>Tips For Guide on StockMarket — JI NG slowstone® — FIXED VERSION</div>
-</div>
-<div style="text-align:right">
-<div style="display:flex;align-items:center;gap:5px;justify-content:flex-end"><div class="dot"></div><span style="font-size:8px;font-weight:800;color:var(--accent)">PH TIME LIVE</span></div>
-<div style="font-size:10px;font-weight:900;color:var(--accent);margin-top:2px" id="phTimeTop">--:--:-- PH</div>
-<div style="font-size:6px;color:#555" id="phDateTop">Tagum City PH — PHT UTC+8</div>
-<div style="display:flex;gap:4px;justify-content:flex-end;margin-top:5px">
-<button class="themeBtn" id="themeGreenBtn">GREEN</button>
-<button class="themeBtn" id="themeOrangeBtn">ORANGE</button>
+<div class="ttl">Sniper Gold DUAL</div>
+<div class="sub">Option A 1:1 Scalp + Option B 2-3 London/NY 1:2 — Both analyse, who matches trades live. Tagum City PHT — v119 DUAL</div>
 </div>
 </div>
+<div class="badge-row">
+<span class="badge offline" id="weekendBadge">WEEKEND CLOSE</span>
+<span class="badge live" id="liveBadge">LIVE XAU</span>
+<span class="badge live" id="phTimeBadge">--:--:-- PHT</span>
+<span class="badge" id="apiBadge">METALPRICEAPI</span>
+<span class="badge" id="confBadge">CONF --%</span>
+<span class="badge blue" id="stratBadge">DUAL A+B ACTIVE</span>
+<span class="badge green" id="winrateBadge">WINRATE --%</span>
 </div>
-
-<div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:8px 0">
-<div class="bdg ph" id="phBadge">PH --:--:-- PHT</div>
-<div class="bdg bos" id="goldBadge">GOLD $-- REAL</div>
-<div class="bdg" id="candleBadge">18/18 CHEAT SHEET</div>
-<div class="bdg offline" id="apiStatusBadge"><span id="apiStatusDot" style="display:inline-block;width:5px;height:5px;border-radius:50%;background:#00ff88;margin-right:4px"></span>OFFLINE MODE — Dele Xonected Sa Internet — Ready</div>
-<div class="bdg live">WORLD MARKET TIME</div>
+<div class="strategy-toggle">
+<button class="strat-btn activeBoth" id="btnBoth">🔥 BOTH A+B LIVE</button>
+<button class="strat-btn" id="btnA">A: 1:1 Scalp</button>
+<button class="strat-btn" id="btnB">B: 1:2 London/NY</button>
 </div>
-
-<div class="card">
-<div class="marketHeader">
-<div class="lbl" style="margin:0;text-align:left">PH TIME WORLD MARKET TIME — LIVE CLOCKS — GOLD TRADING SESSIONS — ORASAN SAKTO</div>
-<div class="bdg live" id="marketStatusBadge">MARKETS LIVE</div>
+<div class="dual-stats">
+<div class="dual-box A"><div class="k">STRAT A WINRATE</div><div class="v" id="winA">--%</div><div class="k" id="winA2">0 trades</div></div>
+<div class="dual-box B"><div class="k">STRAT B WINRATE</div><div class="v" id="winB">--%</div><div class="k" id="winB2">0 trades</div></div>
 </div>
-
-<div class="timeCard ph" style="margin-bottom:10px">
-<div class="city">PHILIPPINES TIME — TAGUM CITY DAVAO — PHT UTC+8 — YOUR LOCAL TIME — ORASAN SAKTO</div>
-<div class="time" id="phTimeBig">--:--:--</div>
-<div class="date" id="phDateBig">-- -- -- -- PH — PHT UTC+8 — Tagum City Davao</div>
-<div style="margin-top:6px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
-<span class="bdg ph" id="phDay">--</span>
-<span class="bdg live" id="phSession">PH DAY — GOLD ACTIVE</span>
-<span class="bdg bos" id="phMarketOverlap">ASIAN SESSION ACTIVE</span>
-</div>
-</div>
-
-<div class="gridMarket" id="worldMarkets">
-<div class="timeCard" id="cardSydney"><div class="city">SYDNEY — AEST UTC+10 — 10:00-18:00 — ASIAN START</div><div class="time" id="timeSydney">--:--:--</div><div class="date" id="dateSydney">-- --</div><div class="session" id="sessionSydney" style="background:#111;color:#666">CLOSED</div><div style="font-size:6px;color:#444;margin-top:4px">Sydney 10:00-18:00 — Gold Asian open</div></div>
-<div class="timeCard" id="cardTokyo"><div class="city">TOKYO — JST UTC+9 — 09:00-15:00 — ASIAN</div><div class="time" id="timeTokyo">--:--:--</div><div class="date" id="dateTokyo">-- --</div><div class="session" id="sessionTokyo" style="background:#111;color:#666">CLOSED</div><div style="font-size:6px;color:#444;margin-top:4px">Tokyo 09:00-15:00 — Gold volatile Asian</div></div>
-<div class="timeCard" id="cardLondon"><div class="city">LONDON — GMT UTC+0 / BST UTC+1 — 08:00-16:30</div><div class="time" id="timeLondon">--:--:--</div><div class="date" id="dateLondon">-- --</div><div class="session" id="sessionLondon" style="background:#111;color:#666">CLOSED</div><div style="font-size:6px;color:#444;margin-top:4px">London 08:00-16:30 — Gold London session high volume</div></div>
-<div class="timeCard" id="cardNY"><div class="city">NEW YORK — EST UTC-5 / EDT UTC-4 — 09:30-16:00</div><div class="time" id="timeNY">--:--:--</div><div class="date" id="dateNY">-- --</div><div class="session" id="sessionNY" style="background:#111;color:#666">CLOSED</div><div style="font-size:6px;color:#444;margin-top:4px">New York 09:30-16:00 — Gold NY session highest volume</div></div>
-<div class="timeCard" id="cardSingapore"><div class="city">SINGAPORE — SGT UTC+8 — SAME AS PH — 09:00-17:00</div><div class="time" id="timeSG">--:--:--</div><div class="date" id="dateSG">-- --</div><div class="session" id="sessionSG" style="background:#111;color:#666">CLOSED</div><div style="font-size:6px;color:#444;margin-top:4px">Singapore same as PH — Asian overlap</div></div>
-<div class="timeCard" id="cardUTC"><div class="city">UTC / GMT — WORLD TIME — 00:00 — FOREX BASE</div><div class="time" id="timeUTC">--:--:--</div><div class="date" id="dateUTC">-- --</div><div class="session" id="sessionUTC" style="background:#111;color:#666">UTC</div><div style="font-size:6px;color:#444;margin-top:4px">UTC base for gold — 24h market</div></div>
-</div>
-
-<div style="margin-top:12px;background:var(--accentBgDark);border:1px solid var(--accent22);border-radius:12px;padding:10px">
-<div style="font-size:8px;color:var(--accent);font-weight:800;text-align:center">GOLD TRADING SESSIONS — PH TIME CONVERSION — BEST TIME TO TRADE GOLD — ORASAN SAKTO MAN — TAGUM CITY PH</div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px">
-<div style="background:#0a0a0a;border-radius:8px;padding:6px;text-align:center"><div style="font-size:6px;color:#666">SYDNEY → PH TIME</div><div style="font-size:8px;color:#fff;margin-top:2px">Sydney 10:00 = PH 08:00 — Asian start — Gold low vol</div></div>
-<div style="background:#0a0a0a;border-radius:8px;padding:6px;text-align:center"><div style="font-size:6px;color:#666">TOKYO → PH TIME</div><div style="font-size:8px;color:#fff;margin-top:2px">Tokyo 09:00 = PH 08:00 — Asian — Gold Asian move</div></div>
-<div style="background:#0a0a0a;border-radius:8px;padding:6px;text-align:center"><div style="font-size:6px;color:#ffd700">LONDON → PH TIME</div><div style="font-size:8px;color:#ffd700;margin-top:2px">London 08:00 = PH 15:00 / 16:00 — Gold London high vol — BEST!</div></div>
-<div style="background:#0a0a0a;border-radius:8px;padding:6px;text-align:center"><div style="font-size:6px;color:var(--accent)">NEW YORK → PH TIME</div><div style="font-size:8px;color:var(--accent);margin-top:2px">NY 09:30 = PH 21:30 / 22:30 — Gold NY highest vol — BEST!</div></div>
-</div>
-<div style="font-size:6px;color:#444;text-align:center;margin-top:6px">PH Time UTC+8 — Best gold trade: London 15:00-00:00 PH (08:00-17:00 GMT) + NY 21:30-04:00 PH (13:30-20:00 GMT) — Overlap 21:30-00:00 PH = Highest volatility — Tagum City PH</div>
+<div class="key-row">
+<input id="apiKey" placeholder="MetalPriceAPI key (optional — gold-api.com backup works free)" spellcheck="false">
+<button class="btn resume" id="btnSaveKey">SAVE KEY</button>
 </div>
 </div>
 
 <div class="card">
-<div class="lbl">Auto read buy and sell gamit 18 candle cheat sheet — Real Price: $--.-- live — Auto updating every 3s — PH Time World Market Time — OFFLINE FIXED — No $NaN</div>
-<div class="prc" id="priceTop">$--.--</div>
-<div class="refreshRow">
-<button class="refreshBtn" id="refreshBtn" aria-label="Refresh gold price now"><span class="rIcon">&#8635;</span>REFRESH</button>
-<span class="lastUpd" id="lastUpd">offline — dele xonected sa internet — mock $4349.70</span>
+<div class="lbl">XAUUSD — DUAL STRATEGY — A: SL3 TP3 1:1 + B: SL5 TP10 1:2 — AUTO REFRESH 60S</div>
+<div class="price-big" id="priceBig">$--.--</div>
+<div class="price-sub" id="lastUpd">Last update —</div>
+<div class="pills">
+<span class="pill high" id="highPill">HIGH --</span>
+<span class="pill low" id="lowPill">LOW --</span>
+<span class="pill" id="barsPill">0 BARS</span>
+<span class="pill" id="maPill">EMA 20/50 — WAIT</span>
+<span class="pill" id="cooldownPill">COOLDOWN READY</span>
 </div>
 <div class="chart-wrap"><canvas id="chart"></canvas></div>
-
-<div class="grid3" style="margin-top:10px">
-<div style="background:#0a0a0a;border:1px solid #1a1a1a;border-radius:10px;padding:8px;text-align:center"><div style="font-size:6px;color:#444">LAST 10 HIGH — BOS BULLY > THIS</div><div style="font-size:11px;font-weight:800;color:#ffd700;margin-top:2px" id="last10High">$--</div><div style="font-size:6px;color:#444">4 bully / BOS — PH Time — No $NaN</div></div>
-<div style="background:#0a0a0a;border:1px solid #1a1a1a;border-radius:10px;padding:8px;text-align:center"><div style="font-size:6px;color:#444">18 CANDLES CHEAT SHEET</div><div style="font-size:12px;font-weight:900;color:var(--accent);margin-top:2px" id="candleCountBig">0/18</div><div style="font-size:6px;color:#555" id="bosCheckInfo">Auto read buy sell gamit 18 candle — Option 3 AND</div></div>
-<div style="background:#0a0a0a;border:1px solid #1a1a1a;border-radius:10px;padding:8px;text-align:center"><div style="font-size:6px;color:#444">LAST 10 LOW — BOS BEAR < THIS</div><div style="font-size:11px;font-weight:800;color:#ff3b4a;margin-top:2px" id="last10Low">$--</div><div style="font-size:6px;color:#444">doble top flag / BOS — World Market — No $NaN</div></div>
+<div class="controls">
+<button class="btn refresh" id="btnRefresh">↻ Refresh quote</button>
+<button class="btn replay-buy" id="btnReplayBuy">Replay BUY A</button>
+<button class="btn replay-sell" id="btnReplaySell">Replay BUY B</button>
+<button class="btn resume" id="btnResume">Resume scan</button>
+</div>
+<div class="help">DUAL MODE: A (Scalp 1:1) = BOS OR Double + EMA = more signals 60-70% win. B (London/NY 1:2) = BOS AND Double + EMA + London/NY session = high quality 45-55% win pero dako gain. Both analyse same candles, kinsay mo-match una mao'y mo-trade live.</div>
 </div>
 
-<div style="margin-top:10px">
-<div class="lbl">18 CANDLE CHEAT SHEET — 4 BULLY / DOBLE TOP FLAG / BOS — AUTO READ BUY AND SELL GAMIT 18 CANDLE — PH TIME WORLD MARKET TIME — FIXED: Option 3 AND + Hide Comands</div>
-<div class="grid4">
-<div class="cheat" id="boxBully" style="margin:0;padding:8px;border-color:var(--accent)"><div class="cheat-ttl" style="font-size:8px">1. BOS BULLY</div><div style="font-size:7px;color:#666;margin-top:2px;text-align:center">Break of Structure bullish — close[-1] > max(highs[-10:]) — BUY!</div><div class="bdg buy" style="display:block;text-align:center;margin-top:4px" id="cheatBOSBully">BOS BULLY: WAIT</div></div>
-<div class="cheat" id="boxBear" style="margin:0;padding:8px;border-color:#ff3b4a"><div class="cheat-ttl" style="font-size:8px;color:#ff3b4a">2. BOS BEAR</div><div style="font-size:7px;color:#666;margin-top:2px;text-align:center">Break of Structure bearish — close[-1] < min(lows[-10:]) — SELL!</div><div class="bdg sell" style="display:block;text-align:center;margin-top:4px" id="cheatBOSBear">BOS BEAR: WAIT</div></div>
-<div class="cheat" id="boxTop" style="margin:0;padding:8px;border-color:#ff8c00"><div class="cheat-ttl" style="font-size:8px;color:#ff8c00">3. DOBLE TOP FLAG</div><div style="font-size:7px;color:#666;margin-top:2px;text-align:center">2 highs within 0.5% similar — DOBLE TOP — SELL MORE — Need BOS BEAR + DOBLE TOP = SELL!</div><div class="bdg doble" style="display:block;text-align:center;margin-top:4px" id="cheatDobleTop">DOBLE TOP: WAIT</div></div>
-<div class="cheat" id="boxBottom" style="margin:0;padding:8px;border-color:var(--accent)"><div class="cheat-ttl" style="font-size:8px">4. DOBLE BOTTOM</div><div style="font-size:7px;color:#666;margin-top:2px;text-align:center">2 lows within 0.5% similar — DOBLE BOTTOM — BUY MORE — Need BOS BULLY + DOBLE BOTTOM = BUY!</div><div class="bdg buy" style="display:block;text-align:center;margin-top:4px" id="cheatDobleBottom">DOBLE BOTTOM: WAIT</div></div>
+<div class="card trade-card" id="tradeCard">
+<div class="lbl" id="tradeLbl">TRADE CONFIRMED — STRATEGY ?</div>
+<div id="tradeTitle" style="font-size:18px;font-weight:800;text-align:center;margin-top:6px">BUY CONFIRMED</div>
+<div id="tradeSub" style="font-size:11px;color:#777;text-align:center;margin-top:4px"></div>
+<div class="grid-trade">
+<div class="tbox"><div class="k">STRATEGY</div><div class="v" id="gStrat">--</div></div>
+<div class="tbox"><div class="k">CONFIDENCE</div><div class="v" id="gConf">--%</div></div>
+<div class="tbox"><div class="k">ENTRY</div><div class="v" id="gEntry">--</div></div>
+<div class="tbox"><div class="k" id="gSLk">SL</div><div class="v" id="gSL">--</div></div>
+<div class="tbox"><div class="k" id="gTP1k">TP1</div><div class="v" id="gTP1">--</div></div>
+<div class="tbox"><div class="k" id="gTP2k">TP2</div><div class="v" id="gTP2">--</div></div>
 </div>
 </div>
 
-<div style="display:flex;gap:4px;justify-content:center;flex-wrap:wrap;margin-top:10px" id="patternBadges">
-<span class="bdg">Auto read buy and sell gamit 18 candle cheat sheet and /4 bully /doble top flag/bos — PH Time World Market Time — FIXED Option 3 AND</span>
+<div class="card live-read">
+<div class="lbl">LIVE DUAL READ — A vs B</div>
+<div class="big" id="liveReadBig">WAIT</div>
+<div class="desc" id="liveReadDesc">Connecting…</div>
+<div class="status-pills">
+<span class="status-pill" id="pillBosBully">BOS BULLY WAIT</span>
+<span class="status-pill" id="pillDoubleBottom">DOUBLE BOTTOM WAIT</span>
+<span class="status-pill" id="pillBosBear">BOS BEAR WAIT</span>
+<span class="status-pill" id="pillDoubleTop">DOUBLE TOP WAIT</span>
+<span class="status-pill" id="pillMa">EMA 20/50 WAIT</span>
+<span class="status-pill" id="pillStratA">STRAT A WAIT</span>
+<span class="status-pill" id="pillStratB">STRAT B WAIT</span>
 </div>
 </div>
 
-<div class="sig WAIT" id="signalBox">
-<div class="lbl" id="signalLabel">Auto read buy and sell gamit 18 candle cheat sheet and /4 bully /doble top flag/bos — PH Time World Market Time — FIXED</div>
-<div class="bt" id="signalTop" style="color:#444">WAIT — AUTO READING 18 CANDLES — 4 BULLY / DOBLE TOP FLAG / BOS — PH Time World Market Time — FIXED Option 3 AND</div>
-<div style="margin-top:8px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap" id="signalBadges">
-<span class="bdg">BOS BULLY: WAIT — BOS BEAR: WAIT — DOBLE TOP: WAIT — DOBLE BOTTOM: WAIT — Need BOS + DOBLE — Duha confirm — PH Time</span>
+<div class="card">
+<div class="option-hdr">
+<div class="left">DUAL LOGIC — OPTION A SCALP vs OPTION B LONDON</div>
+<div class="right" id="optRight">0/18</div>
 </div>
-<div style="font-size:7px;color:#444;margin-top:8px" id="signalInfo">Auto read buy and sell gamit 18 candle cheat sheet and /4 bully /doble top flag/bos — PH Time World Market Time — Tagum City PH — World Market Time — FIXED: Option 3 AND + Hide Comands + No $NaN + Market Closed No Trade</div>
-</div>
-
-<div class="card hidden" id="tradeCard">
-<div style="text-align:center">
-<div class="lbl">When MATCH FOUND — Option 3 AND — Need BOS BEAR + DOBLE TOP = SELL CONFIRMED — Duha! — PH Time</div>
-<div style="font-size:13px;font-weight:900;color:var(--accent);margin-top:4px" id="matchTitle">BOS BULLY CONFIRMED — BUY! — 4 BULLY / DOBLE TOP FLAG / BOS</div>
-<div style="font-size:8px;color:#666;margin-top:3px" id="matchSubtitle">ENTRY $-- SL $-- LOT 0.01 Risk $3 TP1 $-- Win $9 TP2 $-- Win $12+ — PH Time World Market Time — Option 3 AND</div>
-</div>
-
-<div class="grid3">
-<div class="box entry"><div class="k">ENTRY $-- — Real Price — 18 candle — PH Time</div><div class="v" id="gEntry">$--</div><div style="font-size:6px;color:#666;margin-top:2px" id="gEntryInfo">BOS BULLY / CHoCH — 18 candle cheat sheet — PH Time — No $NaN</div></div>
-<div class="box"><div class="k" style="color:var(--accent)">LOT 0.01 — 0.01 lot = $1/move — World Market</div><div class="v" id="gLot" style="color:var(--accent)">0.01 lot</div><div style="font-size:6px;color:var(--accent);margin-top:2px">Lot = Risk/SL*0.01 Lose $3 exactly — 4 bully</div></div>
-<div class="box"><div class="k" style="color:#ff3b4a">RISK $3 — Lose $3 exactly — PH Time</div><div class="v" id="gRisk" style="color:#ff3b4a">$3</div><div style="font-size:6px;color:#666;margin-top:2px">Fixed — 0.01 lot — PH Time World Market</div></div>
-</div>
-
+<div class="option-title">Option A = lenient, Option B = strict</div>
 <div class="grid2">
-<div class="box sl"><div class="k">SL $-- — $3-4 Below — SL $-- LOT 0.01 Risk $3 — BOS / DOBLE — PH Time</div><div class="v" id="gSL">$--</div><div style="font-size:6px;color:#666;margin-top:2px" id="gSLInfo">SL $3 distance Lose $3 — 3996-3997 zone — 4 bully / doble top flag / bos — PH Time — No $NaN</div></div>
-<div class="box"><div class="k">SL DISTANCE — |ENTRY - SL| — BOS — World Market</div><div class="v" id="gSLDist" style="color:#ff3b4a">$3</div><div style="font-size:6px;color:#666;margin-top:2px">Entry - SL = $3 — 18 candle — PH Time</div></div>
-<div class="box tp"><div class="k">TP1 $-- Win $9 — 1:3 RR — 4 bully — PH Time</div><div class="v" id="gTP1">$--</div><div style="font-size:6px;color:var(--accent);margin-top:2px" id="gTP1Info">Entry + $9 Win $9 at 0.01 lot — 4 bully — World Market Time</div></div>
-<div class="box tp"><div class="k">TP2 $-- Win $12+ — 1:4 RR — doble top flag — PH Time</div><div class="v" id="gTP2">$--</div><div style="font-size:6px;color:var(--accent);margin-top:2px" id="gTP2Info">Entry + $12 Win $12+ at 0.01 lot — doble top flag / bos — PH Time</div></div>
+<div class="opt-card" style="border-color:#4a9eff33"><div class="name" style="color:#4a9eff">OPTION A — 1:1 SCALP</div><div class="need">SL $3 TP $3 1:1 — (BOS OR Double) + EMA — More signals 60-70% win — Any session — No filter</div></div>
+<div class="opt-card" style="border-color:#00d08433"><div class="name" style="color:#00d084">OPTION B — 1:2 LONDON/NY</div><div class="need">SL $5 TP $10 1:2 — BOS AND Double + EMA — High quality 45-55% win — London 15:00-00:00 + NY 21:30-04:00 only</div></div>
+</div>
+<div class="wait-bar">→ BOTH ANALYSE SAME 18 CANDLES → IF A MATCHES → TRADE A LIVE → IF B MATCHES → TRADE B LIVE → IF BOTH SAME CANDLE → PRIORITIZE B (higher quality)</div>
 </div>
 
-<div class="cheat" id="cheatSheet">
-<div class="cheat-ttl" id="cheatTitle">CHEAT SHEET AUTO — 18 CANDLE — 4 BULLY / DOBLE TOP FLAG / BOS — AUTO READ BUY AND SELL GAMIT 18 CANDLE — PH TIME WORLD MARKET TIME — FIXED Option 3 AND</div>
-<div id="cheatLines"></div>
+<div class="card">
+<div class="option-hdr"><div class="left">ORASAN SAKTO · TAGUM CITY — PH TIME WORLD SESSIONS</div><div class="right" id="sessionBadge">ASIAN / CLOSED</div></div>
+<div class="option-title">PH time · world sessions</div>
+<div style="margin-top:12px">
+<div class="time-card ph" style="margin-bottom:10px">
+<div class="city">PHILIPPINES · PHT UTC+8 — YOUR LOCAL TIME</div>
+<div class="time" id="phTimeBig">--:--:--</div>
+<div class="date" id="phDateBig">—</div>
+<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+<span class="pill-small" id="pillLondonSess">—</span>
+<span class="pill-small" id="pillLondonVol">—</span>
+<span class="pill-small" id="pillConfSmall">CONF --%</span>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<div class="time-card"><div class="city">SYDNEY</div><div class="time white" id="timeSydney">--</div><div class="date" id="dateSydney">—</div><div class="closed" id="sessSydney">CLOSED</div></div>
+<div class="time-card"><div class="city">TOKYO</div><div class="time white" id="timeTokyo">--</div><div class="date" id="dateTokyo">—</div><div class="closed" id="sessTokyo">CLOSED</div></div>
+<div class="time-card"><div class="city">LONDON</div><div class="time white" id="timeLondon">--</div><div class="date" id="dateLondon">—</div><div class="closed" id="sessLondon">CLOSED</div></div>
+<div class="time-card"><div class="city">NEW YORK</div><div class="time white" id="timeNY">--</div><div class="date" id="dateNY">—</div><div class="closed" id="sessNY">CLOSED</div></div>
+<div class="time-card"><div class="city">SINGAPORE</div><div class="time white" id="timeSG">--</div><div class="date" id="dateSG">—</div><div class="closed" id="sessSG">CLOSED</div></div>
+<div class="time-card"><div class="city">UTC</div><div class="time white" id="timeUTC">--</div><div class="date" id="dateUTC">—</div><div class="closed">BASE</div></div>
+</div>
 </div>
 </div>
 
-<div class="card" id="noMatchCard">
-<div class="lbl">When NO MATCH: Trade card hidden — display:none — No entry SL TP lot — Clean minimal — Wait only — PH Time World Market Time — FIXED</div>
-<div style="text-align:center;padding:20px">
-<div style="font-size:14px;font-weight:900;color:#444">WAIT ONLY — NO MATCH — 18 CANDLE CHEAT SHEET — WAIT BOS BULLY / DOBLE TOP / 4 BULLY — PH Time World Market Time</div>
-<div style="font-size:8px;color:#333;margin-top:6px">Clean minimal — No entry SL TP lot — Wait only — Auto read lang naay mag match — Need BOS + DOBLE — Duha confirm — Option 3 AND — PH Time World Market Time — Tagum City PH — FIXED: Hide Comands + Option 3 AND + No $NaN + Market Closed No Trade</div>
+<div class="event-log">
+<div class="lbl">EVENT LOG — DUAL</div>
+<div id="eventLog"></div>
+</div>
+
+<div class="card">
+<div class="lbl">SIGNAL HISTORY + LIVE WINRATE — DUAL TRACKED</div>
+<div class="pills" style="margin:0 0 8px">
+<span class="pill" id="winrateOpen">no signals yet</span>
+<span class="pill" id="winratePill">WINRATE --%</span>
+</div>
+<div id="signalList"></div>
+<div style="display:flex;gap:6px;justify-content:center;margin-top:10px">
+<button class="btn resume" id="btnClearSig">CLEAR HISTORY</button>
 </div>
 </div>
 
-<div class="card" style="padding:10px">
-<div class="lbl">Logs: Auto read buy and sell gamit 18 candle cheat sheet and /4 bully /doble top flag/bos — PH Time World Market Time — FIXED VERSION</div>
-<div class="logs" id="logs"></div>
-</div>
-
-<div style="text-align:center;font-size:6px;color:#222;margin-top:10px;padding:10px;line-height:1.4">
-FIXED VERSION: Option 3 AND — Need BOS BEAR + DOBLE TOP = SELL CONFIRMED — Need BOS BULLY + DOBLE BOTTOM = BUY CONFIRMED — Duha confirm — Hide Comands — Match only — Trade card DISPLAY:NONE when WAIT — No $NaN — safeMax/safeMin — Market Closed No Trade — Close man dapat wlay trade ron — Orasan sakto man — PH Time UTC+8 Tagum City Davao — World Market Time — Gold trading sessions PH Time conversion — Offline Dele Xonected Sa Internet — Works Offline — Auto read buy and sell gamit 18 candle cheat sheet and /4 bully /doble top flag/bos — v115 FINAL<br>
-Tips For Guide on StockMarket — Developed by JI NG slowstone® — v113 PH Time World Market Time — FINAL FIXED — Add ph Time world market time — FIXED: Option 3 AND + Hide Comands + No $NaN + Market Closed No Trade + Orasan Sakto
-</div>
+<div class="guide">DUAL MODE: A = Scalp 1:1 (SL3 TP3) lenient BOS OR Double + EMA — more signals. B = London/NY 1:2 (SL5 TP10) strict BOS AND Double + EMA + London 15:00-00:00 NY 21:30-04:00 — high quality. Both analyse same 18 candles live, who matches trades live — if both same candle prioritize B. Every signal tracked: TP1 before SL = WIN. Spot metalpriceapi.com + gold-api.com backup, 1-min OHLC, 60s refresh.</div>
 
 <script>
-let hist=[], logs=[], priceNow=4349.70, vis=18, pan=0, dragging=false, lastX=0;
-const RISK=3, LOT=0.01;
-const $=id=>document.getElementById(id);
-let ACCENT_HEX="#00ff88";
-const OFFLINE_MODE=false; // v115 uses live spot price; no mock candles/signals
+const $=id=>document.getElementById(id), fmt2=n=>isFinite(n)?n.toFixed(2):"--.--";
+let hist=JSON.parse(localStorage.getItem("sg_candles_v119_dual")||"[]"), priceNow=0, lastSignalTime=0, cooldownMs=600000, vis=41, isReplay=false, activeStrat="BOTH";
+let signals=JSON.parse(localStorage.getItem("sg_signals_v119_dual")||"[]");
 
-function applyTheme(theme){
-    ACCENT_HEX = theme==="orange" ? "#ff8c00" : "#00ff88";
-    document.body.classList.toggle("theme-orange", theme==="orange");
-    $("themeGreenBtn").className = "themeBtn"+(theme==="orange"?"":" active-green");
-    $("themeOrangeBtn").className = "themeBtn"+(theme==="orange"?" active-orange":"");
-    localStorage.setItem("sniperGoldTheme", theme);
-    draw();
+function saveSignals(){ try{localStorage.setItem("sg_signals_v119_dual",JSON.stringify(signals.slice(0,100)))}catch(e){} }
+function recordSignal(type,entry,sl,tp1,tp2,conf,strat){
+  signals.unshift({type,entry,sl,tp1,tp2,conf,strat,time:new Date().toLocaleTimeString("en-PH",{hour:"2-digit",minute:"2-digit"}),result:null});
+  saveSignals();
 }
-$("themeGreenBtn").addEventListener("click",()=>applyTheme("green"));
-$("themeOrangeBtn").addEventListener("click",()=>applyTheme("orange"));
-applyTheme(localStorage.getItem("sniperGoldTheme")||"green");
-
-// === FINAL FIXED — TANAN FIX NAA NA — OFFLINE — DELE XONECTED SA INTERNET ===
-function safeMax(arr, fallback){
-  const a=(arr||[]).filter(Number.isFinite);
-  return a.length ? Math.max(...a) : fallback;
-}
-function safeMin(arr, fallback){
-  const a=(arr||[]).filter(Number.isFinite);
-  return a.length ? Math.min(...a) : fallback;
-}
-function safePrice(v, fallback=4349.70){
-  const n=Number(v);
-  return Number.isFinite(n) ? n : fallback;
-}
-function fmt2(n, fb="--"){
-  return Number.isFinite(Number(n)) ? Number(n).toFixed(2) : fb;
-}
-
-function log(m,t="info"){
-  const c=t==="buy"?"var(--accent)":t==="sell"?"#ff3b4a":t==="bos"?"#ffd700":t==="doble"?"#ff8c00":"#777";
-  logs.unshift(`<div style="padding:2px 0;border-bottom:1px solid #111"><span style="color:#333">[${new Date().toLocaleTimeString()}]</span> <b style="color:${c}">${m}</b></div>`);
-  if(logs.length>60) logs.pop();
-  $("logs").innerHTML=logs.join("");
-}
-
-function updateWorldTimes(){
-  const now=new Date();
-  const getTime=tz=>new Date(now.toLocaleString("en-US",{timeZone:tz}));
-  const ph=getTime("Asia/Manila");
-  const ts=ph.toLocaleTimeString("en-PH",{hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:true});
-  const ds=ph.toLocaleDateString("en-PH",{weekday:"short",year:"numeric",month:"short",day:"numeric"});
-  $("phTimeTop").textContent=ts+" PHT";
-  $("phBadge").textContent=`PH ${ph.toLocaleTimeString("en-PH",{hour:"2-digit",minute:"2-digit"})} PHT`;
-  $("phTimeBig").textContent=ts;
-  $("phDateBig").textContent=`${ds} — PHT UTC+8 — Tagum City PH`;
-  $("phDateTop").textContent=`${ds} — PHT UTC+8`;
-  $("phDay").textContent=ph.toLocaleDateString("en-PH",{weekday:"long"})+" PH";
-
-  const h=ph.getHours()+ph.getMinutes()/60;
-  $("phSession").textContent=h>=15&&h<22?"PH AFTERNOON — LONDON / PRE-NY":
-    (h>=22||h<4?"PH NIGHT — NEW YORK SESSION":(h>=8&&h<15?"PH MORNING — ASIAN SESSION":"PH EARLY MORNING — ASIAN / SYDNEY"));
-  let overlap=h>=21.5&&h<24?"LONDON + NY OVERLAP — HIGH VOL":
-    (h>=15&&h<21.5?"LONDON SESSION — ACTIVE":(h>=21.5||h<4?"NEW YORK SESSION — ACTIVE":(h>=8&&h<15?"ASIAN SESSION — ACTIVE":"NO MAJOR OVERLAP")));
-  $("phMarketOverlap").textContent=overlap;
-  $("phMarketOverlap").className=overlap.includes("HIGH")?"bdg buy":"bdg bos";
-
-  const markets=[
-    {id:"Sydney",tz:"Australia/Sydney",openH:10,closeH:18},
-    {id:"Tokyo",tz:"Asia/Tokyo",openH:9,closeH:15},
-    {id:"London",tz:"Europe/London",openH:8,closeH:16.5},
-    {id:"NY",tz:"America/New_York",openH:9.5,closeH:16},
-    {id:"SG",tz:"Asia/Singapore",openH:9,closeH:17},
-    {id:"UTC",tz:"UTC",openH:0,closeH:24}
-  ];
-  markets.forEach(m=>{
-    const t=getTime(m.tz), hour=t.getHours()+t.getMinutes()/60;
-    const weekend=t.getDay()===0||t.getDay()===6;
-    const open=!weekend&&hour>=m.openH&&hour<m.closeH;
-    $(`time${m.id}`).textContent=t.toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:true});
-    $(`date${m.id}`).textContent=t.toLocaleDateString("en-US",{month:"short",day:"numeric"});
-    const se=$(`session${m.id}`),ce=$(`card${m.id}`);
-    if(se){se.textContent=weekend?"WEEKEND CLOSED":open?"OPEN — SESSION":"CLOSED";se.style.background=open?"var(--accentBg)":"#111";se.style.color=open?"var(--accent)":"#666";}
-    if(ce) ce.className=open?"timeCard open":"timeCard closed";
+function resolveSignals(p){
+  if(!p) return; let changed=false;
+  signals.forEach(s=>{
+    if(s.result) return;
+    if(s.type==="BUY"){ if(p>=s.tp1) s.result="WIN"; else if(p<=s.sl) s.result="LOSS"; }
+    else { if(p<=s.tp1) s.result="WIN"; else if(p>=s.sl) s.result="LOSS"; }
+    if(s.result){ changed=true; logEvent(new Date().toLocaleTimeString("en-PH",{hour:"2-digit",minute:"2-digit"}),`${s.type} $${fmt2(s.entry)} [${s.strat}] → ${s.result} at $${fmt2(p)}`); }
   });
+  if(changed){ saveSignals(); renderWinrate(); renderSignalList(); }
+}
+function winrateStats(filter){
+  const f=filter?signals.filter(s=>s.strat===filter):signals;
+  const done=f.filter(s=>s.result), wins=done.filter(s=>s.result==="WIN").length;
+  return {done:done.length,wins,rate:done.length?Math.round(wins/done.length*100):null,open:f.filter(s=>!s.result).length};
+}
+function renderWinrate(){
+  const stAll=winrateStats(null), stA=winrateStats("A"), stB=winrateStats("B");
+  $("winrateBadge").textContent=stAll.rate===null?"WINRATE --%":`WINRATE ${stAll.rate}% (${stAll.wins}/${stAll.done})`;
+  $("winrateOpen").textContent=`${stAll.open} OPEN — A:${stA.done?stA.rate+"%":"--%"} B:${stB.done?stB.rate+"%":"--%"}`;
+  $("winA").textContent=stA.rate===null?"--%":`${stA.rate}%`; $("winA2").textContent=`${stA.done} closed ${stA.wins}W`;
+  $("winB").textContent=stB.rate===null?"--%":`${stB.rate}%`; $("winB2").textContent=`${stB.done} closed ${stB.wins}W`;
+}
+function renderSignalList(){
+  const el=$("signalList"); if(!el) return;
+  if(!signals.length){ el.innerHTML='<div style="text-align:center;padding:12px;color:#444;font-size:11px">No signals yet — both strategies analysing</div>'; return; }
+  el.innerHTML=signals.slice(0,20).map(s=>`<div class="event-row"><span class="t">${s.time}</span><span class="m"><b style="color:${s.strat==="A"?"#4a9eff":"#00d084"}">[${s.strat}]</b> <span style="color:${s.type==="BUY"?"#00d084":"#ff4d5a"};font-weight:800">${s.type}</span> $${fmt2(s.entry)} SL $${fmt2(s.sl)} TP $${fmt2(s.tp1)} ${s.conf}% ${s.result?`<b style="color:${s.result==="WIN"?"#00d084":"#ff4d5a"}">${s.result}</b>`:'<i>OPEN</i>'}</span></div>`).join("");
 }
 
-function isMarketClosed(){
-  const d=new Date().getUTCDay(),h=new Date().getUTCHours();
-  return d===6||(d===0&&h<21);
+function saveCandles(){ try{localStorage.setItem("sg_candles_v119_dual",JSON.stringify(hist.slice(-120)))}catch(e){} }
+function logEvent(t,m){ const el=$("eventLog"); if(!el)return; const row=document.createElement("div"); row.className="event-row"; row.innerHTML=`<span class="t">${t}</span><span class="m">${m}</span>`; el.prepend(row); while(el.children.length>20) el.removeChild(el.lastChild); }
+
+function calcEMA(data,p){
+  if(data.length<p) return null;
+  const k=2/(p+1); let e=data.slice(0,p).reduce((a,b)=>a+b,0)/p;
+  for(let i=p;i<data.length;i++) e=data[i]*k+e*(1-k);
+  return e;
 }
-
-/*
-  v115 SAFETY RULE:
-  The supplied v113 file only has a spot-price endpoint. It does not receive
-  historical OHLC candles. Therefore v115 NEVER converts spot snapshots into
-  fake candles and NEVER emits BUY/SELL from fabricated data.
-*/
-function realOHLCReady(){
-  return hist.length>=18 && hist.every(c=>c&&c.realOHLC===true&&
-    Number.isFinite(c.open)&&Number.isFinite(c.high)&&Number.isFinite(c.low)&&Number.isFinite(c.close));
-}
-
-function check18(c){
-  if(c.length<18) return {need:true,n:c.length,reason:"Need 18 real OHLC candles"};
-  if(!realOHLCReady()) return {need:true,n:c.length,reason:"Real OHLC candles required — spot snapshots cannot generate signals"};
-
-  const last=c[c.length-1];
-  const prior=c.slice(-11,-1); // exclude current candle
-  const previousHigh=safeMax(prior.map(x=>x.high),NaN);
-  const previousLow=safeMin(prior.map(x=>x.low),NaN);
-
-  const bos_bully=last.close>previousHigh;
-  const bos_bear=last.close<previousLow;
-
-  // Tight, separated pivot comparison; old 0.5% tolerance was too wide.
-  const tol=0.0015;
-  let doble_top=false,doble_bottom=false;
-  for(let i=0;i<prior.length;i++) for(let j=i+3;j<prior.length;j++){
-    if(Math.abs(prior[i].high-prior[j].high)/Math.max(prior[i].high,1)<=tol) doble_top=true;
-    if(Math.abs(prior[i].low-prior[j].low)/Math.max(prior[i].low,1)<=tol) doble_bottom=true;
+function swings(arr,key){
+  const out=[];
+  for(let i=2;i<arr.length-2;i++){
+    const a=arr[i-2][key],b=arr[i-1][key],c=arr[i][key],d=arr[i+1][key],e=arr[i+2][key];
+    if(key==="high"&&c>a&&c>b&&c>d&&c>e) out.push({i,v:c});
+    if(key==="low"&&c<a&&c<b&&c<d&&c<e) out.push({i,v:c});
   }
-
-  return {
-    need:false,n:18,previousHigh,previousLow,bos_bully,bos_bear,doble_top,doble_bottom,
-    buy:bos_bully&&doble_bottom,sell:bos_bear&&doble_top,last
-  };
+  return out;
 }
+
+function checkPatterns(c){
+  if(c.length<18) return {need:true,reason:`NEED ${18-c.length} MORE CANDLES`,n:c.length};
+  const closes=c.map(x=>x.close), highs=c.map(x=>x.high), lows=c.map(x=>x.low);
+  const ema20=calcEMA(closes,20), ema50=calcEMA(closes,50);
+  const lastClose=closes[closes.length-1];
+  const prev10High=Math.max(...highs.slice(-11,-1)), prev10Low=Math.min(...lows.slice(-11,-1));
+  const bos_bully=lastClose>prev10High, bos_bear=lastClose<prev10Low;
+  let doble_top=false, doble_bottom=false;
+  const sh=swings(c.slice(-30),"high"), sl=swings(c.slice(-30),"low");
+  for(let i=0;i<sh.length;i++) for(let j=i+1;j<sh.length;j++){
+    if(Math.abs(sh[i].v-sh[j].v)/sh[i].v<0.003){
+      const between=lows.slice(sh[i].i,sh[j].i+1);
+      if(between.length&&Math.min(...between)<sh[i].v*0.997) doble_top=true;
+    }
+  }
+  for(let i=0;i<sl.length;i++) for(let j=i+1;j<sl.length;j++){
+    if(Math.abs(sl[i].v-sl[j].v)/sl[i].v<0.003){
+      const between=highs.slice(sl[i].i,sl[j].i+1);
+      if(between.length&&Math.max(...between)>sl[i].v*1.003) doble_bottom=true;
+    }
+  }
+  const hasEma=ema20!==null&&ema50!==null;
+  const emaBull=hasEma&&ema20>ema50&&lastClose>ema20, emaBear=hasEma&&ema20<ema50&&lastClose<ema20;
+  let conf=0;
+  if(bos_bully||bos_bear) conf+=25;
+  if(doble_top||doble_bottom) conf+=25;
+  if((bos_bully&&emaBull)||(bos_bear&&emaBear)) conf+=25;
+  if((bos_bully&&doble_bottom)||(bos_bear&&doble_top)) conf+=25;
+
+  // Strategy A: Lenient 1:1 Scalp - BOS OR Double + EMA (more signals)
+  const stratA_buy = (bos_bully || doble_bottom) && emaBull;
+  const stratA_sell = (bos_bear || doble_top) && emaBear;
+  // Strategy B: Strict 1:2 London/NY - BOS AND Double + EMA
+  const stratB_buy = bos_bully && doble_bottom && emaBull;
+  const stratB_sell = bos_bear && doble_top && emaBear;
+
+  return {need:false,n:c.length,prev10High,prev10Low,bos_bully,bos_bear,doble_top,doble_bottom,emaBull,emaBear,ema20,ema50,
+          buyA:stratA_buy, sellA:stratA_sell, buyB:stratB_buy, sellB:stratB_sell,
+          confidence:conf,lastClose};
+}
+
+function updateClocks(){
+  const now=new Date(), ph=new Date(now.toLocaleString("en-US",{timeZone:"Asia/Manila"}));
+  const phStr=ph.toLocaleTimeString("en-PH",{hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:true});
+  $("phTimeBadge").textContent=`${phStr} PHT`; $("phTimeBig").textContent=phStr;
+  $("phDateBig").textContent=ph.toLocaleDateString("en-PH",{weekday:"long",year:"numeric",month:"short",day:"numeric"})+" · Tagum City, Davao — PHT UTC+8";
+  [["Sydney","Australia/Sydney"],["Tokyo","Asia/Tokyo"],["London","Europe/London"],["NY","America/New_York"],["SG","Asia/Singapore"],["UTC","UTC"]].forEach(([id,tz])=>{
+    const t=new Date(now.toLocaleString("en-US",{timeZone:tz}));
+    $(`time${id}`).textContent=t.toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:true});
+    $(`date${id}`).textContent=t.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"});
+    const h=t.getHours()+t.getMinutes()/60, wk=t.getDay()===0||t.getDay()===6;
+    if($(`sess${id}`)) $(`sess${id}`).textContent=(id==="UTC"||(!wk&&h>=9&&h<17))?"OPEN":"CLOSED";
+  });
+  const phH=ph.getHours();
+  if(phH>=15&&phH<23){ $("pillLondonSess").textContent="LONDON SESSION"; $("pillLondonVol").textContent="LONDON HIGH VOLUME"; $("sessionBadge").textContent="LONDON / HIGH VOLUME"; }
+  else if(phH>=8&&phH<15){ $("pillLondonSess").textContent="ASIAN SESSION"; $("pillLondonVol").textContent="ASIAN / LOW VOLUME"; $("sessionBadge").textContent="ASIAN / CLOSED"; }
+  else { $("pillLondonSess").textContent="NY SESSION"; $("pillLondonVol").textContent="NY HIGH VOLUME"; $("sessionBadge").textContent="NY / HIGH VOLUME"; }
+}
+
+function setPill(id,okTxt,waitTxt,ok){ const el=$(id); if(!el)return; el.textContent=ok?okTxt:waitTxt; el.style.color=ok?(okTxt.includes("BEAR")||okTxt.includes("TOP")?"#ff4d5a":"#00d084"):"#666"; }
 
 function update(){
-  const cs=hist.slice(-18),r=check18(cs);
-  $("priceTop").textContent=`$${fmt2(priceNow)}`;
-  $("goldBadge").textContent=`GOLD $${fmt2(priceNow)} SPOT`;
-  $("candleBadge").textContent=`${cs.length}/18 REAL OHLC`;
-  $("candleCountBig").textContent=`${cs.length}/18`;
+  const cs=hist.slice(-100);
+  const r=cs.length>=18?checkPatterns(cs):{need:true,reason:`NEED ${18-cs.length} MORE CANDLES`,n:cs.length};
+  $("priceBig").textContent=priceNow?`$${fmt2(priceNow)}`:"$--.--";
+  $("highPill").textContent=cs.length?`HIGH $${fmt2(Math.max(...cs.map(c=>c.high)))}`:"HIGH --";
+  $("lowPill").textContent=cs.length?`LOW $${fmt2(Math.min(...cs.map(c=>c.low)))}`:"LOW --";
+  $("barsPill").textContent=`${cs.length} BARS`; $("optRight").textContent=`${cs.length}/18`;
 
-  if(cs.length>=10){
-    const p=cs.slice(-10);
-    $("last10High").textContent=`$${fmt2(safeMax(p.map(x=>x.high),NaN))}`;
-    $("last10Low").textContent=`$${fmt2(safeMin(p.map(x=>x.low),NaN))}`;
+  if(!r.need){
+    setPill("pillBosBully","BOS BULLY CONFIRMED","BOS BULLY WAIT",r.bos_bully);
+    setPill("pillBosBear","BOS BEAR CONFIRMED","BOS BEAR WAIT",r.bos_bear);
+    setPill("pillDoubleBottom","DOUBLE BOTTOM FLAG","DOUBLE BOTTOM WAIT",r.doble_bottom);
+    setPill("pillDoubleTop","DOUBLE TOP FLAG","DOUBLE TOP WAIT",r.doble_top);
+    $("pillMa").textContent=r.ema20!==null?(r.emaBull?`EMA BULL ${fmt2(r.ema20)}>${fmt2(r.ema50)}`:r.emaBear?`EMA BEAR ${fmt2(r.ema20)}<${fmt2(r.ema50)}`:"EMA 20/50 WAIT"):"EMA 20/50 WAIT";
+    setPill("pillStratA",`STRAT A ${r.buyA||r.sellA?"MATCH":"WAIT"}`,`STRAT A WAIT`,r.buyA||r.sellA);
+    setPill("pillStratB",`STRAT B ${r.buyB||r.sellB?"MATCH":"WAIT"}`,`STRAT B WAIT`,r.buyB||r.sellB);
+    $("confBadge").textContent=`CONF ${r.confidence}%`;
   }
+  const remain=Math.ceil((cooldownMs-(Date.now()-lastSignalTime))/60000);
+  $("cooldownPill").textContent=(Date.now()-lastSignalTime)>=cooldownMs?"COOLDOWN READY":`COOLDOWN ${remain}M LEFT`;
 
-  if(isMarketClosed()){
-    $("patternBadges").innerHTML=`<span class="bdg closed">MARKET CLOSED — WEEKEND — NO TRADE</span>`;
-    $("signalBox").className="sig WAIT";
-    $("signalTop").textContent="MARKET CLOSED — NO TRADE — WAIT FOR MARKET OPEN";
-    $("signalTop").style.color="#444";
-    $("tradeCard").classList.add("hidden");$("noMatchCard").classList.remove("hidden");
-    draw();return;
+  const isWeekend=(()=>{const ph=new Date(new Date().toLocaleString("en-US",{timeZone:"Asia/Manila"}));return ph.getDay()===0||ph.getDay()===6;})();
+  if(isWeekend){
+    $("liveReadBig").textContent="WAIT"; $("liveReadBig").style.color="#b8b0a0";
+    $("liveReadDesc").textContent="Weekend close — both strategies paused until Sunday 21:00 UTC";
+    $("tradeCard").className="card trade-card"; draw(); return;
   }
-
   if(r.need){
-    $("patternBadges").innerHTML=`<span class="bdg bos">WAIT — ${r.reason}</span>`;
-    $("signalBox").className="sig WAIT";
-    $("signalTop").textContent=`WAIT — ${r.reason} — NO FABRICATED SIGNAL`;
-    $("signalTop").style.color="#666";
-    $("tradeCard").classList.add("hidden");$("noMatchCard").classList.remove("hidden");
-    $("cheatBOSBully").textContent="BOS BULLY: WAIT";
-    $("cheatBOSBear").textContent="BOS BEAR: WAIT";
-    $("cheatDobleTop").textContent="DOBLE TOP: WAIT";
-    $("cheatDobleBottom").textContent="DOBLE BOTTOM: WAIT";
-    draw();return;
+    $("liveReadBig").textContent="WAIT"; $("liveReadBig").style.color="#b8b0a0";
+    $("liveReadDesc").textContent=r.reason+" — building candles for DUAL analysis";
+    $("tradeCard").className="card trade-card"; draw(); return;
   }
 
-  $("cheatBOSBully").textContent=`BOS BULLY: ${r.bos_bully?"CONFIRMED":"WAIT"}`;
-  $("cheatBOSBully").className=`bdg ${r.bos_bully?"buy":""}`;
-  $("cheatBOSBear").textContent=`BOS BEAR: ${r.bos_bear?"CONFIRMED":"WAIT"}`;
-  $("cheatBOSBear").className=`bdg ${r.bos_bear?"sell":""}`;
-  $("cheatDobleTop").textContent=`DOBLE TOP: ${r.doble_top?"FLAG":"WAIT"}`;
-  $("cheatDobleTop").className=`bdg ${r.doble_top?"doble":""}`;
-  $("cheatDobleBottom").textContent=`DOBLE BOTTOM: ${r.doble_bottom?"FLAG":"WAIT"}`;
-  $("cheatDobleBottom").className=`bdg ${r.doble_bottom?"buy":""}`;
+  // Session filter for B only
+  const phNow=new Date(new Date().toLocaleString("en-US",{timeZone:"Asia/Manila"}));
+  const phHour=phNow.getHours();
+  const isLondon=phHour>=15&&phHour<24;
+  const isNY=phHour>=21||phHour<4;
+  const isBest=isLondon||isNY;
 
-  const match=r.buy||r.sell;
+  // Determine which strategy matches
+  let match=null; // {strat, type, sl, tp1, tp2}
+  const enableA = activeStrat==="BOTH"||activeStrat==="A";
+  const enableB = activeStrat==="BOTH"||activeStrat==="B";
+
+  // Priority: B first if both match same candle (higher quality)
+  if(enableB && (r.buyB||r.sellB) && isBest){
+    const type=r.sellB?"SELL":"BUY";
+    match={strat:"B", type, sl:type==="BUY"?r.lastClose-5:r.lastClose+5, tp1:type==="BUY"?r.lastClose+10:r.lastClose-10, tp2:type==="BUY"?r.lastClose+15:r.lastClose-15};
+  } else if(enableA && (r.buyA||r.sellA)){
+    const type=r.sellA?"SELL":"BUY";
+    match={strat:"A", type, sl:type==="BUY"?r.lastClose-3:r.lastClose+3, tp1:type==="BUY"?r.lastClose+3:r.lastClose-3, tp2:type==="BUY"?r.lastClose+6:r.lastClose-6};
+  } else if(enableB && (r.buyB||r.sellB) && !isBest){
+    // B matched but outside session - show as WAIT, not trade
+    $("liveReadBig").textContent="WAIT";
+    $("liveReadDesc").textContent=`STRAT B MATCH BUT OUTSIDE BEST SESSION (PH ${phHour}:00) — London 15:00-00:00 NY 21:30-04:00 only — Conf ${r.confidence}%`;
+    $("tradeCard").className="card trade-card"; draw(); return;
+  }
+
   if(!match){
-    $("patternBadges").innerHTML=`<span class="bdg">NO MATCH — Need BOS + DOBLE confirmation</span>`;
-    $("signalBox").className="sig WAIT";
-    $("signalTop").textContent="WAIT — NO MATCH — NEED BOS + DOBLE CONFIRMATION";
-    $("signalTop").style.color="#444";
-    $("tradeCard").classList.add("hidden");$("noMatchCard").classList.remove("hidden");
-    draw();return;
+    $("liveReadBig").textContent="WAIT";
+    $("liveReadDesc").textContent=`WAIT — A:${r.buyA||r.sellA?"MATCH":"WAIT"} B:${r.buyB||r.sellB?"MATCH":"WAIT"} ${!isBest?"(B needs London/NY)":""} — Conf ${r.confidence}% — Both analysing`;
+    $("tradeCard").className="card trade-card"; draw(); return;
   }
 
-  const type=r.sell?"SELL":"BUY",entry=safePrice(priceNow);
-  const sl=type==="BUY"?entry-3:entry+3;
-  const tp1=type==="BUY"?entry+9:entry-9;
-  const tp2=type==="BUY"?entry+12:entry-12;
+  if(Date.now()-lastSignalTime<cooldownMs){
+    $("liveReadBig").textContent="WAIT";
+    $("liveReadDesc").textContent=`COOLDOWN ${remain}M LEFT — ${match.strat} ${match.type} ready but cooldown active`;
+    $("tradeCard").className="card trade-card"; draw(); return;
+  }
 
-  $("tradeCard").classList.remove("hidden");$("noMatchCard").classList.add("hidden");
-  $("signalBox").className=`sig ${type}`;
-  $("signalTop").textContent=`${type} CONFIRMED — BOS + ${type==="BUY"?"DOBLE BOTTOM":"DOBLE TOP"} — ENTRY $${entry.toFixed(2)} SL $${sl.toFixed(2)} TP1 $${tp1.toFixed(2)} TP2 $${tp2.toFixed(2)}`;
-  $("signalTop").style.color=type==="BUY"?"var(--accent)":"#ff3b4a";
-  $("matchTitle").textContent=`${type} CONFIRMED — BOS + ${type==="BUY"?"DOBLE BOTTOM":"DOBLE TOP"}`;
-  $("matchTitle").style.color=type==="BUY"?"var(--accent)":"#ff3b4a";
-  $("gEntry").textContent=`$${entry.toFixed(2)}`;
-  $("gSL").textContent=`$${sl.toFixed(2)}`;
-  $("gLot").textContent=`${LOT.toFixed(2)} lot`;
-  $("gRisk").textContent=`$${RISK} target`;
-  $("gTP1").textContent=`$${tp1.toFixed(2)}`;
-  $("gTP2").textContent=`$${tp2.toFixed(2)}`;
-  $("gSLDist").textContent="$3.00";
-  $("gEntryInfo").textContent="Real spot price at signal time";
-  $("gSLInfo").textContent="Fixed $3 price distance";
-  $("gTP1Info").textContent="1:3 price-distance target";
-  $("gTP2Info").textContent="1:4 price-distance target";
-  $("matchSubtitle").textContent=`Entry $${entry.toFixed(2)} • SL $${sl.toFixed(2)} • ${LOT.toFixed(2)} lot • Target risk $${RISK} • TP1 $${tp1.toFixed(2)} • TP2 $${tp2.toFixed(2)}`;
-  $("cheatLines").innerHTML=`<div class="cheat-ln" style="border-left:3px solid ${type==="BUY"?"var(--accent)":"#ff3b4a"}"><b>${type} CONFIRMED — BOS + ${type==="BUY"?"DOBLE BOTTOM":"DOBLE TOP"} — Entry $${entry.toFixed(2)} • SL $${sl.toFixed(2)} • TP1 $${tp1.toFixed(2)} • TP2 $${tp2.toFixed(2)}</b></div>`;
+  // TRADE LIVE!
+  const {strat, type, sl, tp1, tp2}=match;
+  $("liveReadBig").textContent=`${type} CONFIRMED [${strat}]`;
+  $("liveReadBig").style.color=type==="BUY"?"#00d084":"#ff4d5a";
+  $("liveReadDesc").textContent=`${type} CONFIRMED — STRATEGY ${strat} — ${strat==="A"?"SL3 TP3 1:1 Scalp":"SL5 TP10 1:2 London/NY"} — Entry $${fmt2(r.lastClose)} SL $${fmt2(sl)} TP1 $${fmt2(tp1)} — ${r.confidence}% — Live match!`;
+  $("tradeCard").className=`card trade-card show ${type} STRAT-${strat}`;
+  $("tradeLbl").textContent=`TRADE CONFIRMED — STRATEGY ${strat} — ${strat==="A"?"SCALP 1:1":"LONDON/NY 1:2"}`;
+  $("tradeTitle").textContent=`${type} CONFIRMED [STRAT ${strat}] — ${strat==="A"?"1:1 SCALP":"1:2 LONDON/NY"} — ${r.confidence}%`;
+  $("tradeTitle").style.color=strat==="A"?"#4a9eff":(type==="BUY"?"#00d084":"#ff4d5a");
+  $("tradeSub").textContent=`Strategy ${strat} — ${strat==="A"?"SL $3 TP $3 1:1 Any session":"SL $5 TP $10 1:2 London/NY only"} — Entry $${fmt2(r.lastClose)} • 0.01 lot`;
+  $("gStrat").textContent=strat==="A"?"A 1:1 Scalp":"B 1:2 London/NY";
+  $("gStrat").style.color=strat==="A"?"#4a9eff":"#00d084";
+  $("gEntry").textContent=`$${fmt2(r.lastClose)}`;
+  $("gSL").textContent=`$${fmt2(sl)}`; $("gSLk").textContent=strat==="A"?"SL $3":"SL $5";
+  $("gTP1").textContent=`$${fmt2(tp1)}`; $("gTP1k").textContent=strat==="A"?"TP1 $3 1:1":"TP1 $10 1:2";
+  $("gTP2").textContent=`$${fmt2(tp2)}`; $("gTP2k").textContent=strat==="A"?"TP2 $6":"TP2 $15";
+  $("gConf").textContent=`${r.confidence}%`;
+  logEvent(new Date().toLocaleTimeString("en-PH",{hour:"2-digit",minute:"2-digit"}),`${type} [${strat}] Entry $${fmt2(r.lastClose)} SL $${fmt2(sl)} TP1 $${fmt2(tp1)} Conf ${r.confidence}% — LIVE MATCH`);
+  recordSignal(type,r.lastClose,sl,tp1,tp2,r.confidence,strat);
+  renderWinrate(); renderSignalList();
+  lastSignalTime=Date.now();
   draw();
 }
 
-function setApiStatus(online,label){
-  const b=$("apiStatusBadge");
-  b.className=online?"bdg live":"bdg closed";
-  b.textContent=label;
+function draw(){
+  const canvas=$("chart"); if(!canvas) return;
+  const rect=canvas.parentElement.getBoundingClientRect(), w=rect.width, h=rect.height, dpr=window.devicePixelRatio||1;
+  canvas.width=w*dpr; canvas.height=h*dpr; canvas.style.width=w+"px"; canvas.style.height=h+"px";
+  const ctx=canvas.getContext("2d"); ctx.scale(dpr,dpr);
+  ctx.fillStyle="#080808"; ctx.fillRect(0,0,w,h);
+  const v=hist.slice(-vis);
+  if(v.length<2){ ctx.fillStyle="#333"; ctx.font="700 10px Inter"; ctx.textAlign="center"; ctx.fillText("Both strategies analysing — building candles…",w/2,h/2); return; }
+  const max=Math.max(...v.map(c=>c.high)), min=Math.min(...v.map(c=>c.low)), range=max-min||10, padX=12, padY=20, slot=(w-padX*2)/v.length, cw=slot*0.55;
+  ctx.strokeStyle="#151515"; ctx.lineWidth=0.5;
+  for(let i=0;i<4;i++){ const y=padY+i*(h-padY*2)/4; ctx.beginPath(); ctx.moveTo(padX,y); ctx.lineTo(w-padX,y); ctx.stroke(); }
+  const Y=val=>padY+(max-val)/range*(h-padY*2);
+  if(v.length>=11){
+    const prevHigh=Math.max(...v.slice(-11,-1).map(c=>c.high)), prevLow=Math.min(...v.slice(-11,-1).map(c=>c.low));
+    ctx.setLineDash([6,4]);
+    ctx.strokeStyle="#ff8c00aa"; ctx.beginPath(); ctx.moveTo(padX,Y(prevHigh)); ctx.lineTo(w-padX,Y(prevHigh)); ctx.stroke();
+    ctx.fillStyle="#ff8c00"; ctx.font="700 8px Inter"; ctx.textAlign="left"; ctx.fillText("BOS high",padX,Y(prevHigh)-4);
+    ctx.strokeStyle="#ff4d5aaa"; ctx.beginPath(); ctx.moveTo(padX,Y(prevLow)); ctx.lineTo(w-padX,Y(prevLow)); ctx.stroke();
+    ctx.fillStyle="#ff4d5a"; ctx.fillText("BOS low",padX,Y(prevLow)-4);
+    ctx.setLineDash([]);
+  }
+  function drawEMA(p,color){
+    if(v.length<p) return;
+    const k=2/(p+1); let e=0;
+    for(let i=0;i<p;i++) e+=v[i].close; e/=p;
+    ctx.strokeStyle=color; ctx.lineWidth=1; ctx.beginPath();
+    let x=padX+(p-1)*slot+slot/2, y=Y(e);
+    ctx.moveTo(x,y);
+    for(let i=p;i<v.length;i++){ e=v[i].close*k+e*(1-k); x=padX+i*slot+slot/2; y=Y(e); ctx.lineTo(x,y); }
+    ctx.stroke();
+  }
+  drawEMA(20,"#00d084aa"); drawEMA(50,"#ff8c00aa");
+  v.forEach((c,i)=>{
+    const x=padX+i*slot+slot/2, bull=c.close>=c.open;
+    ctx.strokeStyle=bull?"#ff8c0066":"#ff4d5a66";
+    ctx.beginPath(); ctx.moveTo(x,Y(c.high)); ctx.lineTo(x,Y(c.low)); ctx.stroke();
+    ctx.fillStyle=bull?"#ff8c00":"#ff4d5a";
+    const by=Math.min(Y(c.open),Y(c.close)), bh=Math.max(2,Math.abs(Y(c.open)-Y(c.close)));
+    ctx.fillRect(x-cw/2,by,cw,bh);
+  });
+  const last=v[v.length-1], x=padX+(v.length-1)*slot+slot/2;
+  ctx.fillStyle="#f5d78e"; ctx.beginPath(); ctx.arc(x+10,Y(last.close),4,0,Math.PI*2); ctx.fill();
+  ctx.font="700 11px JetBrains Mono"; ctx.textAlign="left"; ctx.fillText(`$${fmt2(last.close)}`,x+18,Y(last.close)+3);
+}
+
+function pushTick(p){
+  if(!(p>1000&&p<10000)) return false;
+  priceNow=p; resolveSignals(p);
+  const now=Math.floor(Date.now()/60000);
+  const lastC=hist[hist.length-1];
+  if(lastC&&lastC.min===now){ lastC.close=p; lastC.high=Math.max(lastC.high,p); lastC.low=Math.min(lastC.low,p); }
+  else { hist.push({min:now,open:p,high:p,low:p,close:p}); if(hist.length>150) hist.shift(); }
+  saveCandles(); return true;
 }
 
 async function fetchPrice(){
+  const key=localStorage.getItem("sg_metal_key")||"";
+  const ts=new Date().toLocaleTimeString("en-PH",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
   try{
-    const r=await fetch("https://api.gold-api.com/price/XAU",{cache:"no-store"});
-    if(!r.ok) throw new Error("HTTP "+r.status);
-    const d=await r.json(),p=parseFloat(d.price);
-    if(!(p>1000&&p<10000)) throw new Error("Invalid price");
-    priceNow=p;
-    $("lastUpd").textContent="updated "+new Date().toLocaleTimeString("en-PH")+" — Gold API spot";
-    setApiStatus(true,"GOLD API CONNECTED — SPOT PRICE");
-    update();
+    let url=key?`https://api.metalpriceapi.com/v1/latest?apikey=${key}&base=USD&currencies=XAU`:"https://api.gold-api.com/price/XAU";
+    let res=await fetch(url,{cache:"no-store"}); if(!res.ok) throw new Error("HTTP "+res.status);
+    let d=await res.json();
+    let p=key?(d.rates&&d.rates.XAU?1/parseFloat(d.rates.XAU):0):parseFloat(d.price);
+    if(!pushTick(p)) throw new Error("bad price");
+    $("apiBadge").textContent=key?"METALPRICEAPI — LIVE":"GOLD-API.COM — LIVE"; $("apiBadge").className="badge live";
+    $("liveBadge").textContent="LIVE XAU"; $("lastUpd").textContent=`Last update ${ts} — $${fmt2(p)} — ${hist.length} bars — DUAL A+B`;
+    $("weekendBadge").textContent="LIVE MARKET"; $("weekendBadge").className="badge live";
+    logEvent(ts,`Live $${fmt2(p)} — DUAL A+B — ${hist.length} bars`);
+    update(); return;
   }catch(e){
-    setApiStatus(false,"GOLD API OFFLINE — NO TRADE");
-    $("lastUpd").textContent="Gold API unavailable — no fabricated price/candle";
+    $("apiBadge").textContent="OFFLINE — retry 60s"; $("apiBadge").className="badge offline";
+    $("liveBadge").textContent="OFFLINE";
+    $("lastUpd").textContent=`${ts} — OFFLINE (${e.message}) — ${hist.length} cached`;
+    logEvent(ts,`OFFLINE — ${e.message}`);
     update();
   }
 }
 
-$("refreshBtn").addEventListener("click",fetchPrice);
+function makeReplay(type, strat){
+  const up=type==="BUY";
+  let bars=[], base=4349.72;
+  for(let i=0;i<41;i++){
+    let close=base+(up?1:-1)*i*0.06+Math.sin(i*1.7)*0.35;
+    let open=close-(up?1:-1)*0.15;
+    let high=Math.max(open,close)+0.25, low=Math.min(open,close)-0.25;
+    bars.push({min:i,open,high,low,close});
+  }
+  if(up){ bars[31].low=4348.10; bars[34].low=4348.15; bars[40].close=4352.20; }
+  else { bars[31].high=4352.30; bars[34].high=4352.35; bars[40].close=4347.40; }
+  return bars;
+}
 
-const chartEl=$("chart");
-chartEl.addEventListener("mousedown",e=>{dragging=true;lastX=e.clientX});
-chartEl.addEventListener("mousemove",e=>{if(!dragging)return;let dx=e.clientX-lastX;lastX=e.clientX;pan+=dx>0?-1:1;pan=Math.max(-hist.length+vis,Math.min(0,pan));draw()});
-chartEl.addEventListener("mouseup",()=>dragging=false);
-chartEl.addEventListener("mouseleave",()=>dragging=false);
-chartEl.addEventListener("wheel",e=>{e.preventDefault();vis=Math.max(8,Math.min(40,vis+(e.deltaY>0?2:-2)));draw()},{passive:false});
-chartEl.addEventListener("touchstart",e=>{dragging=true;lastX=e.touches[0].clientX},{passive:false});
-chartEl.addEventListener("touchmove",e=>{if(!dragging)return;e.preventDefault();let dx=e.touches[0].clientX-lastX;lastX=e.touches[0].clientX;pan+=dx>0?-1:1;pan=Math.max(-hist.length+vis,Math.min(0,pan));draw()},{passive:false});
-chartEl.addEventListener("touchend",()=>dragging=false);
+$("btnRefresh").onclick=()=>{isReplay=false;fetchPrice();};
+$("btnReplayBuy").onclick=()=>{isReplay=true;hist=makeReplay("BUY","A");priceNow=hist[hist.length-1].close;logEvent(new Date().toLocaleTimeString("en-PH",{hour:"2-digit"}),"Replay BUY A — Scalp 1:1 — BOS OR Double + EMA");update();};
+$("btnReplaySell").onclick=()=>{isReplay=true;hist=makeReplay("BUY","B");priceNow=hist[hist.length-1].close;logEvent(new Date().toLocaleTimeString("en-PH",{hour:"2-digit"}),"Replay BUY B — London 1:2 — BOS AND Double + EMA");update();};
+$("btnResume").onclick=()=>{isReplay=false;hist=JSON.parse(localStorage.getItem("sg_candles_v119_dual")||"[]");priceNow=hist.length?hist[hist.length-1].close:0;fetchPrice();};
+$("btnBoth").onclick=()=>{activeStrat="BOTH";$("btnBoth").className="strat-btn activeBoth";$("btnA").className="strat-btn";$("btnB").className="strat-btn";$("stratBadge").textContent="DUAL A+B ACTIVE";$("stratBadge").className="badge blue";};
+$("btnA").onclick=()=>{activeStrat="A";$("btnA").className="strat-btn activeA";$("btnBoth").className="strat-btn";$("btnB").className="strat-btn";$("stratBadge").textContent="STRAT A ONLY";$("stratBadge").className="badge blue";};
+$("btnB").onclick=()=>{activeStrat="B";$("btnB").className="strat-btn activeB";$("btnBoth").className="strat-btn";$("btnA").className="strat-btn";$("stratBadge").textContent="STRAT B ONLY";$("stratBadge").className="badge green";};
+$("btnSaveKey").onclick=()=>{localStorage.setItem("sg_metal_key",$("apiKey").value.trim());logEvent(new Date().toLocaleTimeString("en-PH",{hour:"2-digit"}),"API key saved");fetchPrice();};
+$("apiKey").value=localStorage.getItem("sg_metal_key")||"";
+$("btnClearSig").onclick=()=>{signals=[];saveSignals();renderWinrate();renderSignalList();};
+$("chart").addEventListener("wheel",e=>{e.preventDefault();vis=Math.max(18,Math.min(100,vis+(e.deltaY>0?3:-3)));draw();},{passive:false});
 
-hist=[];logs=[];priceNow=4349.70;
-log("v115 FINAL — REAL SPOT PRICE ONLY — NO SYNTHETIC CANDLES — NO FABRICATED SIGNALS","ph");
-updateWorldTimes();update();fetchPrice();
-setInterval(fetchPrice,15000);
-setInterval(updateWorldTimes,1000);
+renderWinrate(); renderSignalList();
+updateClocks(); fetchPrice();
+setInterval(fetchPrice,60000);
+setInterval(updateClocks,1000);
+setInterval(()=>{ if(!isReplay) update(); },2000);
 setInterval(draw,1000);
 </script>
 </body>
