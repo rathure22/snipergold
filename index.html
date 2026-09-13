@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Sniper Gold v5.0</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#0d0b08;--card:#1a1815;--card2:#1f1c18;--border:#2a2620;--text:#e8ddd0;--muted:#8a7f70;--accent:#ff8c00;--green:#00d084;--green2:#00d08418;--blue:#4a9eff;--red:#ff4a4a}
-body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-serif;font-weight:700;padding:6px;font-size:10px;line-height:1.3}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;font-weight:600;padding:6px;font-size:10px;line-height:1.4;letter-spacing:0.1px}
 .hdr,.xau-card,.dual-card,.strat-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:14px;margin:6px 0}
-.ttl{font-family:'Montserrat',sans-serif;font-size:16px;font-weight:800}
+.ttl{font-family:'Sora',sans-serif;font-size:17px;font-weight:800;letter-spacing:-0.3px}
 .sub{font-size:10px;font-weight:600;color:var(--muted);margin-top:4px}
 .badge{border:1px solid var(--border);background:var(--card2);border-radius:20px;padding:5px 10px;font-size:7px;font-weight:700;text-transform:uppercase;color:var(--muted)}
 .badge.live{border-color:var(--accent);color:var(--accent);background:#ff8c0015;font-weight:800}
@@ -147,7 +147,24 @@ body.orange-theme{--accent:#ff8c00}
 .tf-btn{flex:1;padding:6px;background:var(--card2);border:1px solid var(--border);border-radius:10px;text-align:center;font-size:8px;font-weight:700;color:var(--muted);cursor:pointer}
 .tf-btn.active{border-color:var(--accent);color:var(--accent);background:#ff8c0012}
 .live-data-line{font-size:7px;color:#666;font-weight:600;margin-top:4px}
-.pull-hint{text-align:center;font-size:7px;color:#555;padding:2px 0;height:12px}
+.pattern-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:14px;margin:6px 0}
+.pattern-title{font-size:9px;font-weight:800;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:10px}
+.pattern-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.pattern-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #1a1a1a;font-size:9px}
+.pattern-row:last-child{border:0}
+.pattern-found{color:var(--green);font-weight:800}
+.pattern-none{color:#555;font-weight:700}
+.sig-box{margin-top:12px;border:1px solid var(--border);border-radius:16px;padding:16px;text-align:center;background:#0a0907}
+.sig-box.buy{border-color:var(--green);background:#00d0840f}
+.sig-box.sell{border-color:var(--red);background:#ff4a4a0f}
+.sig-label{font-size:8px;color:#666;letter-spacing:2px;text-transform:uppercase}
+.sig-value{font-size:32px;font-weight:800;margin:8px 0;color:#666}
+.sig-value.buy{color:var(--green)}
+.sig-value.sell{color:var(--red)}
+.sig-exp{background:#0a0907;border:1px solid #1a1a1a;border-radius:10px;padding:10px;margin-top:8px;text-align:left;font-size:8px;line-height:1.5;color:#999}
+.speed-row{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
+.speed-btn{flex:1;min-width:40px;padding:6px;background:var(--card2);border:1px solid var(--border);border-radius:10px;text-align:center;font-size:8px;font-weight:700;color:var(--muted);cursor:pointer}
+.speed-btn.active{border-color:var(--accent);color:var(--accent);background:#ff8c0012}
 </style>
 </head>
 <body>
@@ -319,7 +336,13 @@ body.orange-theme{--accent:#ff8c00}
 </div>
 
 <div class="dual-card">
- <div style="font-size:8px;font-weight:800;color:var(--muted);text-transform:uppercase;margin-bottom:8px">Dual Strategy — 18-Candle Analysis</div>
+ <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+  <div style="font-size:8px;font-weight:800;color:var(--muted);text-transform:uppercase">Dual Strategy — 18-Candle Analysis</div>
+  <div style="display:flex;align-items:center;gap:6px">
+   <span style="font-size:7px;color:#666;font-weight:700" id="abMonitorLabel">A/B ON</span>
+   <div class="toggle-switch-mini on" id="abMonitorToggle"><div class="knob"></div></div>
+  </div>
+ </div>
  <div class="dual-row">
   <div class="dual-opt" id="optABox">
    <div class="dual-label">A · 1:1 Scalp</div>
@@ -378,6 +401,42 @@ body.orange-theme{--accent:#ff8c00}
  <div style="display:flex;gap:6px;margin-top:8px">
   <button class="btn btn-small btn-orange" id="calcSlTpBtn">Recalculate</button>
   <button class="btn btn-small btn-dark" id="showSlTpBtn">Show Strategy</button>
+ </div>
+</div>
+
+<div class="pattern-card" id="patternCard">
+ <div class="pattern-title">Strategy C — Pattern + Guide (18-tick window)</div>
+ <div style="display:flex;gap:6px;flex-wrap:wrap">
+  <span class="badge live" id="patternLiveBadge">1-SEC-STYLE GUIDE</span>
+  <span class="badge" id="guideHighBadge">GUIDE HIGH --</span>
+  <span class="badge" id="guideLowBadge">GUIDE LOW --</span>
+ </div>
+ <div class="pattern-grid">
+  <div>
+   <div class="pattern-row"><span>Double Bottom (W)</span><span id="patW" class="pattern-none">--</span></div>
+   <div class="pattern-row"><span>Double Top (M)</span><span id="patM" class="pattern-none">--</span></div>
+  </div>
+  <div>
+   <div class="pattern-row"><span>Bull Flag</span><span id="patBF" class="pattern-none">--</span></div>
+   <div class="pattern-row"><span>Bear Flag</span><span id="patBE" class="pattern-none">--</span></div>
+  </div>
+ </div>
+ <div class="sig-box" id="patSigBox">
+  <div class="sig-label">Pattern + Guide Break Signal</div>
+  <div class="sig-value" id="patSigValue">WAIT</div>
+  <div class="sig-exp" id="patSigExp">⏳ Waiting for a detected pattern (W / M / Bull Flag / Bear Flag) to line up with a break of the guide high or low.</div>
+ </div>
+ <div style="font-size:7px;color:#666;font-weight:600;margin-top:8px" id="patTpLabel">TP1–TP5 (from guide risk)</div>
+ <div id="patTpList" style="margin-top:6px"></div>
+ <div style="background:var(--card2);border-top:1px solid var(--border);margin-top:10px;padding-top:10px">
+  <div style="font-size:7px;color:#666;font-weight:700;text-transform:uppercase;margin-bottom:6px">Update Speed</div>
+  <div class="speed-row">
+   <div class="speed-btn" data-ms="1000">1s</div>
+   <div class="speed-btn active" data-ms="5000">5s</div>
+   <div class="speed-btn" data-ms="10000">10s</div>
+   <div class="speed-btn" data-ms="30000">30s</div>
+  </div>
+  <div style="font-size:6px;color:#666;margin-top:6px">Faster = more API calls to gold-api.com/xaus.com/goldprice.dev. Very fast settings (1s) risk rate-limits on free tiers — use with caution, ideally short sessions only.</div>
  </div>
 </div>
 
@@ -441,6 +500,74 @@ let lastMatchState={a:false,b:false};
 let soundAlertsOn=true;
 let priceAlert={above:null,below:null,firedAbove:false,firedBelow:false};
 let connLog=[];
+let patternPrices=[];
+let guideHigh=0, guideLow=0, patEntry=0, patSL=0, patRisk=0;
+let lastPatternSignal='WAIT';
+let mainTickMs=5000, mainTickHandle=null;
+let abMonitoringOn=true; // Strategy A/B on/off — Strategy C always runs independently
+
+// Pattern detection ported from SniperGold V9 (W/M/Bull-Flag/Bear-Flag on raw tick swings)
+function detectPatterns(prices){
+ const last=prices.slice(-20), lows=[], highs=[];
+ for(let i=2;i<last.length-2;i++){
+  if(last[i]<last[i-1]&&last[i]<last[i-2]&&last[i]<last[i+1]&&last[i]<last[i+2]) lows.push(last[i]);
+  if(last[i]>last[i-1]&&last[i]>last[i-2]&&last[i]>last[i+1]&&last[i]>last[i+2]) highs.push(last[i]);
+ }
+ const w=lows.length>=2 && Math.abs(lows[lows.length-1]-lows[lows.length-2])<1.5;
+ const m=highs.length>=2 && Math.abs(highs[highs.length-1]-highs[highs.length-2])<1.5;
+ const f=last.slice(0,10), s=last.slice(10);
+ const up=f.length? (f[f.length-1]-f[0]) : 0;
+ const range=s.length? (Math.max(...s)-Math.min(...s)) : 0;
+ return {w, m, bf: up>2.5 && range<2.0, be: up<-2.5 && range<2.0};
+}
+function updatePatternStrategy(cur){
+ patternPrices.push(cur);
+ if(patternPrices.length>90) patternPrices.shift();
+ if(patternPrices.length<18) return; // not enough ticks yet for the guide window
+ const l18=patternPrices.slice(-18);
+ guideHigh=Math.max(...l18); guideLow=Math.min(...l18);
+ patRisk=Math.max(0.30, (guideHigh-guideLow)/3);
+ patEntry=cur; patSL=guideLow;
+
+ if($('guideHighBadge')) $('guideHighBadge').textContent='GUIDE HIGH '+fmt2(guideHigh);
+ if($('guideLowBadge')) $('guideLowBadge').textContent='GUIDE LOW '+fmt2(guideLow);
+
+ const pat=detectPatterns(patternPrices);
+ const setPat=(id,found,label)=>{ const el=$(id); if(!el) return; el.textContent=found?(label+' ✓'):'--'; el.className=found?'pattern-found':'pattern-none'; };
+ setPat('patW', pat.w, 'W FOUND');
+ setPat('patM', pat.m, 'M FOUND');
+ setPat('patBF', pat.bf, 'FLAG');
+ setPat('patBE', pat.be, 'FLAG');
+
+ const above=cur>guideHigh, below=cur<guideLow;
+ let sig='WAIT', bull=false, reason='';
+ if((pat.w||pat.bf)&&above){ sig='BUY'; bull=true; reason='W / Bull Flag pattern + break above guide high '+fmt2(guideHigh); }
+ else if((pat.m||pat.be)&&below){ sig='SELL'; bull=false; reason='M / Bear Flag pattern + break below guide low '+fmt2(guideLow); }
+
+ const box=$('patSigBox'), val=$('patSigValue'), exp=$('patSigExp');
+ if(box&&val&&exp){
+  if(sig==='BUY'){ box.className='sig-box buy'; val.className='sig-value buy'; val.textContent='BUY';
+   exp.innerHTML='✅ <b>BUY — pattern + guide break</b><br>• '+reason+'<br>• Entry '+fmt2(patEntry)+' · SL '+fmt2(patSL)+' · Risk '+fmt2(patRisk); }
+  else if(sig==='SELL'){ box.className='sig-box sell'; val.className='sig-value sell'; val.textContent='SELL';
+   exp.innerHTML='✅ <b>SELL — pattern + guide break</b><br>• '+reason+'<br>• Entry '+fmt2(patEntry)+' · SL '+fmt2(patSL)+' · Risk '+fmt2(patRisk); }
+  else{ box.className='sig-box'; val.className='sig-value'; val.textContent='WAIT';
+   exp.innerHTML='⏳ <b>Waiting</b><br>• High: '+fmt2(guideHigh)+' needs break<br>• Low: '+fmt2(guideLow)+' needs break<br>• Current: '+fmt2(cur); }
+ }
+ renderPatternTP(bull);
+ if(sig!==lastPatternSignal && sig!=='WAIT'){ alertUser('pattern '+sig); }
+ lastPatternSignal=sig;
+}
+function renderPatternTP(bull){
+ const list=$('patTpList'); if(!list) return;
+ const tps=[
+  {n:1,rr:'1:1',pct:'50%',p:bull?patEntry+patRisk:patEntry-patRisk},
+  {n:2,rr:'1:2',pct:'30%',p:bull?patEntry+patRisk*2:patEntry-patRisk*2},
+  {n:3,rr:'1:3',pct:'10%',p:bull?patEntry+patRisk*3:patEntry-patRisk*3},
+  {n:4,rr:'1:4',pct:'5%',p:bull?patEntry+patRisk*4:patEntry-patRisk*4},
+  {n:5,rr:'1:5+',pct:'runner',p:bull?patEntry+patRisk*5:patEntry-patRisk*5},
+ ];
+ list.innerHTML=tps.map(tp=>`<div class="tp-item"><div><div class="tp-label">TP${tp.n}</div><div class="tp-rr">${tp.rr} · ${tp.pct}</div></div><div style="text-align:right"><div class="tp-value">$${fmt2(tp.p)}</div></div></div>`).join('');
+}
 function fmt2(n){return Number(n).toFixed(2);}
 function haptic(ms){ try{ if(navigator.vibrate) navigator.vibrate(ms||10); }catch(e){} }
 function beep(){
@@ -596,8 +723,10 @@ function pushTick(p){
  }
  checkPriceAlert(p);
  updateLiveDataStatus();
+ updatePatternStrategy(p); // Strategy C — always runs, independent of the A/B toggle
  try{ localStorage.setItem('sg_cache', JSON.stringify({price:p, time:now, hist:hist.slice(-60)})); }catch(e){}
- drawChart(); testDualSame18Candles(); updateSlTpDisplay(); updateTp5Display();
+ drawChart(); testDualSame18Candles();
+ if(abMonitoringOn){ updateSlTpDisplay(); updateTp5Display(); }
  return true;
 }
 
@@ -626,6 +755,16 @@ function analyseOptionB(candles){
  return {match: breakout&&qual, reason: breakout?`B match: breakout of ${last.close>high5?`high ${high5.toFixed(2)}`:`low ${low5.toFixed(2)}`}, range ${(last.high-last.low).toFixed(2)}`:`B: no match — monitoring ${high5.toFixed(2)}/${low5.toFixed(2)}`, candle:last};
 }
 function testDualSame18Candles(forceMode=null){
+ if(!abMonitoringOn && !forceMode){
+  const optAStatus=$('optAStatus'), optBStatus=$('optBStatus'), dualBadge=$('dualResultBadge'), tradeLiveBadge=$('tradeLiveBadge'), optABox=$('optABox'), optBBox=$('optBBox');
+  if(optAStatus) optAStatus.textContent='Paused (A/B off)';
+  if(optBStatus) optBStatus.textContent='Paused (A/B off)';
+  if(optABox) optABox.className='dual-opt';
+  if(optBBox) optBBox.className='dual-opt';
+  if(dualBadge) dualBadge.style.display='none';
+  if(tradeLiveBadge) tradeLiveBadge.textContent='A/B monitoring paused';
+  return {a:false,b:false,both:false};
+ }
  const candles=getLast18Candles();
  const logEl=$('dualCandlesLog'), optABox=$('optABox'), optBBox=$('optBBox'), optAStatus=$('optAStatus'), optBStatus=$('optBStatus'), optAReason=$('optAReason'), optBReason=$('optBReason'), dualBadge=$('dualResultBadge'), tradeLiveBadge=$('tradeLiveBadge'), countLabel=$('candleCountLabel');
  if(countLabel) countLabel.textContent=`${candles.length} candles · ${new Date().toLocaleTimeString()}`;
@@ -860,6 +999,13 @@ function checkAllFunctionsActive(){
   {id:'showSlTpBtn', name:'Show SL/TP button'},
   {id:'testGoldLiveBtn', name:'Test Gold-API button'},
   {id:'greenThemeBackBtn', name:'Reset green theme button'},
+  {id:'patternCard', name:'Strategy C pattern card'},
+  {id:'patW', name:'W pattern indicator'},
+  {id:'patM', name:'M pattern indicator'},
+  {id:'patBF', name:'Bull flag indicator'},
+  {id:'patBE', name:'Bear flag indicator'},
+  {id:'patSigBox', name:'Pattern signal box'},
+  {id:'patTpList', name:'Pattern TP1-5 list'},
  ];
  const listEl=$('functionCheckList');
  let activeCount=0;
@@ -882,7 +1028,8 @@ window.addEventListener('load', ()=>{
  drawChart();
  testDualSame18Candles(); updateSlTpDisplay(); updateTp5Display();
  fetchPrice(); fetchExchangeRates();
- setInterval(fetchPrice,60000); setInterval(fetchExchangeRates,60000); setInterval(testDualSame18Candles,60000);
+ setInterval(fetchExchangeRates,60000); setInterval(testDualSame18Candles,60000);
+ mainTickHandle=setInterval(fetchPrice, mainTickMs);
  setInterval(()=>{ $('phTimeBadge').textContent=new Date().toLocaleTimeString('en-PH',{hour:'2-digit',minute:'2-digit',second:'2-digit'})+' PHT'; },1000);
 
  $('testDualBtn').onclick=()=>{const r=testDualSame18Candles(); alert(`Dual test — same 18 candles\nA:${r.a} B:${r.b} Both:${r.both}\n${r.both?'→ Prior B':r.b?'→ Trade B':r.a?'→ Trade A':'→ Monitoring'}`);};
@@ -915,6 +1062,16 @@ window.addEventListener('load', ()=>{
  if(soundToggle) soundToggle.onclick=()=>{
   soundAlertsOn=!soundAlertsOn; soundToggle.classList.toggle('on');
   if(soundAlertsOn) alertUser('enabled');
+ };
+
+ // Strategy A/B monitoring on/off (Strategy C is unaffected — always runs)
+ const abToggle=$('abMonitorToggle');
+ if(abToggle) abToggle.onclick=()=>{
+  abMonitoringOn=!abMonitoringOn; abToggle.classList.toggle('on');
+  if($('abMonitorLabel')) $('abMonitorLabel').textContent='A/B '+(abMonitoringOn?'ON':'OFF');
+  localStorage.setItem('sg_ab_monitor', abMonitoringOn?'on':'off');
+  testDualSame18Candles();
+  haptic(8);
  };
 
  // Price alert
@@ -971,6 +1128,18 @@ window.addEventListener('load', ()=>{
   });
  }
 
+ // Update speed selector (Strategy C)
+ document.querySelectorAll('.speed-btn').forEach(btn=>{
+  btn.onclick=function(){
+   document.querySelectorAll('.speed-btn').forEach(b=>b.classList.remove('active'));
+   this.classList.add('active');
+   mainTickMs=parseInt(this.dataset.ms);
+   if(mainTickHandle) clearInterval(mainTickHandle);
+   mainTickHandle=setInterval(fetchPrice, mainTickMs);
+   haptic(8);
+  };
+ });
+
  // Restore cache if offline on first load
  try{ const cached=JSON.parse(localStorage.getItem('sg_cache')||'{}');
   if(cached.price && cached.hist && cached.hist.length>0){ hist=cached.hist; lastPrice=cached.price; 
@@ -981,6 +1150,13 @@ window.addEventListener('load', ()=>{
 
  const saved=localStorage.getItem('sg_theme');
  if(saved==='green'){applyGreenTheme();}else{applyOrangeTheme();}
+
+ const savedAB=localStorage.getItem('sg_ab_monitor');
+ if(savedAB==='off'){
+  abMonitoringOn=false;
+  if($('abMonitorToggle')) $('abMonitorToggle').classList.remove('on');
+  if($('abMonitorLabel')) $('abMonitorLabel').textContent='A/B OFF';
+ }
 
  setTimeout(checkAllFunctionsActive,1000);
 
