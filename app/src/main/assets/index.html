@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Sniper Gold v119 DUAL - Option A 1:1 Scalp + Option B 2-3 London/NY 1:2 - Live Match</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500&family=Space+Grotesk:wght@500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--accent:#ff8c00;--accent2:#ff8c0022;--green:#00d084;--green22:#00d08422;--bg:#050505;--card:#111;--border:#1e1e1e;--text:#e8e8e8;--muted:#777;--blue:#4a9eff}
@@ -91,6 +91,47 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 .dual-box .k{font-size:8px;color:#666;font-weight:800;letter-spacing:1px;text-transform:uppercase}
 .dual-box .v{font-size:16px;font-weight:800;margin-top:4px}
 .dual-box.A .v{color:var(--blue)} .dual-box.B .v{color:var(--green)}
+
+/* MODERN ELEGANT A B + EXCHANGE + EDITOR */
+.opt-card .name{font-family:'Space Grotesk',sans-serif!important;font-weight:700!important;font-size:13px;letter-spacing:-0.3px;text-transform:uppercase}
+.opt-card .need{font-family:'Outfit',sans-serif!important;font-weight:500!important}
+.dual-box .k{font-family:'Space Grotesk',sans-serif!important;font-weight:700!important;letter-spacing:1.2px}
+.dual-box .v{font-family:'Outfit',sans-serif!important;font-weight:800!important}
+.strat-btn{font-family:'Space Grotesk',sans-serif!important;font-weight:700!important}
+#stratBadge,#winA,#winB{font-family:'Outfit',sans-serif!important;font-weight:800!important}
+.price-big,.tbox .v,#gEntry,#gSL,#gTP1,#gTP2,#tradeTitle,.btn,.pill,input,#eventLog,#signalList{font-family:'Inter','JetBrains Mono',sans-serif!important}
+/* LIVE DOT */
+.badge.live{position:relative;padding-left:18px}
+.badge.live::before{content:'●';position:absolute;left:6px;top:50%;transform:translateY(-50%);color:#00ff88;animation:blink 1s infinite;font-size:11px}
+.badge.offline{position:relative;padding-left:18px}
+.badge.offline::before{content:'●';position:absolute;left:6px;top:50%;transform:translateY(-50%);color:#ff4d5a;font-size:11px}
+@keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0.2}}
+/* EXCHANGE BAR - TOP SIDEBAR - TEXT ONLY NO FLAGS */
+.exchange-bar{padding:12px 16px;background:linear-gradient(135deg,#1a1a1a 0%,#222 100%);border:1px solid #333;margin-bottom:12px;border-radius:14px}
+.ex-title{font-family:'Space Grotesk',sans-serif;font-size:9px;letter-spacing:1.2px;font-weight:700;color:#888;margin-bottom:6px}
+.ex-rates{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.ex-item{font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;color:#e8e0d0;background:#111;padding:6px 10px;border-radius:8px;border:1px solid #2a2a2a}
+.ex-item.live{color:#00ff88;border-color:#00ff8840}
+.ex-upd{font-family:'JetBrains Mono',monospace;font-size:9px;color:#666;margin-left:auto}
+/* CONNECTION EDITOR */
+.conn-editor{padding:14px 16px;background:#151515;border:1px solid #2a2a2a;margin-bottom:12px;border-radius:14px}
+.conn-title{font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:1.2px;font-weight:700;color:#aaa;margin-bottom:10px}
+.conn-list{display:flex;flex-direction:column;gap:10px}
+.conn-item{padding:10px;background:#111;border-radius:10px;border:1px solid #222}
+.conn-name{font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;color:#e8e0d0}
+.conn-url{font-family:'JetBrains Mono',monospace;font-size:9px;color:#666;margin-top:4px;word-break:break-all}
+.conn-meta{margin-top:6px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:10px;color:#888}
+.conn-last{font-family:'JetBrains Mono',monospace;font-size:9px;color:#555;margin-top:4px}
+.log-item,.event-row{font-variant-numeric:tabular-nums}
+
+
+/* GOLD-API INDICATOR - GREEN LIVE / ORANGE OFF - tapad sa meta */
+.badge.gold-live{position:relative;padding-left:18px;background:#00ff8815;border:1px solid #00ff8840;color:#00ff88}
+.badge.gold-live::before{content:'●';position:absolute;left:6px;top:50%;transform:translateY(-50%);color:#00ff88;animation:blink 1s infinite;font-size:11px}
+.badge.gold-off{position:relative;padding-left:18px;background:#ff8c0015;border:1px solid #ff8c0040;color:#ff8c00}
+.badge.gold-off::before{content:'●';position:absolute;left:6px;top:50%;transform:translateY(-50%);color:#ff8c00;animation:none;font-size:11px}
+.badge.gold-connecting{background:#ffaa0015;border-color:#ffaa0040;color:#ffaa00}
+
 </style>
 </head>
 <body>
@@ -375,6 +416,18 @@ function update(){
 
   const isWeekend=(()=>{const ph=new Date(new Date().toLocaleString("en-US",{timeZone:"Asia/Manila"}));return ph.getDay()===0||ph.getDay()===6;})();
   if(isWeekend){
+    const openSigs = signals.filter(s=>!s.result);
+    if(openSigs.length>0){
+      const s=openSigs[0];
+      $("liveReadBig").textContent=`OPEN ${s.type} [${s.strat}] — WEEKEND HOLD`;
+      $("liveReadBig").style.color=s.type==="BUY"?"#00d084":"#ff4d5a";
+      $("liveReadDesc").textContent=`Weekend close — holding open ${s.strat} ${s.type} Entry $${fmt2(s.entry)} SL $${fmt2(s.sl)} TP $${fmt2(s.tp1)} — will resolve Monday`;
+      $("tradeCard").className=`card trade-card show ${s.type} STRAT-${s.strat}`;
+      $("tradeLbl").textContent=`OPEN WEEKEND HOLD — STRAT ${s.strat}`;
+      $("tradeTitle").textContent=`OPEN ${s.type} [${s.strat}] — Weekend`;
+      $("gEntry").textContent=`$${fmt2(s.entry)}`; $("gSL").textContent=`$${fmt2(s.sl)}`; $("gTP1").textContent=`$${fmt2(s.tp1)}`; $("gTP2").textContent=`$${fmt2(s.tp2)}`;
+      draw(); return;
+    }
     $("liveReadBig").textContent="WAIT"; $("liveReadBig").style.color="#b8b0a0";
     $("liveReadDesc").textContent="Weekend close — both strategies paused until Sunday 21:00 UTC";
     $("tradeCard").className="card trade-card"; draw(); return;
@@ -412,6 +465,22 @@ function update(){
   }
 
   if(!match){
+    // OFFLINE FIX: If offline / no match but has OPEN signal, show last open SL/TP
+    const openSigs = signals.filter(s=>!s.result);
+    if(openSigs.length>0){
+      const s=openSigs[0];
+      $("liveReadBig").textContent=`OPEN ${s.type} [${s.strat}]`;
+      $("liveReadBig").style.color=s.type==="BUY"?"#00d084":"#ff4d5a";
+      $("liveReadDesc").textContent=`OPEN SIGNAL — Strat ${s.strat} — Entry $${fmt2(s.entry)} SL $${fmt2(s.sl)} TP $${fmt2(s.tp1)} — Waiting TP/SL hit — ${priceNow?"Live price $"+fmt2(priceNow):"Offline — last known"}`;
+      $("tradeCard").className=`card trade-card show ${s.type} STRAT-${s.strat}`;
+      $("tradeLbl").textContent=`OPEN TRADE — STRATEGY ${s.strat} — ${s.strat==="A"?"SCALP 1:1":"LONDON/NY 1:2"}`;
+      $("tradeTitle").textContent=`OPEN ${s.type} [STRAT ${s.strat}] — ${fmt2(s.entry)}`;
+      $("tradeTitle").style.color=s.strat==="A"?"#4a9eff":(s.type==="BUY"?"#00d084":"#ff4d5a");
+      $("tradeSub").textContent=`Open since ${s.time} — Entry $${fmt2(s.entry)} SL $${fmt2(s.sl)} TP $${fmt2(s.tp1)} — TP/SL tracking live`;
+      $("gStrat").textContent=s.strat==="A"?"A 1:1 Scalp":"B 1:2 London/NY"; $("gStrat").style.color=s.strat==="A"?"#4a9eff":"#00d084";
+      $("gEntry").textContent=`$${fmt2(s.entry)}`; $("gSL").textContent=`$${fmt2(s.sl)}`; $("gTP1").textContent=`$${fmt2(s.tp1)}`; $("gTP2").textContent=`$${fmt2(s.tp2)}`; $("gConf").textContent=`${s.conf}%`;
+      draw(); return;
+    }
     $("liveReadBig").textContent="WAIT";
     $("liveReadDesc").textContent=`WAIT — A:${r.buyA||r.sellA?"MATCH":"WAIT"} B:${r.buyB||r.sellB?"MATCH":"WAIT"} ${!isBest?"(B needs London/NY)":""} — Conf ${r.confidence}% — Both analysing`;
     $("tradeCard").className="card trade-card"; draw(); return;
@@ -502,27 +571,106 @@ function pushTick(p){
   saveCandles(); return true;
 }
 
-async function fetchPrice(){
-  const key=localStorage.getItem("sg_metal_key")||"";
-  const ts=new Date().toLocaleTimeString("en-PH",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+
+// EXCHANGE RATES - open.er-api.com free no key - USD/EUR/KWD to PHP - TEXT ONLY NO FLAGS
+async function fetchExchangeRates(){
+  const updEl=$("exUpd");
   try{
-    let url=key?`https://api.metalpriceapi.com/v1/latest?apikey=${key}&base=USD&currencies=XAU`:"https://api.gold-api.com/price/XAU";
-    let res=await fetch(url,{cache:"no-store"}); if(!res.ok) throw new Error("HTTP "+res.status);
-    let d=await res.json();
-    let p=key?(d.rates&&d.rates.XAU?1/parseFloat(d.rates.XAU):0):parseFloat(d.price);
-    if(!pushTick(p)) throw new Error("bad price");
-    $("apiBadge").textContent=key?"METALPRICEAPI — LIVE":"GOLD-API.COM — LIVE"; $("apiBadge").className="badge live";
-    $("liveBadge").textContent="LIVE XAU"; $("lastUpd").textContent=`Last update ${ts} — $${fmt2(p)} — ${hist.length} bars — DUAL A+B`;
+    const ts=nowWithMS();
+    const [usdRes, eurRes, kwdRes] = await Promise.all([
+      fetch("https://open.er-api.com/v6/latest/USD",{cache:"no-store"}),
+      fetch("https://open.er-api.com/v6/latest/EUR",{cache:"no-store"}),
+      fetch("https://open.er-api.com/v6/latest/KWD",{cache:"no-store"})
+    ]);
+    if(!usdRes.ok || !eurRes.ok || !kwdRes.ok) throw new Error("ER API fail");
+    const usdData=await usdRes.json(); const eurData=await eurRes.json(); const kwdData=await kwdRes.json();
+    const usdPhp = usdData.rates?.PHP; const eurPhp = eurData.rates?.PHP; const kwdPhp = kwdData.rates?.PHP;
+    if(usdPhp){$("usdPhp").textContent=`USD→PHP ${usdPhp.toFixed(2)}`; $("usdPhp").className="ex-item live";}
+    if(eurPhp){$("eurPhp").textContent=`EUR→PHP ${eurPhp.toFixed(2)}`; $("eurPhp").className="ex-item live";}
+    if(kwdPhp){$("kwdPhp").textContent=`KWD→PHP ${kwdPhp.toFixed(2)}`; $("kwdPhp").className="ex-item live";}
+    if(updEl) updEl.textContent=`${ts} — open.er-api.com LIVE — no flag text only`;
+    const fs=$("forexConnStatus"); if(fs){fs.textContent="LIVE — open.er-api.com"; fs.className="badge live";}
+    const fl=$("forexLastFetch"); if(fl) fl.textContent=`Last fetch: ${ts} — OK — 5min`;
+    logEvent(ts,`FOREX USD→PHP ${usdPhp?.toFixed(2)} EUR→PHP ${eurPhp?.toFixed(2)} KWD→PHP ${kwdPhp?.toFixed(2)} — open.er-api.com`);
+  }catch(e){
+    if(updEl) updEl.textContent=`${nowWithMS()} — OFFLINE (${e.message})`;
+    const fs=$("forexConnStatus"); if(fs){fs.textContent="OFFLINE — "+e.message; fs.className="badge offline";}
+    logEvent(nowWithMS(),`FOREX OFFLINE — ${e.message}`);
+  }
+}
+function initAnthropicKey(){
+  const inp=$("anthropicKeyInput"); const status=$("anthropicStatus");
+  const saved=localStorage.getItem("sg_anthropic_key")||"";
+  if(saved && inp) inp.value=saved.slice(0,20)+"••••";
+  if(status){status.textContent=saved?`ANTHROPIC — KEY SAVED (${saved.slice(0,8)}•••) — LIVE`:"ANTHROPIC — NO KEY (optional)"; status.className=saved?"pill live":"pill";}
+  const saveBtn=$("saveAnthropicKey"); if(saveBtn) saveBtn.onclick=()=>{const v=inp.value.trim(); if(v && !v.includes("•")){localStorage.setItem("sg_anthropic_key",v); status.textContent=`ANTHROPIC — KEY SAVED (${v.slice(0,8)}•••) — LIVE`; status.className="pill live"; logEvent(nowWithMS(),`ANTHROPIC KEY SAVED — ${v.slice(0,8)}•••`);} };
+  const clearBtn=$("clearAnthropicKey"); if(clearBtn) clearBtn.onclick=()=>{localStorage.removeItem("sg_anthropic_key"); inp.value=""; status.textContent="ANTHROPIC — NO KEY (optional)"; status.className="pill"; logEvent(nowWithMS(),"ANTHROPIC KEY CLEARED");};
+}
+
+async function fetchPrice(){
+
+  const key=localStorage.getItem("sg_metal_key")||"";
+  const ts=nowWithMS();
+  if(!navigator.onLine){
+    $("apiBadge").textContent="OFF — WIFI/DATA OFF"; $("apiBadge").className="badge offline";
+    $("liveBadge").textContent="● OFF — NO WIFI/DATA"; $("liveBadge").className="badge offline";
+    $("weekendBadge").textContent="OFFLINE — NO INTERNET"; $("weekendBadge").className="badge offline";
+    $("lastUpd").textContent=`${ts} — WIFI/DATA OFF — ${hist.length} cached — signal OFF`;
+    logEvent(ts,"WIFI/DATA OFF — no internet — signal OFF");
+    const gs=$("goldConnStatus"); if(gs){gs.textContent="● OFF — gold-api.com NO WIFI/DATA — ORANGE"; gs.className="badge gold-off";}
+    update(); return;
+  }
+  // Try MetalPriceAPI first if key exists, else Gold-API
+  // FREE PLAN LIMITATION: MetalPriceAPI free = 24h delayed, so we fallback to Gold-API for live price
+  try{
+    if(key){
+      try{
+        let url=`https://api.metalpriceapi.com/v1/latest?apikey=${key}&base=USD&currencies=XAU`;
+        let res=await fetch(url,{cache:"no-store"});
+        if(res.ok){
+          let d=await res.json();
+          let p=d.rates&&d.rates.XAU?1/parseFloat(d.rates.XAU):0;
+          if(p>1000&&p<10000){
+            if(pushTick(p)){
+              $("apiBadge").textContent="METALPRICEAPI — LIVE (DELAYED 24h FREE)"; $("apiBadge").className="badge live";
+              $("liveBadge").textContent="LIVE XAU"; $("lastUpd").textContent=`Last update ${ts} — $${fmt2(p)} — MetalPriceAPI free 24h delayed — ${hist.length} bars — DUAL`;
+              $("weekendBadge").textContent="LIVE MARKET"; $("weekendBadge").className="badge live";
+              logEvent(ts,`MetalPriceAPI $${fmt2(p)} — FREE 24h delayed — ${hist.length} bars`);
+              update(); return;
+            }
+          } else {
+            throw new Error("Metal free 24h delayed — trying Gold-API live backup");
+          }
+        }
+      }catch(eMetal){
+        logEvent(ts,`MetalPriceAPI fail: ${eMetal.message} — trying Gold-API live`);
+        // fall through to Gold-API
+      }
+    }
+    // Gold-API.com backup — LIVE, no key, no delay — BEST FOR LIVE TRADING
+    let res2=await fetch("https://api.gold-api.com/price/XAU",{cache:"no-store"});
+    if(!res2.ok) throw new Error("Gold-API HTTP "+res2.status);
+    let d2=await res2.json();
+    let p2=parseFloat(d2.price);
+    if(!pushTick(p2)) throw new Error("Gold-API bad price");
+    $("apiBadge").textContent=key?"GOLD-API LIVE (Metal fallback)":"GOLD-API.COM — LIVE"; $("apiBadge").className="badge live";
+    $("liveBadge").textContent="LIVE XAU"; $("lastUpd").textContent=`Last update ${ts} — $${fmt2(p2)} — Gold-API live — ${hist.length} bars — DUAL A+B`;
     $("weekendBadge").textContent="LIVE MARKET"; $("weekendBadge").className="badge live";
-    logEvent(ts,`Live $${fmt2(p)} — DUAL A+B — ${hist.length} bars`);
+    logEvent(ts,`Gold-API LIVE $${fmt2(p2)} — DUAL A+B — ${hist.length} bars`);
     update(); return;
   }catch(e){
     $("apiBadge").textContent="OFFLINE — retry 60s"; $("apiBadge").className="badge offline";
     $("liveBadge").textContent="OFFLINE";
-    $("lastUpd").textContent=`${ts} — OFFLINE (${e.message}) — ${hist.length} cached`;
-    logEvent(ts,`OFFLINE — ${e.message}`);
+    $("lastUpd").textContent=`${ts} — OFFLINE (${e.message}) — ${hist.length} cached bars — will retry Gold-API`;
+    logEvent(ts,`OFFLINE — ${e.message} — retry 60s`);
+    const goldStatus=$("goldConnStatus"); if(goldStatus){goldStatus.textContent="● OFF — gold-api.com DISCONNECTED — "+e.message; goldStatus.className="badge gold-off"; const metaSt=$("metalConnStatus"); if(metaSt) metaSt.textContent="META — tapad — GOLD OFF ORANGE";}
+    const goldLast=$("goldLastFetch"); if(goldLast) goldLast.textContent=`Last fetch attempt: ${ts} — FAIL (${e.message})`;
+    const goldDot2=$("goldDot"); if(goldDot2){goldDot2.style.background="#ff8c00"; goldDot2.style.boxShadow="0 0 8px #ff8c00";}
     update();
   }
+  const goldStatus2=$("goldConnStatus"); if(goldStatus2){goldStatus2.textContent="● LIVE — gold-api.com CONNECTED"; goldStatus2.className="badge gold-live"; const metaSt=$("metalConnStatus"); if(metaSt) metaSt.textContent="META — tapad — GOLD LIVE";}
+  const goldLast2=$("goldLastFetch"); if(goldLast2) goldLast2.textContent=`Last fetch: ${ts} — OK — auto-refresh every ${localStorage.getItem("sg_gold_refresh")||300}s`;
+  const goldDot=$("goldDot"); if(goldDot){goldDot.style.background="#00ff88"; goldDot.style.boxShadow="0 0 8px #00ff88";}
 }
 
 function makeReplay(type, strat){
