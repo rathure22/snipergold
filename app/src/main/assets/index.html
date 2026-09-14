@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Sniper Gold v5.7</title>
+<title>Sniper Gold v5.8</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
@@ -229,7 +229,7 @@ body.orange-theme{--accent:#ff8c00}
  <div class="sidebar-close-x" id="sidebarCloseBtn">✕</div>
  <div style="text-align:center;padding:6px 0 10px;border-bottom:1px solid var(--border);margin-bottom:10px">
   <div style="font-size:8px;font-weight:700;letter-spacing:0.5px;color:var(--muted)">Dev. JI NG SLOW×STONE™</div>
-  <div style="font-size:7px;font-weight:600;color:#555;margin-top:2px">Version v5.7</div>
+  <div style="font-size:7px;font-weight:600;color:#555;margin-top:2px">Version v5.8</div>
  </div>
  <div style="font-size:8px;font-weight:800;color:var(--muted);text-transform:uppercase;margin-bottom:8px">Function Status</div>
  <div id="functionCheckList" style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px;margin-bottom:10px"></div>
@@ -298,6 +298,28 @@ body.orange-theme{--accent:#ff8c00}
   <div style="font-size:8px;font-weight:800;color:var(--muted);text-transform:uppercase;margin-bottom:6px">Signal History (Auto)</div>
   <div id="sigHistList" style="max-height:160px;overflow-y:auto;font-size:7px">No auto signals yet</div>
   <button class="btn btn-small btn-dark" id="sigHistClearBtn" style="width:100%;margin-top:6px">Clear History</button>
+ </div>
+
+ <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px;margin-bottom:10px">
+  <div style="font-size:8px;font-weight:800;color:var(--muted);text-transform:uppercase;margin-bottom:6px">News Calendar (PHT)</div>
+  <div id="newsCalList" style="max-height:120px;overflow-y:auto;font-size:7px;line-height:1.5">Loading…</div>
+  <div id="newsStatusLine" style="font-size:7px;color:#ffaa00;margin-top:6px;font-weight:700">—</div>
+ </div>
+
+ <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px;margin-bottom:10px">
+  <div style="font-size:8px;font-weight:800;color:var(--muted);text-transform:uppercase;margin-bottom:6px">Backtest Panel</div>
+  <div style="font-size:7px;color:#666;margin-bottom:6px">Run Strategy C rules on loaded candle history</div>
+  <button class="btn btn-small btn-orange" id="runBacktestBtn" style="width:100%">Run Backtest</button>
+  <div id="backtestResult" style="margin-top:8px;font-size:7px;line-height:1.5;color:#aaa">No backtest yet</div>
+ </div>
+
+ <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px;margin-bottom:10px">
+  <div style="font-size:8px;font-weight:800;color:var(--muted);text-transform:uppercase;margin-bottom:6px">Volume (tick intensity)</div>
+  <div style="display:flex;justify-content:space-between;align-items:center">
+   <span style="font-size:8px;font-weight:700" id="volLabel">Normal</span>
+   <span class="badge" id="volBadge">—</span>
+  </div>
+  <div style="font-size:6px;color:#666;margin-top:4px">Proxy from tick range + update intensity (free APIs have no true volume)</div>
  </div>
 
  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px;margin-bottom:10px">
@@ -578,7 +600,7 @@ body.orange-theme{--accent:#ff8c00}
 
 <div style="text-align:center;padding:14px 6px;margin-top:4px">
  <div style="font-size:8px;font-weight:700;letter-spacing:0.5px;color:var(--muted)">Dev. JI NG SLOW×STONE™</div>
- <div style="font-size:7px;font-weight:600;color:#555;margin-top:2px">Version v5.7</div>
+ <div style="font-size:7px;font-weight:600;color:#555;margin-top:2px">Version v5.8</div>
 </div>
 
 <script>
@@ -715,19 +737,71 @@ function updateFwCountdown(){
 }
 
 
-// --- News high-impact windows (approximate, PHT = UTC+8) ---
-// Common: NFP (first Fri 20:30 PHT), FOMC, CPI, etc. Simple fixed windows.
+// --- News Calendar (PHT) — recurring high-impact schedule (best-effort, not live feed) ---
+// Times approximate in PHT (UTC+8). Used for warning/block around release.
+const NEWS_SCHEDULE=[
+ // weekday: 0=Sun..6=Sat matching getDay after PHT convert — we use short names
+ {day:'Fri', hour:20, minute:30, dur:90, impact:'high', label:'NFP / Non-Farm Payrolls'},
+ {day:'Wed', hour:20, minute:0, dur:60, impact:'high', label:'FOMC / Rate Decision (often)'},
+ {day:'Thu', hour:20, minute:30, dur:45, impact:'high', label:'US GDP / Claims (often)'},
+ {day:'Tue', hour:20, minute:30, dur:45, impact:'med', label:'US CPI / Inflation (often)'},
+ {day:'Wed', hour:21, minute:0, dur:30, impact:'med', label:'Crude Oil Inventories'},
+ {day:'Thu', hour:0, minute:30, dur:30, impact:'med', label:'AU Employment (early PHT)'},
+ {day:'Mon', hour:21, minute:0, dur:30, impact:'low', label:'US Factory Orders / other'},
+];
+function getNewsCalendarToday(){
+ const p=getPHTParts();
+ return NEWS_SCHEDULE.filter(n=>n.day===p.weekday).map(n=>{
+  const start=n.hour*60+n.minute;
+  const now=p.hour*60+p.minute;
+  const end=start+n.dur;
+  let state='upcoming';
+  if(now>=start && now<end) state='live';
+  else if(now>=end) state='done';
+  return {...n, state, startMin:start};
+ }).sort((a,b)=>a.startMin-b.startMin);
+}
 function checkNewsWindow(){
  try{
+  const list=getNewsCalendarToday();
+  const live=list.find(n=>n.state==='live');
+  if(live){
+   return {active:true, block:live.impact==='high', label:live.label, impact:live.impact};
+  }
+  // warn 30 min before high impact
   const p=getPHTParts();
-  const day=p.weekday, h=p.hour, m=p.minute;
-  // First Friday of month ~20:30 PHT (NFP) — approximate any Friday 20:00-21:30
-  if(day==='Fri' && h===20 && m>=0) return {active:true, block:true, label:'NFP / High Impact window'};
-  if(day==='Fri' && h===21 && m<30) return {active:true, block:true, label:'NFP / High Impact window'};
-  // Generic high-vol hours warning (not full block)
-  if((h===20 || h===21) && (day==='Wed'||day==='Thu')) return {active:true, block:false, label:'Possible FOMC/CPI hour'};
-  return {active:false, block:false, label:''};
- }catch(e){ return {active:false, block:false, label:''}; }
+  const now=p.hour*60+p.minute;
+  const soon=list.find(n=>n.state==='upcoming' && n.impact==='high' && (n.startMin-now)>0 && (n.startMin-now)<=30);
+  if(soon) return {active:true, block:false, label:'Soon: '+soon.label, impact:'warn'};
+  return {active:false, block:false, label:'', impact:''};
+ }catch(e){ return {active:false, block:false, label:'', impact:''}; }
+}
+function renderNewsCalendar(){
+ const el=$('newsCalList'), st=$('newsStatusLine');
+ if(!el) return;
+ const list=getNewsCalendarToday();
+ if(!list.length){ el.innerHTML='No major events scheduled today (template)'; }
+ else{
+  el.innerHTML=list.map(n=>{
+   const col=n.state==='live'?'#ff4a4a':n.state==='upcoming'?'#ffaa00':'#666';
+   const tag=n.state==='live'?'● LIVE':n.state==='upcoming'?'○ soon':'✓ done';
+   return '<div style="padding:4px 0;border-bottom:1px solid #1a1a1a"><span style="color:'+col+';font-weight:800">'+tag+'</span> '+
+    String(n.hour).padStart(2,'0')+':'+String(n.minute).padStart(2,'0')+' · '+n.label+
+    ' <span style="color:#666">['+n.impact+']</span></div>';
+  }).join('');
+ }
+ const nw=checkNewsWindow();
+ if(st){
+  if(nw.block) st.textContent='⚠ BLOCK signals: '+nw.label;
+  else if(nw.active) st.textContent='⚠ Warning: '+nw.label;
+  else st.textContent='No high-impact window now';
+  st.style.color=nw.block?'#ff4a4a':nw.active?'#ffaa00':'#666';
+ }
+ const nb=$('newsWarnBadge');
+ if(nb){
+  if(nw.active){ nb.style.display='inline-flex'; nb.textContent=nw.block?'NEWS BLOCK':'NEWS'; }
+  else nb.style.display='none';
+ }
 }
 
 
@@ -793,6 +867,57 @@ function pushSignalHistory(rec){
  saveSignalHistory();
  renderSignalHistory();
  if(typeof renderFloatingWidget==='function') renderFloatingWidget();
+}
+
+
+function runBacktest(){
+ const el=$('backtestResult'); if(!el) return;
+ if(typeof hist==='undefined' || hist.length<30){
+  el.innerHTML='Need more candle history (≥30 bars). Keep app open to collect data.';
+  return;
+ }
+ // Replay simplified Strategy C-like rules on hist
+ let wins=0, losses=0, be=0, signals=0;
+ const closes=hist.map(c=>c.close);
+ for(let i=20;i<hist.length-5;i++){
+  const window=closes.slice(i-18,i);
+  const gH=Math.max(...window), gL=Math.min(...window);
+  const cur=closes[i];
+  const above=cur>gH, below=cur<gL;
+  if(!above && !below) continue;
+  // crude pattern: momentum of last 3
+  const mom=closes[i]-closes[i-3];
+  let dir=null;
+  if(above && mom>0) dir='BUY';
+  if(below && mom<0) dir='SELL';
+  if(!dir) continue;
+  signals++;
+  const entry=cur;
+  const risk=Math.max(0.3,(gH-gL)/3);
+  const sl=dir==='BUY'?gL-0.1:gH+0.1;
+  const tp=dir==='BUY'?entry+risk*2:entry-risk*2;
+  // look ahead 5 bars
+  let hit='open';
+  for(let j=i+1;j<Math.min(i+6,hist.length);j++){
+   const p=closes[j];
+   if(dir==='BUY'){
+    if(p<=sl){ hit='loss'; break; }
+    if(p>=tp){ hit='win'; break; }
+   }else{
+    if(p>=sl){ hit='loss'; break; }
+    if(p<=tp){ hit='win'; break; }
+   }
+  }
+  if(hit==='win') wins++;
+  else if(hit==='loss') losses++;
+  else be++;
+ }
+ const total=wins+losses;
+ const wr=total>0?Math.round(wins/total*100):0;
+ el.innerHTML='<b>Bars:</b> '+hist.length+' · <b>Signals:</b> '+signals+
+  '<br><span style="color:var(--green)">Wins: '+wins+'</span> · <span style="color:var(--red)">Losses: '+losses+'</span> · BE/Open: '+be+
+  '<br><b>Winrate:</b> '+(total?wr+'%':'n/a')+
+  '<br><span style="color:#666">Simple 18-bar break + momentum, 5-bar horizon, 1:2 TP. Not full Strategy C.</span>';
 }
 
 // Auto Decision mode
@@ -920,6 +1045,43 @@ function detectPinbar(candle, guideHigh, guideLow, avgMove){
 
 // Simple BOS / CHOCH structure bias from recent candles
 
+
+// Real-ish volume proxy: tick intensity + range expansion
+let tickTimes=[];
+let lastVolState='normal';
+function updateVolumeProxy(price){
+ const now=Date.now();
+ tickTimes.push(now);
+ tickTimes=tickTimes.filter(t=>now-t<60000); // last 60s
+ const tpm=tickTimes.length; // ticks per minute approx
+ let rangeVol='normal';
+ if(typeof hist!=='undefined' && hist.length>=6){
+  const recent=hist.slice(-12);
+  const ranges=recent.map(c=>c.high-c.low);
+  const avg=ranges.reduce((a,b)=>a+b,0)/ranges.length;
+  const lastR=ranges[ranges.length-1];
+  if(lastR>avg*1.6) rangeVol='high';
+  else if(lastR<avg*0.55) rangeVol='low';
+ }
+ // Combine tick intensity
+ let state='normal';
+ if(tpm>=12 || rangeVol==='high') state='high';
+ else if(tpm<=2 && rangeVol==='low') state='low';
+ else if(rangeVol==='high') state='high';
+ else if(rangeVol==='low') state='low';
+ lastVolState=state;
+ const lab=$('volLabel'), badge=$('volBadge');
+ if(lab) lab.textContent=state==='high'?'High activity':state==='low'?'Low activity':'Normal';
+ if(badge){
+  badge.textContent=tpm+' ticks/min · '+state.toUpperCase();
+  badge.className='badge '+(state==='high'?'live':state==='low'?'':'');
+  if(state==='high'){ badge.style.borderColor='var(--green)'; badge.style.color='var(--green)'; }
+  else if(state==='low'){ badge.style.borderColor='#666'; badge.style.color='#888'; }
+  else { badge.style.borderColor=''; badge.style.color=''; }
+ }
+ return state;
+}
+
 // Multi-TF structure bias (15m + 1H) + volume proxy (range expansion)
 function getHTFBias(){
  try{
@@ -974,6 +1136,7 @@ function getHTFBias(){
    if(lastR>avg*1.6) vol='high';
    else if(lastR<avg*0.55) vol='low';
   }
+  if(typeof lastVolState!=='undefined' && lastVolState!=='normal') vol=lastVolState;
   return {bias, note, vol, bias15, bias1h};
  }catch(e){ return {bias:'neutral', note:'', vol:'normal'}; }
 }
@@ -1312,6 +1475,7 @@ function pushTick(p){
  updateLiveDataStatus();
  updatePatternStrategy(p); // Strategy C — always runs, independent of the A/B toggle
  manageActiveTrade(p);
+ updateVolumeProxy(p);
  try{ localStorage.setItem('sg_cache', JSON.stringify({price:p, time:now, hist:hist.slice(-60)})); }catch(e){}
  drawChart();
  if(abMonitoringOn){ updateSlTpDisplay(); updateTp5Display(); }
@@ -1990,6 +2154,8 @@ updateChartSession();
  loadSignalHistory();
  renderSignalHistory();
  if($('sigHistClearBtn')) $('sigHistClearBtn').onclick=()=>{ signalHistory=[]; saveSignalHistory(); renderSignalHistory(); };
+ if($('runBacktestBtn')) $('runBacktestBtn').onclick=runBacktest;
+ if(typeof renderNewsCalendar==='function'){ renderNewsCalendar(); setInterval(renderNewsCalendar, 30000); }
  setTimeout(checkAllFunctionsActive,1000);
 
 });
