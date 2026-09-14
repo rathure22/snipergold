@@ -1529,71 +1529,119 @@ function aggregateCandles(candles, minutesPerBar){
 }
 function drawChart(){
  if(!ctx || hist.length===0) return;
- const W=$('chart').offsetWidth, H=240;
+ const canvas=$('chart');
+ const W=canvas.offsetWidth||canvas.clientWidth||700, H=240;
+ if(canvas.width!==Math.round(W*2) || canvas.height!==H*2){
+  canvas.width=Math.round(W*2); canvas.height=H*2;
+  ctx.setTransform(2,0,0,2,0,0);
+ }
  ctx.clearRect(0,0,W,H);
- const agg=aggregateCandles(hist, currentTimeframe);
- const vis=agg.slice(-80);
+ const agg=aggregateCandles(hist,currentTimeframe);
+ const vis=agg.slice(-90);
  if(vis.length===0) return;
  const rawMin=Math.min(...vis.map(x=>x.low)), rawMax=Math.max(...vis.map(x=>x.high));
- const pad=Math.max((rawMax-rawMin)*0.10,0.5);
- const min=rawMin-pad, max=rawMax+pad, range=max-min||1;
- const py=v=>H-(v-min)/range*H;
- const bw=Math.max(2,Math.min(14,W/vis.length*0.72));
- // subtle grid keeps the original chart readable without changing its layout
- ctx.strokeStyle='#24302b'; ctx.lineWidth=0.6;
- for(let g=1;g<5;g++){ const gy=H*g/5; ctx.beginPath(); ctx.moveTo(0,gy); ctx.lineTo(W,gy); ctx.stroke(); }
- for(let g=1;g<6;g++){ const gx=W*g/6; ctx.beginPath(); ctx.moveTo(gx,0); ctx.lineTo(gx,H); ctx.stroke(); }
- // Real BOS levels from the visible real candles
- const bosHigh=Math.max(...vis.slice(-18).map(x=>x.high));
- const bosLow=Math.min(...vis.slice(-18).map(x=>x.low));
- // Find simple multi-candle support/resistance clusters from actual OHLC data
- const pivL=[], pivH=[];
- for(let i=2;i<vis.length-2;i++){
-  if(vis[i].low<=vis[i-1].low && vis[i].low<=vis[i+1].low) pivL.push(vis[i].low);
-  if(vis[i].high>=vis[i-1].high && vis[i].high>=vis[i+1].high) pivH.push(vis[i].high);
+ const rawRange=Math.max(rawMax-rawMin,0.01);
+ const pad=Math.max(rawRange*0.10,0.35);
+ const min=rawMin-pad, max=rawMax+pad, range=max-min;
+ const left=54,right=58,top=10,bottom=25;
+ const cw=Math.max(1,W-left-right), ch=H-top-bottom;
+ const py=v=>top+(max-v)/range*ch;
+ const px=i=>left+(i+0.5)*cw/vis.length;
+ const bw=Math.max(3,Math.min(15,cw/vis.length*0.68));
+
+ // Sifting-style dark chart field: clear plotting area, fine grid and price scale.
+ ctx.fillStyle='#0a0d0b'; ctx.fillRect(0,0,W,H);
+ ctx.fillStyle='#0d1210'; ctx.fillRect(left,top,cw,ch);
+ ctx.font='9px Inter,sans-serif';
+ ctx.textAlign='right';
+ for(let g=0;g<=5;g++){
+  const y=top+ch*g/5, price=max-range*g/5;
+  ctx.strokeStyle='#1c2721'; ctx.lineWidth=0.65;
+  ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(left+cw,y);ctx.stroke();
+  ctx.fillStyle='#7f8b84'; ctx.fillText('$'+fmt2(price),W-5,y+3);
  }
- const cluster=(arr, tol)=>{
+ for(let g=1;g<6;g++){
+  const x=left+cw*g/6;
+  ctx.strokeStyle='#162019';ctx.lineWidth=.55;
+  ctx.beginPath();ctx.moveTo(x,top);ctx.lineTo(x,top+ch);ctx.stroke();
+ }
+ ctx.strokeStyle='#27332d';ctx.lineWidth=1;
+ ctx.beginPath();ctx.moveTo(left,top);ctx.lineTo(left,top+ch);ctx.lineTo(left+cw,top+ch);ctx.stroke();
+
+ // Real BOS/support/resistance levels from the displayed candles.
+ const recentWindow=Math.min(24,vis.length);
+ const recent=vis.slice(-recentWindow);
+ const bosHigh=Math.max(...recent.map(x=>x.high));
+ const bosLow=Math.min(...recent.map(x=>x.low));
+ const pivL=[],pivH=[];
+ for(let i=2;i<vis.length-2;i++){
+  if(vis[i].low<=vis[i-1].low&&vis[i].low<=vis[i+1].low) pivL.push(vis[i].low);
+  if(vis[i].high>=vis[i-1].high&&vis[i].high>=vis[i+1].high) pivH.push(vis[i].high);
+ }
+ const cluster=(arr,tol)=>{
   const out=[];
   arr.slice().reverse().forEach(v=>{
    let c=out.find(x=>Math.abs(x-v)<=tol);
-   if(c){ c.sum+=v; c.n++; c.level=c.sum/c.n; }
-   else out.push({level:v,sum:v,n:1});
+   if(c){c.sum+=v;c.n++;c.level=c.sum/c.n;}else out.push({level:v,sum:v,n:1});
   });
   return out.filter(x=>x.n>=2).sort((a,b)=>b.n-a.n).slice(0,2).map(x=>x.level);
  };
- const tol=Math.max((rawMax-rawMin)*0.025,0.35);
- const supports=cluster(pivL,tol), resistances=cluster(pivH,tol);
- // Candles: red/green, with the newest two candles highlighted so direction is easy to see.
+ const tol=Math.max(rawRange*.022,.30);
+ const supports=cluster(pivL,tol),resistances=cluster(pivH,tol);
+ const level=(price,label,stroke,dash)=>{
+  const y=py(price); if(y<top||y>top+ch)return;
+  ctx.save();ctx.setLineDash(dash);ctx.strokeStyle=stroke;ctx.lineWidth=.8;
+  ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(left+cw,y);ctx.stroke();ctx.restore();
+  ctx.font='700 8px Inter,sans-serif';ctx.fillStyle=stroke;ctx.textAlign='left';ctx.fillText(label,left+5,Math.max(top+9,Math.min(top+ch-3,y-4)));
+ };
+ supports.forEach(v=>level(v,'SUPPORT','#00d084aa',[2,5]));
+ resistances.forEach(v=>level(v,'RESISTANCE','#ff4a4aaa',[2,5]));
+ level(bosHigh,'BOS HIGH','#ff9d2e',[5,5]);
+ level(bosLow,'BOS LOW','#ff4a4a',[5,5]);
+
+ // Real OHLC candles: crisp wick + body, latest candle highlighted.
  vis.forEach((c,i)=>{
-  const x=(i+0.5)*W/vis.length;
-  const yO=py(c.open), yC=py(c.close), yH=py(c.high), yL=py(c.low);
+  const x=px(i),o=py(c.open),cl=py(c.close),hi=py(c.high),lo=py(c.low);
   const bull=c.close>=c.open;
-  const color=bull?'#00d084':'#ff4a4a';
-  const recent=i>=Math.max(0,vis.length-2);
-  if(recent){ ctx.shadowBlur=10; ctx.shadowColor=color; }
-  ctx.strokeStyle=color; ctx.lineWidth=recent?1.5:1;
-  ctx.beginPath(); ctx.moveTo(x,yH); ctx.lineTo(x,yL); ctx.stroke();
-  ctx.fillStyle=color;
-  const bodyH=Math.max(2,Math.abs(yO-yC));
-  ctx.fillRect(x-bw/2,Math.min(yO,yC),bw,bodyH);
-  if(recent){ ctx.shadowBlur=0; }
+  const fill=bull?'#00d084':'#ff4a4a';
+  const recentC=i>=vis.length-3;
+  ctx.save();
+  ctx.strokeStyle=fill;ctx.lineWidth=recentC?1.5:1;
+  if(recentC){ctx.shadowBlur=8;ctx.shadowColor=fill;}
+  ctx.beginPath();ctx.moveTo(x,hi);ctx.lineTo(x,lo);ctx.stroke();
+  const y=Math.min(o,cl),body=Math.max(2,Math.abs(cl-o));
+  ctx.fillStyle=fill;ctx.fillRect(x-bw/2,y,bw,body);
+  ctx.restore();
  });
- // Current price line
- const last=vis[vis.length-1]; const lastY=py(last.close);
- ctx.setLineDash([5,4]); ctx.strokeStyle=last.close>=last.open?'#00d084':'#ff4a4a'; ctx.lineWidth=1;
- ctx.beginPath(); ctx.moveTo(0,lastY); ctx.lineTo(W,lastY); ctx.stroke(); ctx.setLineDash([]);
- // BOS
- ctx.setLineDash([5,5]); ctx.strokeStyle='#ff8c00'; ctx.beginPath(); ctx.moveTo(0,py(bosHigh)); ctx.lineTo(W,py(bosHigh)); ctx.stroke();
- ctx.strokeStyle='#ff4a4a'; ctx.beginPath(); ctx.moveTo(0,py(bosLow)); ctx.lineTo(W,py(bosLow)); ctx.stroke(); ctx.setLineDash([]);
- ctx.font='700 9px Inter,sans-serif'; ctx.fillStyle='#ff8c00'; ctx.fillText('BOS high',4,Math.max(10,py(bosHigh)-5));
- ctx.fillStyle='#ff4a4a'; ctx.fillText('BOS low',4,Math.min(H-4,py(bosLow)+12));
- // Support / resistance lines only when multiple candles support the zone.
- supports.forEach(level=>{ const y=py(level); ctx.setLineDash([2,5]); ctx.strokeStyle='#00d08499'; ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); ctx.setLineDash([]); ctx.fillStyle='#00d084'; ctx.fillText('SUPPORT',4,Math.max(10,y-4)); });
- resistances.forEach(level=>{ const y=py(level); ctx.setLineDash([2,5]); ctx.strokeStyle='#ff4a4a99'; ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); ctx.setLineDash([]); ctx.fillStyle='#ff4a4a'; ctx.fillText('RESISTANCE',4,Math.max(10,y-4)); });
- // Direction marker from the last 6 real closes.
- const n=Math.min(6,vis.length); const first=vis[vis.length-n].close, lastClose=vis[vis.length-1].close;
- const up=lastClose>=first; const dirEl=$('chartDirection');
- if(dirEl){ dirEl.className='chart-direction '+(up?'direction-up':'direction-down'); dirEl.textContent=(up?'📈 UP':'📉 DOWN')+' · real price direction'; }
+
+ // Current-price marker and right-side price pill.
+ const last=vis[vis.length-1], lastY=py(last.close), bull=last.close>=last.open;
+ const liveColor=bull?'#00d084':'#ff4a4a';
+ ctx.save();ctx.setLineDash([6,4]);ctx.strokeStyle=liveColor;ctx.lineWidth=1;
+ ctx.beginPath();ctx.moveTo(left,lastY);ctx.lineTo(left+cw,lastY);ctx.stroke();ctx.restore();
+ const pillY=Math.max(top+10,Math.min(top+ch-10,lastY));
+ ctx.fillStyle=liveColor;ctx.fillRect(W-55,pillY-9,54,18);
+ ctx.fillStyle='#07100b';ctx.font='800 8px Inter,sans-serif';ctx.textAlign='center';ctx.fillText('$'+fmt2(last.close),W-28,pillY+3);
+
+ // Compact time labels, derived from actual candle timestamps.
+ ctx.fillStyle='#68736d';ctx.font='8px Inter,sans-serif';ctx.textAlign='center';
+ const labelCount=Math.min(6,vis.length);
+ for(let j=0;j<labelCount;j++){
+  const idx=Math.round(j*(vis.length-1)/(labelCount-1||1));
+  const d=new Date(vis[idx].time);
+  const txt=currentTimeframe>=1440?d.toLocaleDateString([], {month:'short',day:'numeric'}):d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+  ctx.fillText(txt,px(idx),H-7);
+ }
+
+ // Header inside chart: timeframe, bar count, and real-data state.
+ ctx.textAlign='left';ctx.font='800 9px Inter,sans-serif';ctx.fillStyle='#d8e2dc';
+ ctx.fillText('XAU/USD · '+(currentTimeframe===60?'1H':currentTimeframe===240?'4H':currentTimeframe===1440?'1D':currentTimeframe+'m'),left+6,top+10);
+ ctx.font='700 8px Inter,sans-serif';ctx.fillStyle='#6f7d75';
+ ctx.fillText(vis.length+' real bars',left+6,top+21);
+ const n=Math.min(8,vis.length);
+ const first=vis[vis.length-n].close,lastClose=vis[vis.length-1].close;
+ const up=lastClose>=first,dirEl=$('chartDirection');
+ if(dirEl){dirEl.className='chart-direction '+(up?'direction-up':'direction-down');dirEl.textContent=(up?'📈 UP':'📉 DOWN')+' · real price direction';}
 }
 
 function checkPriceAlert(p){
