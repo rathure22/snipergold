@@ -160,6 +160,7 @@ body.orange-theme{--accent:#ff8c00}
 .tf-btn{flex:1;padding:6px;background:var(--card2);border:1px solid var(--border);border-radius:10px;text-align:center;font-size:8px;font-weight:700;color:var(--muted);cursor:pointer}
 .tf-btn.active{border-color:var(--accent);color:var(--accent);background:#ff8c0012}
 .live-data-line{font-size:7px;color:#666;font-weight:600;margin-top:4px}
+.logs-bar{background:#0b0f0d;border:1px solid var(--border);border-radius:12px;padding:8px 10px;margin:8px 0;color:#9aa39e;font-size:8px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.logs-bar .log-live{color:var(--green)}.logs-bar .log-bear{color:var(--red)}.logs-bar .log-bull{color:var(--green)}
 .pattern-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:14px;margin:6px 0}
 .pattern-title{font-size:9px;font-weight:800;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:10px}
 .pattern-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
@@ -513,16 +514,17 @@ body.orange-theme{--accent:#ff8c00}
 </div>
 
 <div class="candle-engine" id="candleEngineCard">
- <div class="candle-engine-title">🕯 Candle Pattern Engine</div>
+ <div class="candle-engine-title">CANDLE PATTERNS</div>
  <div class="candle-latest neutral" id="candleLatestPattern">WAIT · need more real OHLC candles</div>
  <div class="candle-tags" id="candlePatternTags"></div>
- <div class="candle-note">Detects common real-OHLC candlestick formations: Doji, Hammer, Inverted Hammer, Hanging Man, Shooting Star, Marubozu, Engulfing, Harami, Piercing, Dark Cloud, Morning/Evening Star, Three Soldiers/Crows, Tweezers, Dragonfly and Gravestone Doji. No random/fake candles are generated.</div>
+ <div class="candle-note">Real OHLC patterns: Doji, Hammer, Shooting Star, Marubozu, Engulfing, Harami, Stars, Soldiers/Crows and Tweezers.</div>
 </div>
+<div class="logs-bar" id="patternLogsBar"><span class="log-live">LOG</span> · Pattern monitor ready · waiting for real OHLC data</div>
 
 <div class="pattern-card" id="patternCard">
- <div class="pattern-title">Strategy C — Pattern + Guide (18-tick window)</div>
+ <div class="pattern-title">STRATEGY C — PATTERN GUIDE</div>
  <div style="display:flex;gap:6px;flex-wrap:wrap">
-  <span class="badge live" id="patternLiveBadge">1-SEC-STYLE GUIDE</span>
+  <span class="badge live" id="patternLiveBadge">1S GUIDE</span>
   <span class="badge" id="guideHighBadge">GUIDE HIGH --</span>
   <span class="badge" id="guideLowBadge">GUIDE LOW --</span>
  </div>
@@ -539,7 +541,7 @@ body.orange-theme{--accent:#ff8c00}
  <div class="sig-box" id="patSigBox">
   <div class="sig-label">Pattern + Structure + Pinbar Confluence</div>
   <div class="sig-value" id="patSigValue">WAIT</div>
-  <div class="sig-exp" id="patSigExp">⏳ Waiting for confluence: Pattern (W/M/Flag) + Guide break + Pinbar rejection + BOS/CHOCH (need score ≥5 + pattern).</div>
+  <div class="sig-exp" id="patSigExp">Waiting for pattern + guide break + pinbar + BOS/CHOCH (score ≥5).</div>
  </div>
  <div style="font-size:7px;color:#666;font-weight:600;margin-top:8px" id="patTpLabel">TP1–TP5 (from confluence risk)</div>
  <div id="patTpList" style="margin-top:6px"></div>
@@ -1579,13 +1581,14 @@ function detectCandlestickPatterns(candles){
 function updateCandlePatternUI(patterns,last){
  const latest=$('candleLatestPattern'), tags=$('candlePatternTags'); if(!latest||!tags) return;
  tags.innerHTML='';
- if(!patterns.length){latest.className='candle-latest neutral'; latest.textContent='No major candlestick pattern on latest real candle'; return;}
+ if(!patterns.length){latest.className='candle-latest neutral'; latest.textContent='No major pattern on latest real candle'; const log=$('patternLogsBar'); if(log) log.innerHTML='<span class="log-live">LOG</span> · No major pattern · real OHLC'; return;}
  const bullNames=['Bullish Engulfing','Piercing Line','Hammer','Inverted Hammer','Morning Star','Three White Soldiers','Tweezer Bottom','Dragonfly Doji','Bullish Marubozu'];
  const bearNames=['Bearish Engulfing','Dark Cloud Cover','Shooting Star','Hanging Man','Evening Star','Three Black Crows','Tweezer Top','Gravestone Doji','Bearish Marubozu'];
  const bull=patterns.some(x=>bullNames.includes(x)), bear=patterns.some(x=>bearNames.includes(x));
  latest.className='candle-latest '+(bull&&!bear?'bull':bear&&!bull?'bear':'neutral');
- latest.textContent='🕯 '+patterns.join(' · ');
+ latest.textContent=patterns.join(' · ');
  patterns.forEach(x=>{const d=document.createElement('span'); d.className='candle-tag '+(bullNames.includes(x)?'bull':bearNames.includes(x)?'bear':'neutral'); d.textContent=x; tags.appendChild(d);});
+ const log=$('patternLogsBar'); if(log){ log.innerHTML='<span class="'+(bull&&!bear?'log-bull':bear&&!bull?'log-bear':'log-live')+'">LOG</span> · '+patterns.join(' · ')+' · real OHLC'; }
 }
 
 function drawChart(){
