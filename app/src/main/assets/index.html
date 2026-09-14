@@ -628,7 +628,7 @@ let lastPatternSignal='WAIT';
 let lastConfluenceScore=0;
 let mainTickMs=1000, mainTickHandle=null;
 let goldSourceCursor=0;
-const MAX_REAL_BARS=10080;
+const MAX_REAL_BARS=600; // keep up to 10 hours of 1-minute real candles
 let abMonitoringOn=true; // Strategy A/B on/off — Strategy C always runs independently
 let lastADir=null, lastBDir=null;
 let masterSignal={dir:'WAIT', source:null, entry:0, sl:0, tpBest:0, tpMed:0, tpRest:0, score:0, lot:0.01};
@@ -954,8 +954,8 @@ try{
 
 function runBacktest(){
  const el=$('backtestResult'); if(!el) return;
- if(typeof hist==='undefined' || hist.length<40){
-  el.innerHTML='Need more candle history (≥40 bars — that\'s still only ~40 minutes, so treat any result as a small-sample smoke test, not a real edge validation).';
+ if(typeof hist==='undefined' || hist.length<120){
+  el.innerHTML='Need more candle history (≥120 bars = at least 2 hours on 1m; this is still a small-sample smoke test, not real edge validation).';
   return;
  }
 
@@ -1528,13 +1528,13 @@ function drawChart(){
  const W=$('chart').offsetWidth, H=240;
  ctx.clearRect(0,0,W,H);
  const agg=aggregateCandles(hist, currentTimeframe);
- const vis=agg.slice(-41);
+ const vis=agg.slice(-80);
  if(vis.length===0) return;
  const rawMin=Math.min(...vis.map(x=>x.low)), rawMax=Math.max(...vis.map(x=>x.high));
  const pad=Math.max((rawMax-rawMin)*0.10,0.5);
  const min=rawMin-pad, max=rawMax+pad, range=max-min||1;
  const py=v=>H-(v-min)/range*H;
- const bw=Math.max(3,Math.min(18,W/vis.length*0.58));
+ const bw=Math.max(2,Math.min(14,W/vis.length*0.72));
  // subtle grid keeps the original chart readable without changing its layout
  ctx.strokeStyle='#24302b'; ctx.lineWidth=0.6;
  for(let g=1;g<5;g++){ const gy=H*g/5; ctx.beginPath(); ctx.moveTo(0,gy); ctx.lineTo(W,gy); ctx.stroke(); }
@@ -1641,14 +1641,14 @@ function pushTick(p){
   const highs=hist.map(x=>x.high), lows=hist.map(x=>x.low);
   $('highEl').textContent='HIGH $'+fmt2(Math.max(...highs));
   $('lowEl').textContent='LOW $'+fmt2(Math.min(...lows));
-  $('barsEl').textContent=hist.length+' bars';
+  $('barsEl').textContent=hist.length+' bars · history retained';
  }
  checkPriceAlert(p);
  updateLiveDataStatus();
  updatePatternStrategy(p); // Strategy C — always runs, independent of the A/B toggle
  manageActiveTrade(p);
  updateVolumeProxy(p);
- try{ localStorage.setItem('sg_cache', JSON.stringify({version:'real-1s-v1', real:true, price:p, time:now, hist:hist.slice(-MAX_REAL_BARS)})); }catch(e){}
+ try{ localStorage.setItem('sg_cache', JSON.stringify({version:'real-1s-v3-10h-history', real:true, price:p, time:now, hist:hist.slice(-MAX_REAL_BARS)})); }catch(e){}
  drawChart();
  if(abMonitoringOn){ updateSlTpDisplay(); updateTp5Display(); }
  testDualSame18Candles();
@@ -2308,7 +2308,7 @@ updateChartSession();
 
  // Restore cache if offline on first load
  try{ const cached=JSON.parse(localStorage.getItem('sg_cache')||'{}');
-  if(cached.real===true && cached.version==='real-1s-v1' && cached.price && cached.hist && cached.hist.length>0){ hist=cached.hist; lastPrice=cached.price; 
+  if(cached.real===true && (cached.version==='real-1s-v1'||cached.version==='real-1s-v2-long-history'||cached.version==='real-1s-v3-10h-history') && cached.price && cached.hist && cached.hist.length>0){ hist=cached.hist; lastPrice=cached.price; 
    if($('priceEl')) $('priceEl').textContent='$'+fmt2(cached.price);
    liveTickCount=hist.length; firstLiveTickAt=Date.now()-hist.length*60000;
   }
