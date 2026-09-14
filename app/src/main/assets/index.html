@@ -870,54 +870,134 @@ function pushSignalHistory(rec){
 }
 
 
+// Typical retail XAU/USD spread. Applied half on entry, half on exit —
+// this is the #1 thing a "winrate" number is worthless without.
+const BACKTEST_SPREAD=0.30;
+// How many 1-min bars a simulated trade is allowed to stay open before
+// it's marked "open/timeout" instead of forced to a fake result.
+const BACKTEST_MAX_HOLD=30;
+
+function slTpForBacktest(strategy, dir, candles){
+ // Mirrors updateSlTpDisplay()'s formulas exactly, but direction-aware
+ // (the live display always assumed a BUY; that's a separate bug from
+ // the backtest one, worth fixing too, but kept in scope here so the
+ // backtest's SL/TP is at least self-consistent for both directions).
+ const entry=candles[candles.length-1].close;
+ if(strategy==='A'){
+  const last5=candles.slice(-5);
+  if(dir==='BUY'){
+   const sl=Math.min(...last5.map(c=>c.low));
+   const risk=entry-sl;
+   return {entry, sl, tp:entry+risk*1.0, risk};
+  }else{
+   const sl=Math.max(...last5.map(c=>c.high));
+   const risk=sl-entry;
+   return {entry, sl, tp:entry-risk*1.0, risk};
+  }
+ }else{
+  const last5=candles.slice(-5);
+  const low5=Math.min(...last5.map(c=>c.low)), high5=Math.max(...last5.map(c=>c.high));
+  const buffer=(high5-low5)*0.1;
+  if(dir==='BUY'){
+   const sl=low5-buffer;
+   const risk=entry-sl;
+   return {entry, sl, tp:entry+risk*2.0, risk};
+  }else{
+   const sl=high5+buffer;
+   const risk=sl-entry;
+   return {entry, sl, tp:entry-risk*2.0, risk};
+  }
+ }
+}
+
 function runBacktest(){
  const el=$('backtestResult'); if(!el) return;
- if(typeof hist==='undefined' || hist.length<30){
-  el.innerHTML='Need more candle history (≥30 bars). Keep app open to collect data.';
+ if(typeof hist==='undefined' || hist.length<40){
+  el.innerHTML='Need more candle history (≥40 bars — that\'s still only ~40 minutes, so treat any result as a small-sample smoke test, not a real edge validation).';
   return;
  }
- // Replay simplified Strategy C-like rules on hist
- let wins=0, losses=0, be=0, signals=0;
- const closes=hist.map(c=>c.close);
- for(let i=20;i<hist.length-5;i++){
-  const window=closes.slice(i-18,i);
-  const gH=Math.max(...window), gL=Math.min(...window);
-  const cur=closes[i];
-  const above=cur>gH, below=cur<gL;
-  if(!above && !below) continue;
-  // crude pattern: momentum of last 3
-  const mom=closes[i]-closes[i-3];
-  let dir=null;
-  if(above && mom>0) dir='BUY';
-  if(below && mom<0) dir='SELL';
-  if(!dir) continue;
-  signals++;
-  const entry=cur;
-  const risk=Math.max(0.3,(gH-gL)/3);
-  const sl=dir==='BUY'?gL-0.1:gH+0.1;
-  const tp=dir==='BUY'?entry+risk*2:entry-risk*2;
-  // look ahead 5 bars
-  let hit='open';
-  for(let j=i+1;j<Math.min(i+6,hist.length);j++){
-   const p=closes[j];
-   if(dir==='BUY'){
-    if(p<=sl){ hit='loss'; break; }
-    if(p>=tp){ hit='win'; break; }
-   }else{
-    if(p>=sl){ hit='loss'; break; }
-    if(p<=tp){ hit='win'; break; }
+
+ const stats={A:{wins:0,losses:0,open:0,grossWin:0,grossLoss:0}, B:{wins:0,losses:0,open:0,grossWin:0,grossLoss:0}};
+ let equity=0, peak=0, maxDD=0;
+ const trades=[];
+
+ let i=18;
+ while(i<hist.length-1){
+  const window=hist.slice(Math.max(0,i-17), i+1); // same 18-candle window shape as getLast18Candles()
+  // Reuse the ACTUAL live strategy functions — no separate proxy rule.
+  const resA=analyseOptionA(window);
+  const resB=analyseOptionB(window);
+
+  // If both fire on the same bar, keep them as two independent simulated
+  // trades (that's what the live dual-card would actually show you).
+  const fires=[];
+  if(resA.match && resA.dir) fires.push({strategy:'A', dir:resA.dir});
+  if(resB.match && resB.dir) fires.push({strategy:'B', dir:resB.dir});
+
+  if(fires.length===0){ i++; continue; }
+
+  let advanceTo=i+1;
+  fires.forEach(f=>{
+   const st=slTpForBacktest(f.strategy, f.dir, window);
+   const spreadAdj=f.dir==='BUY'? BACKTEST_SPREAD/2 : -BACKTEST_SPREAD/2;
+   const entryFilled=st.entry+spreadAdj;
+
+   let outcome='open', resolvedAt=Math.min(i+BACKTEST_MAX_HOLD, hist.length-1);
+   for(let j=i+1;j<=Math.min(i+BACKTEST_MAX_HOLD, hist.length-1);j++){
+    const c=hist[j];
+    // Wick-based (high/low), not close-only — a close-only check misses
+    // intrabar SL hits and overstates winrate.
+    // SL checked before TP on the same bar (conservative assumption:
+    // we don't know true intrabar order, so don't give the trade the
+    // benefit of the doubt).
+    if(f.dir==='BUY'){
+     if(c.low<=st.sl){ outcome='loss'; resolvedAt=j; break; }
+     if(c.high>=st.tp){ outcome='win'; resolvedAt=j; break; }
+    }else{
+     if(c.high>=st.sl){ outcome='loss'; resolvedAt=j; break; }
+     if(c.low<=st.tp){ outcome='win'; resolvedAt=j; break; }
+    }
    }
-  }
-  if(hit==='win') wins++;
-  else if(hit==='loss') losses++;
-  else be++;
+
+   const s=stats[f.strategy];
+   if(outcome==='win'){
+    const pnl=Math.abs(st.tp-entryFilled);
+    s.wins++; s.grossWin+=pnl; equity+=pnl;
+   }else if(outcome==='loss'){
+    const pnl=Math.abs(entryFilled-st.sl);
+    s.losses++; s.grossLoss+=pnl; equity-=pnl;
+   }else{
+    s.open++; // ran past BACKTEST_MAX_HOLD bars without hitting either — excluded from winrate
+   }
+   peak=Math.max(peak, equity);
+   maxDD=Math.max(maxDD, peak-equity);
+   trades.push({strategy:f.strategy, dir:f.dir, outcome});
+   advanceTo=Math.max(advanceTo, resolvedAt+1); // don't overlap a fresh signal inside a trade still playing out
+  });
+
+  i=advanceTo;
  }
- const total=wins+losses;
- const wr=total>0?Math.round(wins/total*100):0;
- el.innerHTML='<b>Bars:</b> '+hist.length+' · <b>Signals:</b> '+signals+
-  '<br><span style="color:var(--green)">Wins: '+wins+'</span> · <span style="color:var(--red)">Losses: '+losses+'</span> · BE/Open: '+be+
-  '<br><b>Winrate:</b> '+(total?wr+'%':'n/a')+
-  '<br><span style="color:#666">Simple 18-bar break + momentum, 5-bar horizon, 1:2 TP. Not full Strategy C.</span>';
+
+ function line(label, s){
+  const total=s.wins+s.losses;
+  const wr=total>0?Math.round(s.wins/total*100):0;
+  const pf=s.grossLoss>0?(s.grossWin/s.grossLoss).toFixed(2):(s.grossWin>0?'∞':'n/a');
+  return '<b>'+label+':</b> '+s.wins+'W / '+s.losses+'L / '+s.open+' timed-out · '
+   +'Winrate '+(total?wr+'%':'n/a')+' · Profit factor '+pf
+   +' · Net $'+ (s.grossWin-s.grossLoss).toFixed(2);
+ }
+
+ if(trades.length===0){
+  el.innerHTML='No Strategy A or B signals fired anywhere in the '+hist.length+' collected bars — nothing to backtest yet.';
+  return;
+ }
+
+ el.innerHTML=
+  '<b>Bars replayed:</b> '+hist.length+' (~'+Math.round(hist.length)+' min of real session data — still a small sample, not a validated edge)'+
+  '<br>'+line('Strategy A', stats.A)+
+  '<br>'+line('Strategy B', stats.B)+
+  '<br><b>Max drawdown (equity $):</b> $'+maxDD.toFixed(2)+
+  '<br><span style="color:#666">Replays the live analyseOptionA()/analyseOptionB() functions directly (not a separate proxy rule) · '+BACKTEST_SPREAD.toFixed(2)+' spread applied · SL/TP checked against candle wicks, SL priority on same-bar hits · max '+BACKTEST_MAX_HOLD+'-bar hold before a signal counts as timed-out.</span>';
 }
 
 // Auto Decision mode
