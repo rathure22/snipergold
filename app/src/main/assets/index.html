@@ -12,6 +12,13 @@
 body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;font-weight:600;padding:6px;font-size:10px;line-height:1.4;letter-spacing:0.1px}
 .hdr,.xau-card,.dual-card,.strat-card,.world-clock-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:14px;margin:6px 0}
 .world-clock-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:12px;margin:6px 0}
+.page-wrap{display:block}
+.main-col,.side-col{min-width:0}
+@media(min-width:900px){
+ .page-wrap{display:grid;grid-template-columns:1.3fr 1fr;gap:14px;align-items:start}
+ .main-col .xau-card{margin-top:0}
+ .side-col .world-clock-card,.side-col .dual-card,.side-col .sl-tp-card,.side-col .candle-engine,.side-col .pattern-card{margin-top:0}
+}
 .wc-title{font-size:8px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
 .wc-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .wc-item{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:8px;text-align:center}
@@ -434,129 +441,8 @@ body.orange-theme{--accent:#ff8c00}
   </div>
 </div>
 
-<div class="world-clock-card" id="worldClockCard">
- <div class="wc-title">World Trading Clock</div>
- <div class="wc-grid" id="worldClockGrid">
-  <div class="wc-item" id="wcSydney"><div class="wc-city">Sydney</div><div class="wc-time" id="wcSydneyTime">--:--</div><div class="wc-status" id="wcSydneyStatus">--</div></div>
-  <div class="wc-item" id="wcTokyo"><div class="wc-city">Tokyo</div><div class="wc-time" id="wcTokyoTime">--:--</div><div class="wc-status" id="wcTokyoStatus">--</div></div>
-  <div class="wc-item" id="wcLondon"><div class="wc-city">London</div><div class="wc-time" id="wcLondonTime">--:--</div><div class="wc-status" id="wcLondonStatus">--</div></div>
-  <div class="wc-item" id="wcNY"><div class="wc-city">New York</div><div class="wc-time" id="wcNYTime">--:--</div><div class="wc-status" id="wcNYStatus">--</div></div>
- </div>
-</div>
-
-<div class="dual-card">
- <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-  <div style="font-size:8px;font-weight:800;color:var(--muted);text-transform:uppercase">Dual Strategy — 18-Candle Analysis</div>
-  <div style="display:flex;align-items:center;gap:6px">
-   <span style="font-size:7px;color:#666;font-weight:700" id="abMonitorLabel">A/B ON</span>
-   <div class="toggle-switch-mini on" id="abMonitorToggle"><div class="knob"></div></div>
-  </div>
- </div>
- <div class="dual-row">
-  <div class="dual-opt" id="optABox">
-   <div class="dual-label">A · 1:1 Scalp</div>
-   <div class="dual-match" style="color:var(--blue)" id="optAStatus">Analysing 18 candles…</div>
-   <div style="font-size:7px;color:#666;font-weight:600;margin-top:3px" id="optAReason">A: engulfing pattern or 3-candle momentum</div>
-  </div>
-  <div class="dual-opt" id="optBBox">
-   <div class="dual-label">B · 1:2 London/NY</div>
-   <div class="dual-match" style="color:var(--green)" id="optBStatus">Analysing 18 candles…</div>
-   <div style="font-size:7px;color:#666;font-weight:600;margin-top:3px" id="optBReason">B: London/NY breakout + quality range filter</div>
-  </div>
- </div>
- <div style="display:flex;gap:6px;align-items:center;margin-top:8px;flex-wrap:wrap">
-  <span id="dualResultBadge" style="display:none;padding:4px 8px;border-radius:12px;font-size:7px;font-weight:800;background:#00d08418;border:1px solid #00d08440;color:#00d084">PRIOR B</span>
-  <span id="tradeLiveBadge" style="font-size:8px;font-weight:800;color:var(--text)"></span>
-  <span style="font-size:7px;font-weight:600;color:#666" id="candleCountLabel">18 candles</span>
- </div>
- <div style="font-family:'JetBrains Mono',monospace;font-size:7px;color:#666;background:#0a0907;padding:8px;border-radius:10px;margin-top:8px;max-height:70px;overflow-y:auto;border:1px solid #1a1a1a" id="dualCandlesLog">Loading candle data…</div>
- <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
-  <button class="btn btn-small btn-orange" id="testDualBtn">Test Dual Signal</button>
-  <button class="btn btn-small btn-dark" id="forceABtn">Force A Match</button>
-  <button class="btn btn-small btn-dark" id="forceBBtn">Force B Match</button>
-  <button class="btn btn-small btn-dark" id="forceBothBtn">Force Both → Prior B</button>
-  <button class="btn btn-small btn-dark" id="checkAllBtn">Check All Functions</button>
- </div>
-</div>
-
-<div class="sl-tp-card" id="slTpCard">
- <div class="sl-tp-title">Stop-Loss / Take-Profit — A (1:1) vs B (1:2)</div>
- <div class="sl-tp-grid">
-  <div class="sl-tp-box a-strat" id="slTpABox">
-   <div class="sl-tp-label">Strategy A (1:1)</div>
-   <div style="display:flex;flex-direction:column;gap:4px;margin-top:6px">
-    <div><span class="sl-tp-label">ENTRY</span><div class="sl-tp-value entry" id="aEntry">--</div></div>
-    <div><span class="sl-tp-label" style="color:var(--red)">STOP LOSS</span><div class="sl-tp-value sl" id="aSL">--</div><div class="sl-tp-calc" id="aSLCalc">SL = recent swing low</div></div>
-    <div><span class="sl-tp-label" style="color:var(--green)">TAKE PROFIT</span><div class="sl-tp-value tp" id="aTP">--</div><div class="sl-tp-calc" id="aTPCalc">TP = Entry + (Entry − SL) × 1.0</div></div>
-    <div class="sl-tp-rr a" id="aRR">RR 1:1</div>
-    <div style="font-size:7px;color:#666;font-weight:600;margin-top:4px" id="aStrategyDesc">Quick scalp using BOS high/low, 1:1 risk-reward</div>
-   </div>
-  </div>
-  <div class="sl-tp-box b-strat" id="slTpBBox">
-   <div class="sl-tp-label">Strategy B (1:2)</div>
-   <div style="display:flex;flex-direction:column;gap:4px;margin-top:6px">
-    <div><span class="sl-tp-label">ENTRY</span><div class="sl-tp-value entry" id="bEntry">--</div></div>
-    <div><span class="sl-tp-label" style="color:var(--red)">STOP LOSS</span><div class="sl-tp-value sl" id="bSL">--</div><div class="sl-tp-calc" id="bSLCalc">SL = low of last 5 + buffer</div></div>
-    <div><span class="sl-tp-label" style="color:var(--green)">TAKE PROFIT</span><div class="sl-tp-value tp" id="bTP">--</div><div class="sl-tp-calc" id="bTPCalc">TP = Entry + (Entry − SL) × 2.0</div></div>
-    <div class="sl-tp-rr b" id="bRR">RR 1:2</div>
-    <div style="font-size:7px;color:#666;font-weight:600;margin-top:4px" id="bStrategyDesc">London/NY breakout with quality range filter, 1:2 risk-reward</div>
-   </div>
-  </div>
- </div>
- <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
-  <span class="badge live" id="slTpStatusBadge">Live</span>
-  <span style="font-size:7px;font-weight:600;color:#666" id="slTpLiveInfo">Calculated from the last 18 candles</span>
- </div>
- <div style="display:flex;gap:6px;margin-top:8px">
-  <button class="btn btn-small btn-orange" id="calcSlTpBtn">Recalculate</button>
-  <button class="btn btn-small btn-dark" id="showSlTpBtn">Show Strategy</button>
- </div>
-</div>
-
-<div class="candle-engine" id="candleEngineCard">
- <div class="candle-engine-title">CANDLE PATTERNS</div>
- <div class="candle-latest neutral" id="candleLatestPattern">WAIT · need more real OHLC candles</div>
- <div class="candle-tags" id="candlePatternTags"></div>
- <div class="candle-note">Real OHLC patterns: Doji, Hammer, Shooting Star, Marubozu, Engulfing, Harami, Stars, Soldiers/Crows and Tweezers.</div>
-</div>
-<div class="logs-bar" id="patternLogsBar"><span class="log-live">LOG</span> · Pattern monitor ready · waiting for real OHLC data</div>
-
-<div class="pattern-card" id="patternCard">
- <div class="pattern-title">STRATEGY C — PATTERN GUIDE</div>
- <div style="display:flex;gap:6px;flex-wrap:wrap">
-  <span class="badge live" id="patternLiveBadge">1S GUIDE</span>
-  <span class="badge" id="guideHighBadge">GUIDE HIGH --</span>
-  <span class="badge" id="guideLowBadge">GUIDE LOW --</span>
- </div>
- <div class="pattern-grid">
-  <div>
-   <div class="pattern-row"><span>Double Bottom (W)</span><span id="patW" class="pattern-none">--</span></div>
-   <div class="pattern-row"><span>Double Top (M)</span><span id="patM" class="pattern-none">--</span></div>
-  </div>
-  <div>
-   <div class="pattern-row"><span>Bull Flag</span><span id="patBF" class="pattern-none">--</span></div>
-   <div class="pattern-row"><span>Bear Flag</span><span id="patBE" class="pattern-none">--</span></div>
-  </div>
- </div>
- <div class="sig-box" id="patSigBox">
-  <div class="sig-label">Pattern + Structure + Pinbar Confluence</div>
-  <div class="sig-value" id="patSigValue">WAIT</div>
-  <div class="sig-exp" id="patSigExp">Waiting for pattern + guide break + pinbar + BOS/CHOCH (score ≥5).</div>
- </div>
- <div style="font-size:7px;color:#666;font-weight:600;margin-top:8px" id="patTpLabel">TP1–TP5 (from confluence risk)</div>
- <div id="patTpList" style="margin-top:6px"></div>
- <div style="background:var(--card2);border-top:1px solid var(--border);margin-top:10px;padding-top:10px">
-  <div style="font-size:7px;color:#666;font-weight:700;text-transform:uppercase;margin-bottom:6px">Update Speed</div>
-  <div class="speed-row">
-   <div class="speed-btn active" data-ms="1000">1s</div>
-   <div class="speed-btn" data-ms="5000">5s</div>
-   <div class="speed-btn" data-ms="10000">10s</div>
-   <div class="speed-btn" data-ms="30000">30s</div>
-  </div>
-  <div style="font-size:6px;color:#666;margin-top:6px">Faster = more API calls to gold-api.com/xaus.com/goldprice.dev. Very fast settings (1s) risk rate-limits on free tiers — use with caution, ideally short sessions only.</div>
- </div>
-</div>
-
+<div class="page-wrap">
+ <div class="main-col">
 <div class="xau-card">
  <div style="font-size:8px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase">XAU/USD</div>
  <div id="liveStatusRow" style="display:flex;align-items:center;gap:6px;margin-top:6px">
@@ -621,6 +507,129 @@ body.orange-theme{--accent:#ff8c00}
   Replay loads a constructed 18-bar setup that satisfies the AND rule so you can verify confirmation. Resume scan returns to ranging/monitoring mode.
   <br><br>
   <strong>Note:</strong> when there isn't enough real price history yet, candle data and signals shown here are simulated placeholders (not live market data). Don't use this tool's signals as the basis for real trading decisions.
+ </div>
+</div>
+ </div>
+ <div class="side-col">
+<div class="world-clock-card" id="worldClockCard">
+ <div class="wc-title">World Trading Clock</div>
+ <div class="wc-grid" id="worldClockGrid">
+  <div class="wc-item" id="wcSydney"><div class="wc-city">Sydney</div><div class="wc-time" id="wcSydneyTime">--:--</div><div class="wc-status" id="wcSydneyStatus">--</div></div>
+  <div class="wc-item" id="wcTokyo"><div class="wc-city">Tokyo</div><div class="wc-time" id="wcTokyoTime">--:--</div><div class="wc-status" id="wcTokyoStatus">--</div></div>
+  <div class="wc-item" id="wcLondon"><div class="wc-city">London</div><div class="wc-time" id="wcLondonTime">--:--</div><div class="wc-status" id="wcLondonStatus">--</div></div>
+  <div class="wc-item" id="wcNY"><div class="wc-city">New York</div><div class="wc-time" id="wcNYTime">--:--</div><div class="wc-status" id="wcNYStatus">--</div></div>
+ </div>
+</div>
+<div class="dual-card">
+ <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+  <div style="font-size:8px;font-weight:800;color:var(--muted);text-transform:uppercase">Dual Strategy — 18-Candle Analysis</div>
+  <div style="display:flex;align-items:center;gap:6px">
+   <span style="font-size:7px;color:#666;font-weight:700" id="abMonitorLabel">A/B ON</span>
+   <div class="toggle-switch-mini on" id="abMonitorToggle"><div class="knob"></div></div>
+  </div>
+ </div>
+ <div class="dual-row">
+  <div class="dual-opt" id="optABox">
+   <div class="dual-label">A · 1:1 Scalp</div>
+   <div class="dual-match" style="color:var(--blue)" id="optAStatus">Analysing 18 candles…</div>
+   <div style="font-size:7px;color:#666;font-weight:600;margin-top:3px" id="optAReason">A: engulfing pattern or 3-candle momentum</div>
+  </div>
+  <div class="dual-opt" id="optBBox">
+   <div class="dual-label">B · 1:2 London/NY</div>
+   <div class="dual-match" style="color:var(--green)" id="optBStatus">Analysing 18 candles…</div>
+   <div style="font-size:7px;color:#666;font-weight:600;margin-top:3px" id="optBReason">B: London/NY breakout + quality range filter</div>
+  </div>
+ </div>
+ <div style="display:flex;gap:6px;align-items:center;margin-top:8px;flex-wrap:wrap">
+  <span id="dualResultBadge" style="display:none;padding:4px 8px;border-radius:12px;font-size:7px;font-weight:800;background:#00d08418;border:1px solid #00d08440;color:#00d084">PRIOR B</span>
+  <span id="tradeLiveBadge" style="font-size:8px;font-weight:800;color:var(--text)"></span>
+  <span style="font-size:7px;font-weight:600;color:#666" id="candleCountLabel">18 candles</span>
+ </div>
+ <div style="font-family:'JetBrains Mono',monospace;font-size:7px;color:#666;background:#0a0907;padding:8px;border-radius:10px;margin-top:8px;max-height:70px;overflow-y:auto;border:1px solid #1a1a1a" id="dualCandlesLog">Loading candle data…</div>
+ <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
+  <button class="btn btn-small btn-orange" id="testDualBtn">Test Dual Signal</button>
+  <button class="btn btn-small btn-dark" id="forceABtn">Force A Match</button>
+  <button class="btn btn-small btn-dark" id="forceBBtn">Force B Match</button>
+  <button class="btn btn-small btn-dark" id="forceBothBtn">Force Both → Prior B</button>
+  <button class="btn btn-small btn-dark" id="checkAllBtn">Check All Functions</button>
+ </div>
+</div>
+<div class="sl-tp-card" id="slTpCard">
+ <div class="sl-tp-title">Stop-Loss / Take-Profit — A (1:1) vs B (1:2)</div>
+ <div class="sl-tp-grid">
+  <div class="sl-tp-box a-strat" id="slTpABox">
+   <div class="sl-tp-label">Strategy A (1:1)</div>
+   <div style="display:flex;flex-direction:column;gap:4px;margin-top:6px">
+    <div><span class="sl-tp-label">ENTRY</span><div class="sl-tp-value entry" id="aEntry">--</div></div>
+    <div><span class="sl-tp-label" style="color:var(--red)">STOP LOSS</span><div class="sl-tp-value sl" id="aSL">--</div><div class="sl-tp-calc" id="aSLCalc">SL = recent swing low</div></div>
+    <div><span class="sl-tp-label" style="color:var(--green)">TAKE PROFIT</span><div class="sl-tp-value tp" id="aTP">--</div><div class="sl-tp-calc" id="aTPCalc">TP = Entry + (Entry − SL) × 1.0</div></div>
+    <div class="sl-tp-rr a" id="aRR">RR 1:1</div>
+    <div style="font-size:7px;color:#666;font-weight:600;margin-top:4px" id="aStrategyDesc">Quick scalp using BOS high/low, 1:1 risk-reward</div>
+   </div>
+  </div>
+  <div class="sl-tp-box b-strat" id="slTpBBox">
+   <div class="sl-tp-label">Strategy B (1:2)</div>
+   <div style="display:flex;flex-direction:column;gap:4px;margin-top:6px">
+    <div><span class="sl-tp-label">ENTRY</span><div class="sl-tp-value entry" id="bEntry">--</div></div>
+    <div><span class="sl-tp-label" style="color:var(--red)">STOP LOSS</span><div class="sl-tp-value sl" id="bSL">--</div><div class="sl-tp-calc" id="bSLCalc">SL = low of last 5 + buffer</div></div>
+    <div><span class="sl-tp-label" style="color:var(--green)">TAKE PROFIT</span><div class="sl-tp-value tp" id="bTP">--</div><div class="sl-tp-calc" id="bTPCalc">TP = Entry + (Entry − SL) × 2.0</div></div>
+    <div class="sl-tp-rr b" id="bRR">RR 1:2</div>
+    <div style="font-size:7px;color:#666;font-weight:600;margin-top:4px" id="bStrategyDesc">London/NY breakout with quality range filter, 1:2 risk-reward</div>
+   </div>
+  </div>
+ </div>
+ <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
+  <span class="badge live" id="slTpStatusBadge">Live</span>
+  <span style="font-size:7px;font-weight:600;color:#666" id="slTpLiveInfo">Calculated from the last 18 candles</span>
+ </div>
+ <div style="display:flex;gap:6px;margin-top:8px">
+  <button class="btn btn-small btn-orange" id="calcSlTpBtn">Recalculate</button>
+  <button class="btn btn-small btn-dark" id="showSlTpBtn">Show Strategy</button>
+ </div>
+</div>
+<div class="candle-engine" id="candleEngineCard">
+ <div class="candle-engine-title">CANDLE PATTERNS</div>
+ <div class="candle-latest neutral" id="candleLatestPattern">WAIT · need more real OHLC candles</div>
+ <div class="candle-tags" id="candlePatternTags"></div>
+ <div class="candle-note">Real OHLC patterns: Doji, Hammer, Shooting Star, Marubozu, Engulfing, Harami, Stars, Soldiers/Crows and Tweezers.</div>
+</div>
+<div class="logs-bar" id="patternLogsBar"><span class="log-live">LOG</span> · Pattern monitor ready · waiting for real OHLC data</div>
+
+<div class="pattern-card" id="patternCard">
+ <div class="pattern-title">STRATEGY C — PATTERN GUIDE</div>
+ <div style="display:flex;gap:6px;flex-wrap:wrap">
+  <span class="badge live" id="patternLiveBadge">1S GUIDE</span>
+  <span class="badge" id="guideHighBadge">GUIDE HIGH --</span>
+  <span class="badge" id="guideLowBadge">GUIDE LOW --</span>
+ </div>
+ <div class="pattern-grid">
+  <div>
+   <div class="pattern-row"><span>Double Bottom (W)</span><span id="patW" class="pattern-none">--</span></div>
+   <div class="pattern-row"><span>Double Top (M)</span><span id="patM" class="pattern-none">--</span></div>
+  </div>
+  <div>
+   <div class="pattern-row"><span>Bull Flag</span><span id="patBF" class="pattern-none">--</span></div>
+   <div class="pattern-row"><span>Bear Flag</span><span id="patBE" class="pattern-none">--</span></div>
+  </div>
+ </div>
+ <div class="sig-box" id="patSigBox">
+  <div class="sig-label">Pattern + Structure + Pinbar Confluence</div>
+  <div class="sig-value" id="patSigValue">WAIT</div>
+  <div class="sig-exp" id="patSigExp">Waiting for pattern + guide break + pinbar + BOS/CHOCH (score ≥5).</div>
+ </div>
+ <div style="font-size:7px;color:#666;font-weight:600;margin-top:8px" id="patTpLabel">TP1–TP5 (from confluence risk)</div>
+ <div id="patTpList" style="margin-top:6px"></div>
+ <div style="background:var(--card2);border-top:1px solid var(--border);margin-top:10px;padding-top:10px">
+  <div style="font-size:7px;color:#666;font-weight:700;text-transform:uppercase;margin-bottom:6px">Update Speed</div>
+  <div class="speed-row">
+   <div class="speed-btn active" data-ms="1000">1s</div>
+   <div class="speed-btn" data-ms="5000">5s</div>
+   <div class="speed-btn" data-ms="10000">10s</div>
+   <div class="speed-btn" data-ms="30000">30s</div>
+  </div>
+  <div style="font-size:6px;color:#666;margin-top:6px">Faster = more API calls to gold-api.com/xaus.com/goldprice.dev. Very fast settings (1s) risk rate-limits on free tiers — use with caution, ideally short sessions only.</div>
+ </div>
+</div>
  </div>
 </div>
 
@@ -1641,6 +1650,47 @@ function drawChart(){
  ctx.fillStyle='#ff8c00';ctx.fillText('BOS HIGH',4,Math.max(10,py(bosHigh)-5));ctx.fillStyle='#ff4a4a';ctx.fillText('BOS LOW',4,Math.min(H-4,py(bosLow)+12));
  supports.forEach(level=>{const y=py(level);ctx.setLineDash([2,5]);ctx.strokeStyle='#00d08499';ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='#00d084';ctx.fillText('SUPPORT',4,Math.max(10,y-4));});
  resistances.forEach(level=>{const y=py(level);ctx.setLineDash([2,5]);ctx.strokeStyle='#ff4a4a99';ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='#ff4a4a';ctx.fillText('RESISTANCE',4,Math.max(10,y-4));});
+ // Trend arrows: UP TREND → peak → DOWN TREND → trough → UP TREND (real swing points, no fabricated data)
+ (function drawTrendArrows(){
+  if(vis.length<10) return;
+  const arrow=(x1,y1,x2,y2,color)=>{
+   ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=2;
+   ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+   const ang=Math.atan2(y2-y1,x2-x1),hl=7;
+   ctx.beginPath();ctx.moveTo(x2,y2);
+   ctx.lineTo(x2-hl*Math.cos(ang-Math.PI/6),y2-hl*Math.sin(ang-Math.PI/6));
+   ctx.lineTo(x2-hl*Math.cos(ang+Math.PI/6),y2-hl*Math.sin(ang+Math.PI/6));
+   ctx.closePath();ctx.fill();
+  };
+  const label=(x,y,text,color,ang)=>{
+   ctx.save();ctx.translate(x,y);if(ang>Math.PI/2||ang<-Math.PI/2)ang+=Math.PI;ctx.rotate(ang);
+   ctx.font='800 9px Inter,sans-serif';ctx.fillStyle=color;ctx.textAlign='center';
+   ctx.fillText(text,0,-6);ctx.restore();
+  };
+  let peakIdx=0; for(let i=1;i<vis.length;i++){ if(vis[i].high>vis[peakIdx].high) peakIdx=i; }
+  let troughIdx=peakIdx; for(let i=peakIdx;i<vis.length;i++){ if(vis[i].low<vis[troughIdx].low) troughIdx=i; }
+  // Leg 1: start → peak
+  if(peakIdx>=4){
+   const x1=0.5*W/vis.length, y1=py(vis[0].low);
+   const x2=(peakIdx+0.5)*W/vis.length, y2=py(vis[peakIdx].high)-6;
+   arrow(x1,y1,x2,y2,'#00d084');
+   label((x1+x2)/2,(y1+y2)/2,'UP TREND','#00d084',Math.atan2(y2-y1,x2-x1));
+  }
+  // Leg 2: peak → trough
+  if(troughIdx>peakIdx+3){
+   const x1=(peakIdx+0.5)*W/vis.length, y1=py(vis[peakIdx].high)+8;
+   const x2=(troughIdx+0.5)*W/vis.length, y2=py(vis[troughIdx].low)-8;
+   arrow(x1,y1,x2,y2,'#ff4a4a');
+   label((x1+x2)/2,(y1+y2)/2,'DOWN TREND','#ff4a4a',Math.atan2(y2-y1,x2-x1));
+  }
+  // Leg 3: trough → last (recovery)
+  if(vis.length-1>troughIdx+3 && last.close>=vis[troughIdx].low){
+   const x1=(troughIdx+0.5)*W/vis.length, y1=py(vis[troughIdx].low)+6;
+   const x2=(vis.length-1+0.5)*W/vis.length, y2=py(last.close)-6;
+   arrow(x1,y1,x2,y2,'#00d084');
+   label((x1+x2)/2,(y1+y2)/2,'UP TREND','#00d084',Math.atan2(y2-y1,x2-x1));
+  }
+ })();
  // Header + current price pill
  ctx.fillStyle='#ddd';ctx.font='700 10px Inter,sans-serif';ctx.fillText('XAU/USD · '+(currentTimeframe===1?'1m':currentTimeframe===5?'5m':currentTimeframe===15?'15m':currentTimeframe===60?'1H':currentTimeframe===240?'4H':'1D'),8,18);
  ctx.fillStyle='#777';ctx.font='600 8px Inter,sans-serif';ctx.fillText(vis.length+' real bars',8,31);
