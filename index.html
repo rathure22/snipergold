@@ -512,6 +512,13 @@ body.orange-theme{--accent:#ff8c00}
  </div>
 </div>
 
+<div class="candle-engine" id="candleEngineCard">
+ <div class="candle-engine-title">🕯 Candle Pattern Engine</div>
+ <div class="candle-latest neutral" id="candleLatestPattern">WAIT · need more real OHLC candles</div>
+ <div class="candle-tags" id="candlePatternTags"></div>
+ <div class="candle-note">Detects common real-OHLC candlestick formations: Doji, Hammer, Inverted Hammer, Hanging Man, Shooting Star, Marubozu, Engulfing, Harami, Piercing, Dark Cloud, Morning/Evening Star, Three Soldiers/Crows, Tweezers, Dragonfly and Gravestone Doji. No random/fake candles are generated.</div>
+</div>
+
 <div class="pattern-card" id="patternCard">
  <div class="pattern-title">Strategy C — Pattern + Guide (18-tick window)</div>
  <div style="display:flex;gap:6px;flex-wrap:wrap">
@@ -1527,120 +1534,119 @@ function aggregateCandles(candles, minutesPerBar){
  if(bucket) groups.push(bucket);
  return groups;
 }
+
+function candleBody(c){return Math.abs(c.close-c.open);}
+function candleRange(c){return Math.max(0.000001,c.high-c.low);}
+function candleUpper(c){return c.high-Math.max(c.open,c.close);}
+function candleLower(c){return Math.min(c.open,c.close)-c.low;}
+function isBull(c){return c.close>c.open;}
+function isBear(c){return c.close<c.open;}
+function detectCandlestickPatterns(candles){
+ const out=[]; if(!candles||candles.length<1) return out;
+ const n=candles.length, c=candles[n-1], p=n>1?candles[n-2]:null, p2=n>2?candles[n-3]:null;
+ const r=candleRange(c), b=candleBody(c), up=candleUpper(c), lo=candleLower(c), small=b/r<0.12;
+ const near=(a,bv,t=.002)=>Math.abs(a-bv)<=Math.max(r*t,0.15);
+ // Single-candle patterns
+ if(small){
+   out.push('Doji');
+   if(lo/r>.62 && up/r<.12) out.push('Dragonfly Doji');
+   if(up/r>.62 && lo/r<.12) out.push('Gravestone Doji');
+ }
+ if(lo>=b*2 && lo/r>.45 && up/r<.25) out.push(isBull(c)?'Hammer':'Hanging Man');
+ if(up>=b*2 && up/r>.45 && lo/r<.25) out.push(isBear(c)?'Shooting Star':'Inverted Hammer');
+ if(b/r>.82){ out.push(isBull(c)?'Bullish Marubozu':'Bearish Marubozu'); }
+ // Two-candle patterns
+ if(p){
+   if(isBull(c)&&isBear(p)&&c.open<=p.close&&c.close>=p.open) out.push('Bullish Engulfing');
+   if(isBear(c)&&isBull(p)&&c.open>=p.close&&c.close<=p.open) out.push('Bearish Engulfing');
+   if(isBull(p)&&isBear(c)&&c.open<p.open&&c.close>c.open&&c.close<p.close&&c.close>p.open) out.push('Dark Cloud Cover');
+   if(isBear(p)&&isBull(c)&&c.open>p.open&&c.close>p.close&&c.open<p.close) out.push('Piercing Line');
+   if(Math.max(c.open,c.close)<Math.max(p.open,p.close)&&Math.min(c.open,c.close)>Math.min(p.open,p.close)) out.push('Harami');
+   if(isBull(p)&&isBear(c)&&near(c.high,p.high,.004)) out.push('Tweezer Top');
+   if(isBear(p)&&isBull(c)&&near(c.low,p.low,.004)) out.push('Tweezer Bottom');
+ }
+ // Three-candle patterns
+ if(p&&p2){
+   const r2=candleRange(p2), b2=candleBody(p2), r1=candleRange(p), b1=candleBody(p);
+   const p2Bear=isBear(p2), p2Bull=isBull(p2), pBear=isBear(p), pBull=isBull(p);
+   if(p2Bear && b2/r2>.5 && b1/r1<.35 && isBull(c) && c.close>(p2.open+p2.close)/2) out.push('Morning Star');
+   if(p2Bull && b2/r2>.5 && b1/r1<.35 && isBear(c) && c.close<(p2.open+p2.close)/2) out.push('Evening Star');
+   if(p2Bull&&pBull&&isBull(c)&&c.close>p.close&&p.close>p2.close&&c.open>=p.open-b1*.5&&p.open>=p2.open-b2*.5) out.push('Three White Soldiers');
+   if(p2Bear&&pBear&&isBear(c)&&c.close<p.close&&p.close<p2.close&&c.open<=p.open+b1*.5&&p.open<=p2.open+b2*.5) out.push('Three Black Crows');
+ }
+ return [...new Set(out)];
+}
+function updateCandlePatternUI(patterns,last){
+ const latest=$('candleLatestPattern'), tags=$('candlePatternTags'); if(!latest||!tags) return;
+ tags.innerHTML='';
+ if(!patterns.length){latest.className='candle-latest neutral'; latest.textContent='No major candlestick pattern on latest real candle'; return;}
+ const bullNames=['Bullish Engulfing','Piercing Line','Hammer','Inverted Hammer','Morning Star','Three White Soldiers','Tweezer Bottom','Dragonfly Doji','Bullish Marubozu'];
+ const bearNames=['Bearish Engulfing','Dark Cloud Cover','Shooting Star','Hanging Man','Evening Star','Three Black Crows','Tweezer Top','Gravestone Doji','Bearish Marubozu'];
+ const bull=patterns.some(x=>bullNames.includes(x)), bear=patterns.some(x=>bearNames.includes(x));
+ latest.className='candle-latest '+(bull&&!bear?'bull':bear&&!bull?'bear':'neutral');
+ latest.textContent='🕯 '+patterns.join(' · ');
+ patterns.forEach(x=>{const d=document.createElement('span'); d.className='candle-tag '+(bullNames.includes(x)?'bull':bearNames.includes(x)?'bear':'neutral'); d.textContent=x; tags.appendChild(d);});
+}
+
 function drawChart(){
  if(!ctx || hist.length===0) return;
- const canvas=$('chart');
- const W=canvas.offsetWidth||canvas.clientWidth||700, H=240;
- if(canvas.width!==Math.round(W*2) || canvas.height!==H*2){
-  canvas.width=Math.round(W*2); canvas.height=H*2;
-  ctx.setTransform(2,0,0,2,0,0);
- }
+ const W=$('chart').offsetWidth, H=240;
  ctx.clearRect(0,0,W,H);
- const agg=aggregateCandles(hist,currentTimeframe);
- const vis=agg.slice(-90);
+ const agg=aggregateCandles(hist, currentTimeframe);
+ const vis=agg.slice(-80);
  if(vis.length===0) return;
  const rawMin=Math.min(...vis.map(x=>x.low)), rawMax=Math.max(...vis.map(x=>x.high));
- const rawRange=Math.max(rawMax-rawMin,0.01);
- const pad=Math.max(rawRange*0.10,0.35);
- const min=rawMin-pad, max=rawMax+pad, range=max-min;
- const left=54,right=58,top=10,bottom=25;
- const cw=Math.max(1,W-left-right), ch=H-top-bottom;
- const py=v=>top+(max-v)/range*ch;
- const px=i=>left+(i+0.5)*cw/vis.length;
- const bw=Math.max(3,Math.min(15,cw/vis.length*0.68));
-
- // Sifting-style dark chart field: clear plotting area, fine grid and price scale.
- ctx.fillStyle='#0a0d0b'; ctx.fillRect(0,0,W,H);
- ctx.fillStyle='#0d1210'; ctx.fillRect(left,top,cw,ch);
- ctx.font='9px Inter,sans-serif';
- ctx.textAlign='right';
- for(let g=0;g<=5;g++){
-  const y=top+ch*g/5, price=max-range*g/5;
-  ctx.strokeStyle='#1c2721'; ctx.lineWidth=0.65;
-  ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(left+cw,y);ctx.stroke();
-  ctx.fillStyle='#7f8b84'; ctx.fillText('$'+fmt2(price),W-5,y+3);
- }
- for(let g=1;g<6;g++){
-  const x=left+cw*g/6;
-  ctx.strokeStyle='#162019';ctx.lineWidth=.55;
-  ctx.beginPath();ctx.moveTo(x,top);ctx.lineTo(x,top+ch);ctx.stroke();
- }
- ctx.strokeStyle='#27332d';ctx.lineWidth=1;
- ctx.beginPath();ctx.moveTo(left,top);ctx.lineTo(left,top+ch);ctx.lineTo(left+cw,top+ch);ctx.stroke();
-
- // Real BOS/support/resistance levels from the displayed candles.
- const recentWindow=Math.min(24,vis.length);
- const recent=vis.slice(-recentWindow);
- const bosHigh=Math.max(...recent.map(x=>x.high));
- const bosLow=Math.min(...recent.map(x=>x.low));
+ const pad=Math.max((rawMax-rawMin)*0.10,0.5);
+ const min=rawMin-pad, max=rawMax+pad, range=max-min||1;
+ const py=v=>H-(v-min)/range*H;
+ const bw=Math.max(2,Math.min(14,W/vis.length*0.72));
+ ctx.font='700 9px Inter,sans-serif';
+ // Grid
+ ctx.strokeStyle='#24302b'; ctx.lineWidth=0.6;
+ for(let g=1;g<5;g++){const gy=H*g/5;ctx.beginPath();ctx.moveTo(0,gy);ctx.lineTo(W,gy);ctx.stroke();}
+ for(let g=1;g<6;g++){const gx=W*g/6;ctx.beginPath();ctx.moveTo(gx,0);ctx.lineTo(gx,H);ctx.stroke();}
+ // Real BOS levels
+ const bosHigh=Math.max(...vis.slice(-18).map(x=>x.high));
+ const bosLow=Math.min(...vis.slice(-18).map(x=>x.low));
+ // Support/resistance clusters from real pivots
  const pivL=[],pivH=[];
  for(let i=2;i<vis.length-2;i++){
-  if(vis[i].low<=vis[i-1].low&&vis[i].low<=vis[i+1].low) pivL.push(vis[i].low);
-  if(vis[i].high>=vis[i-1].high&&vis[i].high>=vis[i+1].high) pivH.push(vis[i].high);
+  if(vis[i].low<=vis[i-1].low&&vis[i].low<=vis[i+1].low)pivL.push(vis[i].low);
+  if(vis[i].high>=vis[i-1].high&&vis[i].high>=vis[i+1].high)pivH.push(vis[i].high);
  }
- const cluster=(arr,tol)=>{
-  const out=[];
-  arr.slice().reverse().forEach(v=>{
-   let c=out.find(x=>Math.abs(x-v)<=tol);
-   if(c){c.sum+=v;c.n++;c.level=c.sum/c.n;}else out.push({level:v,sum:v,n:1});
-  });
-  return out.filter(x=>x.n>=2).sort((a,b)=>b.n-a.n).slice(0,2).map(x=>x.level);
- };
- const tol=Math.max(rawRange*.022,.30);
+ const cluster=(arr,tol)=>{const out=[];arr.slice().reverse().forEach(v=>{let z=out.find(x=>Math.abs(x-v)<=tol);if(z){z.sum+=v;z.n++;z.level=z.sum/z.n;}else out.push({level:v,sum:v,n:1});});return out.filter(x=>x.n>=2).sort((a,b)=>b.n-a.n).slice(0,2).map(x=>x.level);};
+ const tol=Math.max((rawMax-rawMin)*0.025,0.35);
  const supports=cluster(pivL,tol),resistances=cluster(pivH,tol);
- const level=(price,label,stroke,dash)=>{
-  const y=py(price); if(y<top||y>top+ch)return;
-  ctx.save();ctx.setLineDash(dash);ctx.strokeStyle=stroke;ctx.lineWidth=.8;
-  ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(left+cw,y);ctx.stroke();ctx.restore();
-  ctx.font='700 8px Inter,sans-serif';ctx.fillStyle=stroke;ctx.textAlign='left';ctx.fillText(label,left+5,Math.max(top+9,Math.min(top+ch-3,y-4)));
- };
- supports.forEach(v=>level(v,'SUPPORT','#00d084aa',[2,5]));
- resistances.forEach(v=>level(v,'RESISTANCE','#ff4a4aaa',[2,5]));
- level(bosHigh,'BOS HIGH','#ff9d2e',[5,5]);
- level(bosLow,'BOS LOW','#ff4a4a',[5,5]);
-
- // Real OHLC candles: crisp wick + body, latest candle highlighted.
+ // Candles: true OHLC only. Pattern candles are highlighted, not fabricated.
+ const allPatterns=detectCandlestickPatterns(vis);
  vis.forEach((c,i)=>{
-  const x=px(i),o=py(c.open),cl=py(c.close),hi=py(c.high),lo=py(c.low);
-  const bull=c.close>=c.open;
-  const fill=bull?'#00d084':'#ff4a4a';
-  const recentC=i>=vis.length-3;
-  ctx.save();
-  ctx.strokeStyle=fill;ctx.lineWidth=recentC?1.5:1;
-  if(recentC){ctx.shadowBlur=8;ctx.shadowColor=fill;}
-  ctx.beginPath();ctx.moveTo(x,hi);ctx.lineTo(x,lo);ctx.stroke();
-  const y=Math.min(o,cl),body=Math.max(2,Math.abs(cl-o));
-  ctx.fillStyle=fill;ctx.fillRect(x-bw/2,y,bw,body);
-  ctx.restore();
+  const x=(i+0.5)*W/vis.length,yO=py(c.open),yC=py(c.close),yH=py(c.high),yL=py(c.low);
+  const bull=c.close>=c.open,color=bull?'#00d084':'#ff4a4a',recent=i>=Math.max(0,vis.length-3);
+  if(recent){ctx.shadowBlur=10;ctx.shadowColor=color;}
+  ctx.strokeStyle=color;ctx.lineWidth=recent?1.5:1;ctx.beginPath();ctx.moveTo(x,yH);ctx.lineTo(x,yL);ctx.stroke();
+  ctx.fillStyle=color;const bodyH=Math.max(2,Math.abs(yO-yC));ctx.fillRect(x-bw/2,Math.min(yO,yC),bw,bodyH);ctx.shadowBlur=0;
+  // Mark recognized patterns only on the latest candle. This keeps the chart clean.
+  if(i===vis.length-1 && allPatterns.length){
+    ctx.strokeStyle='#ffcf70';ctx.lineWidth=1;ctx.beginPath();ctx.arc(x,Math.max(7,yH-6),3,0,Math.PI*2);ctx.stroke();
+  }
  });
-
- // Current-price marker and right-side price pill.
- const last=vis[vis.length-1], lastY=py(last.close), bull=last.close>=last.open;
- const liveColor=bull?'#00d084':'#ff4a4a';
- ctx.save();ctx.setLineDash([6,4]);ctx.strokeStyle=liveColor;ctx.lineWidth=1;
- ctx.beginPath();ctx.moveTo(left,lastY);ctx.lineTo(left+cw,lastY);ctx.stroke();ctx.restore();
- const pillY=Math.max(top+10,Math.min(top+ch-10,lastY));
- ctx.fillStyle=liveColor;ctx.fillRect(W-55,pillY-9,54,18);
- ctx.fillStyle='#07100b';ctx.font='800 8px Inter,sans-serif';ctx.textAlign='center';ctx.fillText('$'+fmt2(last.close),W-28,pillY+3);
-
- // Compact time labels, derived from actual candle timestamps.
- ctx.fillStyle='#68736d';ctx.font='8px Inter,sans-serif';ctx.textAlign='center';
- const labelCount=Math.min(6,vis.length);
- for(let j=0;j<labelCount;j++){
-  const idx=Math.round(j*(vis.length-1)/(labelCount-1||1));
-  const d=new Date(vis[idx].time);
-  const txt=currentTimeframe>=1440?d.toLocaleDateString([], {month:'short',day:'numeric'}):d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-  ctx.fillText(txt,px(idx),H-7);
- }
-
- // Header inside chart: timeframe, bar count, and real-data state.
- ctx.textAlign='left';ctx.font='800 9px Inter,sans-serif';ctx.fillStyle='#d8e2dc';
- ctx.fillText('XAU/USD · '+(currentTimeframe===60?'1H':currentTimeframe===240?'4H':currentTimeframe===1440?'1D':currentTimeframe+'m'),left+6,top+10);
- ctx.font='700 8px Inter,sans-serif';ctx.fillStyle='#6f7d75';
- ctx.fillText(vis.length+' real bars',left+6,top+21);
- const n=Math.min(8,vis.length);
- const first=vis[vis.length-n].close,lastClose=vis[vis.length-1].close;
- const up=lastClose>=first,dirEl=$('chartDirection');
+ // Current price
+ const last=vis[vis.length-1],lastY=py(last.close);
+ ctx.setLineDash([5,4]);ctx.strokeStyle=last.close>=last.open?'#00d084':'#ff4a4a';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(0,lastY);ctx.lineTo(W,lastY);ctx.stroke();ctx.setLineDash([]);
+ // BOS
+ ctx.setLineDash([5,5]);ctx.strokeStyle='#ff8c00';ctx.beginPath();ctx.moveTo(0,py(bosHigh));ctx.lineTo(W,py(bosHigh));ctx.stroke();ctx.strokeStyle='#ff4a4a';ctx.beginPath();ctx.moveTo(0,py(bosLow));ctx.lineTo(W,py(bosLow));ctx.stroke();ctx.setLineDash([]);
+ ctx.fillStyle='#ff8c00';ctx.fillText('BOS HIGH',4,Math.max(10,py(bosHigh)-5));ctx.fillStyle='#ff4a4a';ctx.fillText('BOS LOW',4,Math.min(H-4,py(bosLow)+12));
+ supports.forEach(level=>{const y=py(level);ctx.setLineDash([2,5]);ctx.strokeStyle='#00d08499';ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='#00d084';ctx.fillText('SUPPORT',4,Math.max(10,y-4));});
+ resistances.forEach(level=>{const y=py(level);ctx.setLineDash([2,5]);ctx.strokeStyle='#ff4a4a99';ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='#ff4a4a';ctx.fillText('RESISTANCE',4,Math.max(10,y-4));});
+ // Header + current price pill
+ ctx.fillStyle='#ddd';ctx.font='700 10px Inter,sans-serif';ctx.fillText('XAU/USD · '+(currentTimeframe===1?'1m':currentTimeframe===5?'5m':currentTimeframe===15?'15m':currentTimeframe===60?'1H':currentTimeframe===240?'4H':'1D'),8,18);
+ ctx.fillStyle='#777';ctx.font='600 8px Inter,sans-serif';ctx.fillText(vis.length+' real bars',8,31);
+ ctx.fillStyle=last.close>=last.open?'#00d084':'#ff4a4a';ctx.fillRect(W-82,Math.max(4,lastY-9),78,18);ctx.fillStyle='#07100b';ctx.font='800 9px Inter,sans-serif';ctx.fillText('$'+fmt2(last.close),W-77,Math.max(16,lastY+4));
+ // Time labels
+ ctx.fillStyle='#666';ctx.font='600 8px Inter,sans-serif';const labelIdx=[0,Math.floor(vis.length/2),vis.length-1];labelIdx.forEach(i=>{if(i<0)return;const d=new Date(vis[i].time);const t=d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',hour12:false});ctx.fillText(t,Math.max(2,(i+0.5)*W/vis.length-12),H-4);});
+ // Pattern UI
+ updateCandlePatternUI(allPatterns,last);
+ const n=Math.min(6,vis.length),first=vis[vis.length-n].close,lastClose=last.close,up=lastClose>=first,dirEl=$('chartDirection');
  if(dirEl){dirEl.className='chart-direction '+(up?'direction-up':'direction-down');dirEl.textContent=(up?'📈 UP':'📉 DOWN')+' · real price direction';}
 }
 
@@ -2157,6 +2163,7 @@ function checkAllFunctionsActive(){
   {id:'showSlTpBtn', name:'Show SL/TP button'},
   {id:'testGoldLiveBtn', name:'Test Gold-API button'},
   {id:'greenThemeBackBtn', name:'Reset green theme button'},
+  {id:'candleEngineCard', name:'Candlestick pattern engine'},
   {id:'patternCard', name:'Strategy C pattern card'},
   {id:'patW', name:'W pattern indicator'},
   {id:'patM', name:'M pattern indicator'},
