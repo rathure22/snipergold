@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Sniper Gold v5.8</title>
+<title>Sniper Gold v5.8 · Real 1s Tracker</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
@@ -39,7 +39,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 .xau-badge.high{background:#d4b87a18;border:1px solid #d4b87a30;color:#d4b87a}
 .xau-badge.low{background:#ff4a4a18;border:1px solid #ff4a4a30;color:var(--red)}
 .xau-badge.bars{background:#1a1a1a;border:1px solid var(--border);color:var(--muted)}
-.chart-wrap{background:#0f0e0c;border:1px solid var(--border);border-radius:16px;padding:10px;margin:10px 0}
+.gold-tracker{background:#0b0f0d;border:1px solid #00d08455;border-radius:16px;padding:11px;margin:10px 0;box-shadow:0 0 14px #00d08410}.gold-tracker-head{display:flex;justify-content:space-between;align-items:center;gap:8px}.gold-tracker-title{font-size:9px;font-weight:800;letter-spacing:.7px;color:#d4b87a;text-transform:uppercase}.gold-tracker-price{font-family:'Sora',sans-serif;font-size:25px;font-weight:800;color:var(--green);margin-top:3px}.gold-tracker-change{font-size:8px;font-weight:800;margin-top:2px}.gold-tracker-source{font-size:7px;color:#777;margin-top:5px}.gold-tracker-live{font-size:7px;font-weight:800;color:var(--green);border:1px solid #00d08455;border-radius:20px;padding:4px 7px;white-space:nowrap}.gold-tracker-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:8px}.gold-tracker-stat{background:#111511;border:1px solid #1f3026;border-radius:9px;padding:6px}.gold-tracker-stat span{display:block;font-size:6px;color:#777;text-transform:uppercase}.gold-tracker-stat b{display:block;font-size:8px;margin-top:2px}.chart-direction{display:flex;justify-content:space-between;align-items:center;font-size:8px;font-weight:800;margin-top:6px}.direction-up{color:var(--green)}.direction-down{color:var(--red)}.support-line{color:#00d084}.resistance-line{color:#ff4a4a}.chart-wrap{background:#0f0e0c;border:1px solid var(--border);border-radius:16px;padding:10px;margin:10px 0}
 .chart-wrap canvas{width:100%!important;height:240px!important}
 .btn-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
 .btn{padding:8px 14px;border-radius:20px;border:none;font-size:9px;font-weight:700;cursor:pointer}
@@ -229,7 +229,7 @@ body.orange-theme{--accent:#ff8c00}
  <div class="sidebar-close-x" id="sidebarCloseBtn">✕</div>
  <div style="text-align:center;padding:6px 0 10px;border-bottom:1px solid var(--border);margin-bottom:10px">
   <div style="font-size:8px;font-weight:700;letter-spacing:0.5px;color:var(--muted)">Dev. JI NG SLOW×STONE™</div>
-  <div style="font-size:7px;font-weight:600;color:#555;margin-top:2px">Version v5.8</div>
+  <div style="font-size:7px;font-weight:600;color:#555;margin-top:2px">Version v5.8 · Real 1s / 3-source chart</div>
  </div>
  <div style="font-size:8px;font-weight:800;color:var(--muted);text-transform:uppercase;margin-bottom:8px">Function Status</div>
  <div id="functionCheckList" style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px;margin-bottom:10px"></div>
@@ -539,8 +539,8 @@ body.orange-theme{--accent:#ff8c00}
  <div style="background:var(--card2);border-top:1px solid var(--border);margin-top:10px;padding-top:10px">
   <div style="font-size:7px;color:#666;font-weight:700;text-transform:uppercase;margin-bottom:6px">Update Speed</div>
   <div class="speed-row">
-   <div class="speed-btn" data-ms="1000">1s</div>
-   <div class="speed-btn active" data-ms="5000">5s</div>
+   <div class="speed-btn active" data-ms="1000">1s</div>
+   <div class="speed-btn" data-ms="5000">5s</div>
    <div class="speed-btn" data-ms="10000">10s</div>
    <div class="speed-btn" data-ms="30000">30s</div>
   </div>
@@ -567,14 +567,23 @@ body.orange-theme{--accent:#ff8c00}
   <span style="font-size:7px;font-weight:700;color:#666;text-transform:uppercase">Chart · Session Sync</span>
   <span class="badge live" id="chartSessionBadge">Detecting…</span>
  </div>
+ <div class="gold-tracker" id="goldTracker">
+  <div class="gold-tracker-head"><div><div class="gold-tracker-title">🥇 Gold Tracker · XAU/USD</div><div class="gold-tracker-price" id="trackerPrice">$----</div><div class="gold-tracker-change" id="trackerChange">Waiting for real quote…</div></div><div class="gold-tracker-live" id="trackerLive">● 1s LIVE</div></div>
+  <div class="gold-tracker-source" id="trackerSource">3-source fallback: waiting…</div>
+  <div class="gold-tracker-grid"><div class="gold-tracker-stat"><span>Open</span><b id="trackerOpen">--</b></div><div class="gold-tracker-stat"><span>High</span><b id="trackerHigh">--</b></div><div class="gold-tracker-stat"><span>Low</span><b id="trackerLow">--</b></div><div class="gold-tracker-stat"><span>Direction</span><b id="trackerDirection">WAIT</b></div></div>
+ </div>
  <div class="chart-wrap" id="chartWrap">
   <div class="pull-hint" id="pullHint"></div>
   <canvas id="chart"></canvas>
+  <div id="chartDirection" class="chart-direction direction-up">📈 WAITING FOR REAL DATA</div>
  </div>
  <div class="tf-row">
   <div class="tf-btn active" id="tf1Btn" data-tf="1">1m</div>
   <div class="tf-btn" id="tf5Btn" data-tf="5">5m</div>
   <div class="tf-btn" id="tf15Btn" data-tf="15">15m</div>
+  <div class="tf-btn" id="tf60Btn" data-tf="60">1H</div>
+  <div class="tf-btn" id="tf240Btn" data-tf="240">4H</div>
+  <div class="tf-btn" id="tf1440Btn" data-tf="1440">1D</div>
  </div>
  <div class="btn-row">
   <button class="btn btn-orange" id="refreshBtn">↻ Refresh quote</button>
@@ -601,7 +610,7 @@ body.orange-theme{--accent:#ff8c00}
 
 <div style="text-align:center;padding:14px 6px;margin-top:4px">
  <div style="font-size:8px;font-weight:700;letter-spacing:0.5px;color:var(--muted)">Dev. JI NG SLOW×STONE™</div>
- <div style="font-size:7px;font-weight:600;color:#555;margin-top:2px">Version v5.8</div>
+ <div style="font-size:7px;font-weight:600;color:#555;margin-top:2px">Version v5.8 · Real 1s / 3-source chart</div>
 </div>
 
 <script>
@@ -617,7 +626,9 @@ let patternPrices=[];
 let guideHigh=0, guideLow=0, patEntry=0, patSL=0, patRisk=0;
 let lastPatternSignal='WAIT';
 let lastConfluenceScore=0;
-let mainTickMs=5000, mainTickHandle=null;
+let mainTickMs=1000, mainTickHandle=null;
+let goldSourceCursor=0;
+const MAX_REAL_BARS=10080;
 let abMonitoringOn=true; // Strategy A/B on/off — Strategy C always runs independently
 let lastADir=null, lastBDir=null;
 let masterSignal={dir:'WAIT', source:null, entry:0, sl:0, tpBest:0, tpMed:0, tpRest:0, score:0, lot:0.01};
@@ -1519,25 +1530,68 @@ function drawChart(){
  const agg=aggregateCandles(hist, currentTimeframe);
  const vis=agg.slice(-41);
  if(vis.length===0) return;
- const min=Math.min(...vis.map(x=>x.low))-1, max=Math.max(...vis.map(x=>x.high))+1;
- const range=max-min||1;
- const bw=W/vis.length*0.6;
+ const rawMin=Math.min(...vis.map(x=>x.low)), rawMax=Math.max(...vis.map(x=>x.high));
+ const pad=Math.max((rawMax-rawMin)*0.10,0.5);
+ const min=rawMin-pad, max=rawMax+pad, range=max-min||1;
+ const py=v=>H-(v-min)/range*H;
+ const bw=Math.max(3,Math.min(18,W/vis.length*0.58));
+ // subtle grid keeps the original chart readable without changing its layout
+ ctx.strokeStyle='#24302b'; ctx.lineWidth=0.6;
+ for(let g=1;g<5;g++){ const gy=H*g/5; ctx.beginPath(); ctx.moveTo(0,gy); ctx.lineTo(W,gy); ctx.stroke(); }
+ for(let g=1;g<6;g++){ const gx=W*g/6; ctx.beginPath(); ctx.moveTo(gx,0); ctx.lineTo(gx,H); ctx.stroke(); }
+ // Real BOS levels from the visible real candles
+ const bosHigh=Math.max(...vis.slice(-18).map(x=>x.high));
+ const bosLow=Math.min(...vis.slice(-18).map(x=>x.low));
+ // Find simple multi-candle support/resistance clusters from actual OHLC data
+ const pivL=[], pivH=[];
+ for(let i=2;i<vis.length-2;i++){
+  if(vis[i].low<=vis[i-1].low && vis[i].low<=vis[i+1].low) pivL.push(vis[i].low);
+  if(vis[i].high>=vis[i-1].high && vis[i].high>=vis[i+1].high) pivH.push(vis[i].high);
+ }
+ const cluster=(arr, tol)=>{
+  const out=[];
+  arr.slice().reverse().forEach(v=>{
+   let c=out.find(x=>Math.abs(x-v)<=tol);
+   if(c){ c.sum+=v; c.n++; c.level=c.sum/c.n; }
+   else out.push({level:v,sum:v,n:1});
+  });
+  return out.filter(x=>x.n>=2).sort((a,b)=>b.n-a.n).slice(0,2).map(x=>x.level);
+ };
+ const tol=Math.max((rawMax-rawMin)*0.025,0.35);
+ const supports=cluster(pivL,tol), resistances=cluster(pivH,tol);
+ // Candles: red/green, with the newest two candles highlighted so direction is easy to see.
  vis.forEach((c,i)=>{
   const x=(i+0.5)*W/vis.length;
-  const yO=H-(c.open-min)/range*H, yC=H-(c.close-min)/range*H, yH=H-(c.high-min)/range*H, yL=H-(c.low-min)/range*H;
-  const isBull=c.close>c.open;
-  const bullColor=currentTheme==='green'?'#00d084':'#ff8c00'; const bearColor='#ff4a4a';
-  ctx.strokeStyle=isBull?bullColor:bearColor; ctx.lineWidth=1;
+  const yO=py(c.open), yC=py(c.close), yH=py(c.high), yL=py(c.low);
+  const bull=c.close>=c.open;
+  const color=bull?'#00d084':'#ff4a4a';
+  const recent=i>=Math.max(0,vis.length-2);
+  if(recent){ ctx.shadowBlur=10; ctx.shadowColor=color; }
+  ctx.strokeStyle=color; ctx.lineWidth=recent?1.5:1;
   ctx.beginPath(); ctx.moveTo(x,yH); ctx.lineTo(x,yL); ctx.stroke();
-  ctx.fillStyle=isBull?bullColor:bearColor;
-  ctx.fillRect(x-bw/2, Math.min(yO,yC), bw, Math.abs(yO-yC)||2);
+  ctx.fillStyle=color;
+  const bodyH=Math.max(2,Math.abs(yO-yC));
+  ctx.fillRect(x-bw/2,Math.min(yO,yC),bw,bodyH);
+  if(recent){ ctx.shadowBlur=0; }
  });
- ctx.setLineDash([4,4]); ctx.strokeStyle=currentTheme==='green'?'#00d084':'#ff8c00';
- ctx.beginPath(); ctx.moveTo(0, H*0.25); ctx.lineTo(W, H*0.25); ctx.stroke();
- ctx.strokeStyle='#ff4a4a'; ctx.beginPath(); ctx.moveTo(0, H*0.75); ctx.lineTo(W, H*0.75); ctx.stroke(); ctx.setLineDash([]);
- ctx.fillStyle='#ff8c00'; ctx.font='700 9px Inter,sans-serif'; ctx.fillText('BOS high',4,H*0.25-4);
- ctx.fillStyle='#ff4a4a'; ctx.fillText('BOS low',4,H*0.75+12);
+ // Current price line
+ const last=vis[vis.length-1]; const lastY=py(last.close);
+ ctx.setLineDash([5,4]); ctx.strokeStyle=last.close>=last.open?'#00d084':'#ff4a4a'; ctx.lineWidth=1;
+ ctx.beginPath(); ctx.moveTo(0,lastY); ctx.lineTo(W,lastY); ctx.stroke(); ctx.setLineDash([]);
+ // BOS
+ ctx.setLineDash([5,5]); ctx.strokeStyle='#ff8c00'; ctx.beginPath(); ctx.moveTo(0,py(bosHigh)); ctx.lineTo(W,py(bosHigh)); ctx.stroke();
+ ctx.strokeStyle='#ff4a4a'; ctx.beginPath(); ctx.moveTo(0,py(bosLow)); ctx.lineTo(W,py(bosLow)); ctx.stroke(); ctx.setLineDash([]);
+ ctx.font='700 9px Inter,sans-serif'; ctx.fillStyle='#ff8c00'; ctx.fillText('BOS high',4,Math.max(10,py(bosHigh)-5));
+ ctx.fillStyle='#ff4a4a'; ctx.fillText('BOS low',4,Math.min(H-4,py(bosLow)+12));
+ // Support / resistance lines only when multiple candles support the zone.
+ supports.forEach(level=>{ const y=py(level); ctx.setLineDash([2,5]); ctx.strokeStyle='#00d08499'; ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); ctx.setLineDash([]); ctx.fillStyle='#00d084'; ctx.fillText('SUPPORT',4,Math.max(10,y-4)); });
+ resistances.forEach(level=>{ const y=py(level); ctx.setLineDash([2,5]); ctx.strokeStyle='#ff4a4a99'; ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); ctx.setLineDash([]); ctx.fillStyle='#ff4a4a'; ctx.fillText('RESISTANCE',4,Math.max(10,y-4)); });
+ // Direction marker from the last 6 real closes.
+ const n=Math.min(6,vis.length); const first=vis[vis.length-n].close, lastClose=vis[vis.length-1].close;
+ const up=lastClose>=first; const dirEl=$('chartDirection');
+ if(dirEl){ dirEl.className='chart-direction '+(up?'direction-up':'direction-down'); dirEl.textContent=(up?'📈 UP':'📉 DOWN')+' · real price direction'; }
 }
+
 function checkPriceAlert(p){
  if(priceAlert.above!=null && !priceAlert.firedAbove && p>=priceAlert.above){
   priceAlert.firedAbove=true; alertUser('above'); 
@@ -1576,7 +1630,7 @@ function pushTick(p){
  liveTickCount++;
  if(hist.length===0 || now-hist[hist.length-1].time>60000){
   hist.push({open:p, high:p, low:p, close:p, time:now});
-  if(hist.length>300) hist.shift();
+  if(hist.length>MAX_REAL_BARS) hist.shift();
  }else{
   const last=hist[hist.length-1];
   last.high=Math.max(last.high,p); last.low=Math.min(last.low,p); last.close=p;
@@ -1594,7 +1648,7 @@ function pushTick(p){
  updatePatternStrategy(p); // Strategy C — always runs, independent of the A/B toggle
  manageActiveTrade(p);
  updateVolumeProxy(p);
- try{ localStorage.setItem('sg_cache', JSON.stringify({price:p, time:now, hist:hist.slice(-60)})); }catch(e){}
+ try{ localStorage.setItem('sg_cache', JSON.stringify({version:'real-1s-v1', real:true, price:p, time:now, hist:hist.slice(-MAX_REAL_BARS)})); }catch(e){}
  drawChart();
  if(abMonitoringOn){ updateSlTpDisplay(); updateTp5Display(); }
  testDualSame18Candles();
@@ -1604,10 +1658,7 @@ function pushTick(p){
 function getLast18Candles(){
  if(hist.length>=18) return hist.slice(-18);
  if(hist.length>0) return hist.slice(-Math.min(hist.length,18));
- // Not enough real history yet — placeholder candles for display only.
- let mock=[], price=4349.80;
- for(let i=0;i<18;i++){ const o=price+(Math.random()-0.5)*2; const c=o+(Math.random()-0.5)*3; const h=Math.max(o,c)+Math.random()*1.5; const l=Math.min(o,c)-Math.random()*1.5; mock.push({open:o,high:h,low:l,close:c,time:Date.now()-(18-i)*60000}); price=c; }
- return mock;
+ return [];
 }
 function avgCandleRange(candles, n){
  const recent=candles.slice(-(n||10));
@@ -1776,10 +1827,14 @@ const GOLD_SOURCES=[
  {name:'goldprice.dev', fn:fetchFromGoldPriceDev},
 ];
 async function fetchGoldPriceWithFallback(){
- for(const src of GOLD_SOURCES){
+ // One real quote check every second, rotating the three free sources.
+ // If the selected source fails, immediately fall through to the other two.
+ for(let step=0;step<GOLD_SOURCES.length;step++){
+  const idx=(goldSourceCursor+step)%GOLD_SOURCES.length;
+  const src=GOLD_SOURCES[idx];
   try{
    const r=await src.fn();
-   if(r.price>1000 && r.price<10000) return {...r, source:src.name};
+   if(r.price>1000 && r.price<10000){ goldSourceCursor=(idx+1)%GOLD_SOURCES.length; return {...r, source:src.name}; }
   }catch(e){ console.warn(src.name+' failed:', e.message); }
  }
  return null;
@@ -1928,6 +1983,21 @@ function setLiveStatus(mode, text){
  label.textContent=text;
 }
 
+function updateGoldTracker(p, source){
+ const price=$('trackerPrice'), ch=$('trackerChange'), src=$('trackerSource'), live=$('trackerLive');
+ const last=hist.length?hist[hist.length-1]:null;
+ if(price) price.textContent='$'+fmt2(p);
+ if(ch){ const prev=hist.length>1?hist[hist.length-2].close:(last?.open||p); const d=p-prev; ch.textContent=(d>=0?'▲ +':'▼ ')+fmt2(d); ch.style.color=d>=0?'var(--green)':'var(--red)'; }
+ if(src) src.textContent='LIVE · '+source+' · 3-source fallback · quote check 1s';
+ if(live) live.textContent='● 1s LIVE';
+ if(last){
+  if($('trackerOpen')) $('trackerOpen').textContent='$'+fmt2(last.open);
+  if($('trackerHigh')) $('trackerHigh').textContent='$'+fmt2(last.high);
+  if($('trackerLow')) $('trackerLow').textContent='$'+fmt2(last.low);
+  const dir=p>=last.open?'UP':'DOWN'; const el=$('trackerDirection'); if(el){el.textContent=dir;el.style.color=dir==='UP'?'var(--green)':'var(--red)';}
+ }
+}
+
 async function fetchPrice(){
  nextTickAt=Date.now()+mainTickMs;
  const result=await fetchGoldPriceWithFallback();
@@ -1942,6 +2012,7 @@ async function fetchPrice(){
  logConnection(result.source, true);
  const p=result.price;
  pushTick(p);
+ updateGoldTracker(p, result.source);
  const priceStr=p.toFixed(2);
  const tag=result.source+(result.stale?' (stale)':'');
  if($('apiBadge')) $('apiBadge').textContent=tag+' $'+priceStr;
@@ -2050,8 +2121,6 @@ function checkAllFunctionsActive(){
 
 window.addEventListener('load', ()=>{
  initChart();
- let p=4349.80;
- for(let i=0;i<41;i++){ const o=p+(Math.random()-0.5)*1.5; const c=o+(Math.random()-0.5)*2; const h=Math.max(o,c)+Math.random()*1; const l=Math.min(o,c)-Math.random()*1; hist.push({open:o,high:h,low:l,close:c,time:Date.now()-(41-i)*60000}); p=c; }
  drawChart();
  testDualSame18Candles(); updateSlTpDisplay(); updateTp5Display();
  fetchPrice(); fetchExchangeRates();
@@ -2182,7 +2251,7 @@ updateChartSession();
  };
 
  // Timeframe buttons
- [$('tf1Btn'), $('tf5Btn'), $('tf15Btn')].forEach(btn=>{
+ [$('tf1Btn'), $('tf5Btn'), $('tf15Btn'), $('tf60Btn'), $('tf240Btn'), $('tf1440Btn')].forEach(btn=>{
   if(btn) btn.onclick=function(){ document.querySelectorAll('.tf-btn').forEach(b=>b.classList.remove('active'));
    this.classList.add('active'); currentTimeframe=parseInt(this.dataset.tf); drawChart(); };
  });
@@ -2239,7 +2308,7 @@ updateChartSession();
 
  // Restore cache if offline on first load
  try{ const cached=JSON.parse(localStorage.getItem('sg_cache')||'{}');
-  if(cached.price && cached.hist && cached.hist.length>0){ hist=cached.hist; lastPrice=cached.price; 
+  if(cached.real===true && cached.version==='real-1s-v1' && cached.price && cached.hist && cached.hist.length>0){ hist=cached.hist; lastPrice=cached.price; 
    if($('priceEl')) $('priceEl').textContent='$'+fmt2(cached.price);
    liveTickCount=hist.length; firstLiveTickAt=Date.now()-hist.length*60000;
   }
