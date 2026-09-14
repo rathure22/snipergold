@@ -3,14 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Sniper Gold v5.1</title>
+<title>Sniper Gold v5.3</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#0d0b08;--card:#1a1815;--card2:#1f1c18;--border:#2a2620;--text:#e8ddd0;--muted:#8a7f70;--accent:#ff8c00;--green:#00d084;--green2:#00d08418;--blue:#4a9eff;--red:#ff4a4a}
 body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;font-weight:600;padding:6px;font-size:10px;line-height:1.4;letter-spacing:0.1px}
-.hdr,.xau-card,.dual-card,.strat-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:14px;margin:6px 0}
+.hdr,.xau-card,.dual-card,.strat-card,.world-clock-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:14px;margin:6px 0}
+.world-clock-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:12px;margin:6px 0}
+.wc-title{font-size:8px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+.wc-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.wc-item{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:8px;text-align:center}
+.wc-item.open{border-color:var(--green);background:#00d08412}
+.wc-item.closed{opacity:0.7}
+.wc-city{font-size:8px;font-weight:800;color:var(--text)}
+.wc-time{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;margin-top:2px;color:var(--accent)}
+.wc-status{font-size:7px;font-weight:700;margin-top:3px}
+.wc-status.open{color:var(--green)}
+.wc-status.closed{color:#888}
+.wc-pht{font-size:7px;color:#666;margin-top:2px}
+
 .ttl{font-family:'Sora',sans-serif;font-size:17px;font-weight:800;letter-spacing:-0.3px}
 .sub{font-size:10px;font-weight:600;color:var(--muted);margin-top:4px}
 .badge{border:1px solid var(--border);background:var(--card2);border-radius:20px;padding:5px 10px;font-size:7px;font-weight:700;text-transform:uppercase;color:var(--muted)}
@@ -216,7 +229,7 @@ body.orange-theme{--accent:#ff8c00}
  <div class="sidebar-close-x" id="sidebarCloseBtn">✕</div>
  <div style="text-align:center;padding:6px 0 10px;border-bottom:1px solid var(--border);margin-bottom:10px">
   <div style="font-size:8px;font-weight:700;letter-spacing:0.5px;color:var(--muted)">Dev. JI NG SLOW×STONE™</div>
-  <div style="font-size:7px;font-weight:600;color:#555;margin-top:2px">Version v5.0</div>
+  <div style="font-size:7px;font-weight:600;color:#555;margin-top:2px">Version v5.3</div>
  </div>
  <div style="font-size:8px;font-weight:800;color:var(--muted);text-transform:uppercase;margin-bottom:8px">Function Status</div>
  <div id="functionCheckList" style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px;margin-bottom:10px"></div>
@@ -243,6 +256,11 @@ body.orange-theme{--accent:#ff8c00}
    <span style="font-size:8px;font-weight:700">Sound / vibration on match</span>
    <div class="toggle-switch-mini on" id="soundAlertToggle"><div class="knob"></div></div>
   </div>
+  <div class="toggle-line" style="margin-top:6px">
+   <span style="font-size:8px;font-weight:700">Auto Decision (active signals)</span>
+   <div class="toggle-switch-mini" id="autoDecisionToggle"><div class="knob"></div></div>
+  </div>
+  <div style="font-size:6px;color:#666;margin-top:4px">When ON: lower confluence threshold + auto-start trade management (BE/trail after TP1)</div>
   <div style="margin-top:8px">
    <div style="font-size:7px;color:#666;font-weight:700;margin-bottom:4px">PRICE ALERT ($)</div>
    <div style="display:flex;gap:4px">
@@ -350,6 +368,7 @@ body.orange-theme{--accent:#ff8c00}
   <span class="badge" id="weekendBadge">WEEKEND CLOSE</span>
   <span class="badge live" id="liveBadge">LIVE XAU</span>
   <span class="badge live" id="phTimeBadge">--:--:-- PHT</span>
+  <span class="badge" id="newsWarnBadge" style="display:none;border-color:#ffaa00;color:#ffaa00">NEWS</span>
   <span class="badge live" id="apiBadge">GOLD-API.COM LIVE</span>
   <span class="badge" id="confBadge">CONF --%</span>
   <span class="badge blue" id="dualBadge">DUAL A+B</span>
@@ -384,6 +403,16 @@ body.orange-theme{--accent:#ff8c00}
     <button class="btn btn-small" style="background:#00ff88;color:#000;font-weight:800" id="testGoldLiveBtn">Test Gold-API Feed</button>
     <button class="btn btn-small" style="background:#111;border:1px solid #00ff88;color:#00ff88" id="greenThemeBackBtn">Reset Green Theme</button>
   </div>
+</div>
+
+<div class="world-clock-card" id="worldClockCard">
+ <div class="wc-title">World Trading Clock</div>
+ <div class="wc-grid" id="worldClockGrid">
+  <div class="wc-item" id="wcSydney"><div class="wc-city">Sydney</div><div class="wc-time" id="wcSydneyTime">--:--</div><div class="wc-status" id="wcSydneyStatus">--</div></div>
+  <div class="wc-item" id="wcTokyo"><div class="wc-city">Tokyo</div><div class="wc-time" id="wcTokyoTime">--:--</div><div class="wc-status" id="wcTokyoStatus">--</div></div>
+  <div class="wc-item" id="wcLondon"><div class="wc-city">London</div><div class="wc-time" id="wcLondonTime">--:--</div><div class="wc-status" id="wcLondonStatus">--</div></div>
+  <div class="wc-item" id="wcNY"><div class="wc-city">New York</div><div class="wc-time" id="wcNYTime">--:--</div><div class="wc-status" id="wcNYStatus">--</div></div>
+ </div>
 </div>
 
 <div class="dual-card">
@@ -506,6 +535,10 @@ body.orange-theme{--accent:#ff8c00}
   <span class="xau-badge bars" id="goldLastFetch2">Gold: 4349.70</span>
   <span class="xau-badge bars" id="forexLastFetch">Forex: 62.67</span>
  </div>
+ <div style="display:flex;justify-content:space-between;align-items:center;margin:8px 0 4px">
+  <span style="font-size:7px;font-weight:700;color:#666;text-transform:uppercase">Chart · Session Sync</span>
+  <span class="badge live" id="chartSessionBadge">Detecting…</span>
+ </div>
  <div class="chart-wrap" id="chartWrap">
   <div class="pull-hint" id="pullHint"></div>
   <canvas id="chart"></canvas>
@@ -539,7 +572,7 @@ body.orange-theme{--accent:#ff8c00}
 
 <div style="text-align:center;padding:14px 6px;margin-top:4px">
  <div style="font-size:8px;font-weight:700;letter-spacing:0.5px;color:var(--muted)">Dev. JI NG SLOW×STONE™</div>
- <div style="font-size:7px;font-weight:600;color:#555;margin-top:2px">Version v5.0</div>
+ <div style="font-size:7px;font-weight:600;color:#555;margin-top:2px">Version v5.3</div>
 </div>
 
 <script>
@@ -554,10 +587,11 @@ let connLog=[];
 let patternPrices=[];
 let guideHigh=0, guideLow=0, patEntry=0, patSL=0, patRisk=0;
 let lastPatternSignal='WAIT';
+let lastConfluenceScore=0;
 let mainTickMs=5000, mainTickHandle=null;
 let abMonitoringOn=true; // Strategy A/B on/off — Strategy C always runs independently
 let lastADir=null, lastBDir=null;
-let masterSignal={dir:'WAIT', source:null, entry:0, sl:0, tpBest:0, tpMed:0, tpRest:0};
+let masterSignal={dir:'WAIT', source:null, entry:0, sl:0, tpBest:0, tpMed:0, tpRest:0, score:0, lot:0.01};
 let nextTickAt=Date.now();
 let floatingCollapsed=false;
 
@@ -567,10 +601,12 @@ function updateMasterSignal(){
  const prevDir=masterSignal.dir;
  if(lastPatternSignal==='BUY'||lastPatternSignal==='SELL'){
   const bull=lastPatternSignal==='BUY';
+  const sc=lastConfluenceScore||5;
   masterSignal={dir:lastPatternSignal, source:'C (Pattern+Guide)', entry:patEntry, sl:patSL,
    tpBest: bull? patEntry+patRisk    : patEntry-patRisk,
    tpMed:  bull? patEntry+patRisk*2.5: patEntry-patRisk*2.5,
-   tpRest: bull? patEntry+patRisk*5  : patEntry-patRisk*5};
+   tpRest: bull? patEntry+patRisk*5  : patEntry-patRisk*5,
+   score:sc, lot:lotFromScore(sc)};
  }else if(abMonitoringOn && lastMatchState.b && lastBDir){
   const bull=lastBDir==='BUY';
   const entry=parseFloat($('bEntry')?.textContent.replace('$',''))||lastPrice;
@@ -579,7 +615,7 @@ function updateMasterSignal(){
   masterSignal={dir:lastBDir, source:'B (1:2 London/NY)', entry, sl,
    tpBest: bull? entry+risk    : entry-risk,
    tpMed:  bull? entry+risk*2  : entry-risk*2,
-   tpRest: bull? entry+risk*3  : entry-risk*3};
+   tpRest: bull? entry+risk*3  : entry-risk*3, score:5, lot:0.02};
  }else if(abMonitoringOn && lastMatchState.a && lastADir){
   const bull=lastADir==='BUY';
   const entry=parseFloat($('aEntry')?.textContent.replace('$',''))||lastPrice;
@@ -588,11 +624,11 @@ function updateMasterSignal(){
   masterSignal={dir:lastADir, source:'A (1:1 Scalp)', entry, sl,
    tpBest: bull? entry+risk*0.5: entry-risk*0.5,
    tpMed:  bull? entry+risk    : entry-risk,
-   tpRest: bull? entry+risk*1.5: entry-risk*1.5};
+   tpRest: bull? entry+risk*1.5: entry-risk*1.5, score:4, lot:0.01};
  }else{
-  masterSignal={dir:'WAIT', source:null, entry:0, sl:0, tpBest:0, tpMed:0, tpRest:0};
+  masterSignal={dir:'WAIT', source:null, entry:0, sl:0, tpBest:0, tpMed:0, tpRest:0, score:0, lot:0.01};
  }
- if(masterSignal.dir!==prevDir && masterSignal.dir!=='WAIT') alertUser('master '+masterSignal.dir);
+ if(masterSignal.dir!==prevDir && masterSignal.dir!=='WAIT'){ alertUser('master '+masterSignal.dir); if(autoDecisionOn) startActiveTradeFromMaster(); }
  renderFloatingWidget();
 }
 function renderFloatingWidget(){
@@ -602,15 +638,27 @@ function renderFloatingWidget(){
  if(dirEl){ dirEl.textContent=masterSignal.dir; dirEl.className='fw-dir '+(masterSignal.dir==='BUY'?'buy':masterSignal.dir==='SELL'?'sell':'wait'); }
  if(srcEl) srcEl.textContent=masterSignal.source||'No active signal — monitoring';
  if(body){
-  if(masterSignal.dir==='WAIT'){
+  if(masterSignal.dir==='WAIT' && !activeTrade){
    body.innerHTML='<div class="fw-row"><span>Status</span><span>Monitoring A, B &amp; C…</span></div>';
-  }else{
+  }else if(activeTrade && autoDecisionOn){
+   const t=activeTrade;
+   const be=t.beMoved?'BE ✓':'Open';
    body.innerHTML=
+    '<div class="fw-row"><span style="color:var(--accent)">ACTIVE TRADE</span><span>'+t.dir+' · Lot '+((t.lot||0.01).toFixed(2))+'</span></div>'+
+    '<div class="fw-row"><span>Entry</span><span>$'+fmt2(t.entry)+'</span></div>'+
+    '<div class="fw-row"><span>SL '+(t.beMoved?'(BE)':'')+'</span><span style="color:var(--red)">$'+fmt2(t.sl)+'</span></div>'+
+    '<div class="fw-row"><span>TP1</span><span style="color:var(--green)">$'+fmt2(t.tp1)+'</span></div>'+
+    '<div class="fw-row"><span>TP2</span><span style="color:#ffaa00">$'+fmt2(t.tp2)+'</span></div>'+
+    '<div class="fw-row"><span>Status</span><span>'+be+(t.score?' · Score '+t.score:'')+'</span></div>';
+  }else{
+   const lot=masterSignal.lot||lotFromScore(masterSignal.score||5);
+   body.innerHTML=
+    '<div class="fw-row"><span>Lot (score '+ (masterSignal.score||'-') +')</span><span style="color:var(--accent)">'+lot.toFixed(2)+'</span></div>'+
     '<div class="fw-row"><span>Entry</span><span>$'+fmt2(masterSignal.entry)+'</span></div>'+
     '<div class="fw-row"><span>Stop Loss</span><span style="color:var(--red)">$'+fmt2(masterSignal.sl)+'</span></div>'+
-    '<div class="fw-row"><span>TP Best (1st)</span><span style="color:var(--green)">$'+fmt2(masterSignal.tpBest)+'</span></div>'+
-    '<div class="fw-row"><span>TP Medium</span><span style="color:#ffaa00">$'+fmt2(masterSignal.tpMed)+'</span></div>'+
-    '<div class="fw-row"><span>TP Rest (runner)</span><span style="color:#d4b87a">$'+fmt2(masterSignal.tpRest)+'</span></div>';
+    '<div class="fw-row"><span>TP1</span><span style="color:var(--green)">$'+fmt2(masterSignal.tpBest)+'</span></div>'+
+    '<div class="fw-row"><span>TP2</span><span style="color:#ffaa00">$'+fmt2(masterSignal.tpMed)+'</span></div>'+
+    '<div class="fw-row"><span>TP3 (runner)</span><span style="color:#d4b87a">$'+fmt2(masterSignal.tpRest)+'</span></div>';
   }
  }
 }
@@ -618,6 +666,84 @@ function updateFwCountdown(){
  const el=$('fwCountdown'); if(!el) return;
  const secs=Math.max(0, Math.ceil((nextTickAt-Date.now())/1000));
  el.textContent='Next check: '+secs+'s';
+}
+
+
+// --- News high-impact windows (approximate, PHT = UTC+8) ---
+// Common: NFP (first Fri 20:30 PHT), FOMC, CPI, etc. Simple fixed windows.
+function checkNewsWindow(){
+ try{
+  const p=getPHTParts();
+  const day=p.weekday, h=p.hour, m=p.minute;
+  // First Friday of month ~20:30 PHT (NFP) — approximate any Friday 20:00-21:30
+  if(day==='Fri' && h===20 && m>=0) return {active:true, block:true, label:'NFP / High Impact window'};
+  if(day==='Fri' && h===21 && m<30) return {active:true, block:true, label:'NFP / High Impact window'};
+  // Generic high-vol hours warning (not full block)
+  if((h===20 || h===21) && (day==='Wed'||day==='Thu')) return {active:true, block:false, label:'Possible FOMC/CPI hour'};
+  return {active:false, block:false, label:''};
+ }catch(e){ return {active:false, block:false, label:''}; }
+}
+
+
+// Lot size from confluence score (0.01 – 0.04)
+function lotFromScore(score){
+ if(score>=10) return 0.04;
+ if(score>=8) return 0.03;
+ if(score>=6) return 0.02;
+ return 0.01;
+}
+
+// Auto Decision mode
+let autoDecisionOn=false;
+
+// Active trade management (trailing / BE after TP1)
+let activeTrade=null; // {dir, entry, sl, tp1, tp2, beMoved, trail}
+function manageActiveTrade(price){
+ if(!activeTrade || !price) return;
+ const t=activeTrade;
+ const risk=Math.abs(t.entry-t.sl)||0.3;
+ if(t.dir==='BUY'){
+  // Hit TP1 → move SL to BE
+  if(!t.beMoved && price>=t.tp1){
+   t.sl=t.entry; t.beMoved=true;
+   if(typeof alertUser==='function') alertUser('BE moved');
+  }
+  // Trail after BE
+  if(t.beMoved && price>t.entry+risk*0.5){
+   const newSL=Math.max(t.sl, price-risk*0.6);
+   if(newSL>t.sl) t.sl=newSL;
+  }
+ }else if(t.dir==='SELL'){
+  if(!t.beMoved && price<=t.tp1){
+   t.sl=t.entry; t.beMoved=true;
+   if(typeof alertUser==='function') alertUser('BE moved');
+  }
+  if(t.beMoved && price<t.entry-risk*0.5){
+   const newSL=Math.min(t.sl, price+risk*0.6);
+   if(newSL<t.sl) t.sl=newSL;
+  }
+ }
+ // Update floating widget if this is the active master
+ if(masterSignal.dir===t.dir){
+  masterSignal.sl=t.sl;
+  if(typeof renderFloatingWidget==='function') renderFloatingWidget();
+ }
+}
+function startActiveTradeFromMaster(){
+ if(masterSignal.dir==='WAIT') return;
+ const lot=masterSignal.lot||lotFromScore(masterSignal.score||5);
+ activeTrade={
+  dir:masterSignal.dir,
+  entry:masterSignal.entry,
+  sl:masterSignal.sl,
+  tp1:masterSignal.tpBest,
+  tp2:masterSignal.tpMed,
+  tp3:masterSignal.tpRest,
+  lot:lot,
+  score:masterSignal.score||0,
+  beMoved:false
+ };
+ console.log('Auto Decision active:', activeTrade.dir, 'lot', lot, 'score', activeTrade.score);
 }
 
 // Strategy C v5.1 — upgraded: Pattern + Pinbar rejection + BOS/CHOCH structure (confluence)
@@ -672,6 +798,65 @@ function detectPinbar(candle, guideHigh, guideLow, avgMove){
 }
 
 // Simple BOS / CHOCH structure bias from recent candles
+
+// Multi-TF structure bias (15m + 1H) + volume proxy (range expansion)
+function getHTFBias(){
+ try{
+  if(typeof hist==='undefined' || hist.length<20) return {bias:'neutral', note:'', vol:'normal'};
+  const agg15 = (typeof aggregateCandles==='function') ? aggregateCandles(hist, 15) : hist;
+  const agg60 = (typeof aggregateCandles==='function') ? aggregateCandles(hist, 60) : hist;
+
+  let bias15='neutral', note15='';
+  if(agg15 && agg15.length>=6){
+   const recent=agg15.slice(-8);
+   const last=recent[recent.length-1];
+   const prevHigh=Math.max(...recent.slice(0,-1).map(c=>c.high));
+   const prevLow=Math.min(...recent.slice(0,-1).map(c=>c.low));
+   if(last.close>prevHigh){ bias15='bullish'; note15='15m BOS up'; }
+   else if(last.close<prevLow){ bias15='bearish'; note15='15m BOS down'; }
+   else{
+    const mid=recent[Math.floor(recent.length/2)];
+    if(last.high>mid.high && last.low>mid.low){ bias15='bullish'; note15='15m HH/HL'; }
+    if(last.high<mid.high && last.low<mid.low){ bias15='bearish'; note15='15m LH/LL'; }
+   }
+  }
+
+  let bias1h='neutral', note1h='';
+  if(agg60 && agg60.length>=4){
+   const r=agg60.slice(-6);
+   const last=r[r.length-1];
+   const prevHigh=Math.max(...r.slice(0,-1).map(c=>c.high));
+   const prevLow=Math.min(...r.slice(0,-1).map(c=>c.low));
+   if(last.close>prevHigh){ bias1h='bullish'; note1h='1H BOS up'; }
+   else if(last.close<prevLow){ bias1h='bearish'; note1h='1H BOS down'; }
+   else{
+    const mid=r[Math.floor(r.length/2)];
+    if(last.high>=mid.high && last.low>=mid.low){ bias1h='bullish'; note1h='1H HH/HL'; }
+    if(last.high<=mid.high && last.low<=mid.low){ bias1h='bearish'; note1h='1H LH/LL'; }
+   }
+  }
+
+  // Combine: 1H stronger weight
+  let bias='neutral', note='';
+  if(bias1h==='bullish' && bias15!=='bearish'){ bias='bullish'; note=(note1h+(note15?' + '+note15:'')); }
+  else if(bias1h==='bearish' && bias15!=='bullish'){ bias='bearish'; note=(note1h+(note15?' + '+note15:'')); }
+  else if(bias15==='bullish'){ bias='bullish'; note=note15; }
+  else if(bias15==='bearish'){ bias='bearish'; note=note15; }
+
+  // Volume proxy: compare last candle range vs average range
+  let vol='normal';
+  const recentC=hist.slice(-12);
+  if(recentC.length>=6){
+   const ranges=recentC.map(c=>c.high-c.low);
+   const avg=ranges.reduce((a,b)=>a+b,0)/ranges.length;
+   const lastR=ranges[ranges.length-1];
+   if(lastR>avg*1.6) vol='high';
+   else if(lastR<avg*0.55) vol='low';
+  }
+  return {bias, note, vol, bias15, bias1h};
+ }catch(e){ return {bias:'neutral', note:'', vol:'normal'}; }
+}
+
 function detectStructure(candles){
  if(!candles || candles.length<8) return {bosUp:false, bosDown:false, chochUp:false, chochDown:false, bias:'neutral'};
  const recent=candles.slice(-12);
@@ -747,7 +932,7 @@ function updatePatternStrategy(cur){
  const above=cur>guideHigh, below=cur<guideLow;
  let sig='WAIT', bull=false, reason='', confNotes=[];
 
- // === Confluence scoring (patterns primary, pinbar + structure confirm) ===
+ // === Confluence scoring (patterns primary, pinbar + structure + session + news) ===
  let buyScore=0, sellScore=0;
 
  // Primary: classic patterns
@@ -772,20 +957,49 @@ function updatePatternStrategy(cur){
  if(struct.bias==='bullish') buyScore+=1;
  if(struct.bias==='bearish') sellScore+=1;
 
- // Only fire when pattern exists + at least one confirmation (pinbar or structure or break)
+ // Multi-TF (15m + 1H) structure bias + volume proxy
+ const htf=getHTFBias();
+ if(htf.bias==='bullish'){ buyScore+= (htf.bias1h==='bullish'?3:2); confNotes.push(htf.note||'HTF bullish'); }
+ if(htf.bias==='bearish'){ sellScore+= (htf.bias1h==='bearish'?3:2); confNotes.push(htf.note||'HTF bearish'); }
+ if(htf.vol==='high'){ buyScore+=1; sellScore+=1; confNotes.push('Vol expansion'); }
+ if(htf.vol==='low'){ buyScore-=1; sellScore-=1; confNotes.push('Low vol'); }
+
+ // Session bias (prefer London / NY for gold)
+ const sess=typeof getActiveTradingSession==='function'? getActiveTradingSession() : '';
+ if(sess.includes('London')||sess.includes('New York')||sess.includes('Overlap')){
+  buyScore+=2; sellScore+=2; confNotes.push('Session: '+sess);
+ }else if(sess.includes('Tokyo')||sess.includes('Sydney')){
+  buyScore+=1; sellScore+=1; confNotes.push('Session: '+sess);
+ }else if(sess.includes('Closed')||sess.includes('Off-hours')){
+  buyScore-=2; sellScore-=2; confNotes.push('Off-hours penalty');
+ }
+
+ // News filter — reduce score during high-impact windows (PHT)
+ const news=checkNewsWindow();
+ if(news.active){
+  buyScore-=3; sellScore-=3;
+  confNotes.push('⚠ NEWS: '+news.label);
+ }
+
+ // Only fire when pattern exists + at least one confirmation
  const hasBuyPattern = pat.w || pat.bf;
  const hasSellPattern = pat.m || pat.be;
  const buyConfirmed = hasBuyPattern && (pin.bullPin || struct.bosUp || struct.chochUp || above);
  const sellConfirmed = hasSellPattern && (pin.bearPin || struct.bosDown || struct.chochDown || below);
 
- if(buyConfirmed && buyScore>=5 && buyScore>sellScore){
+ // Auto Decision mode: slightly lower threshold when enabled
+ const minScore = (typeof autoDecisionOn!=='undefined' && autoDecisionOn) ? 4 : 5;
+
+ if(buyConfirmed && buyScore>=minScore && buyScore>sellScore && !news.block){
   sig='BUY'; bull=true;
   patSL = Math.min(guideLow, lastCandle ? lastCandle.low : guideLow) - avgMove*0.3;
   reason = confNotes.join(' + ');
- }else if(sellConfirmed && sellScore>=5 && sellScore>buyScore){
+  lastConfluenceScore=buyScore;
+ }else if(sellConfirmed && sellScore>=minScore && sellScore>buyScore && !news.block){
   sig='SELL'; bull=false;
   patSL = Math.max(guideHigh, lastCandle ? lastCandle.high : guideHigh) + avgMove*0.3;
   reason = confNotes.join(' + ');
+  lastConfluenceScore=sellScore;
  }
 
  const box=$('patSigBox'), val=$('patSigValue'), exp=$('patSigExp');
@@ -976,6 +1190,7 @@ function pushTick(p){
  checkPriceAlert(p);
  updateLiveDataStatus();
  updatePatternStrategy(p); // Strategy C — always runs, independent of the A/B toggle
+ manageActiveTrade(p);
  try{ localStorage.setItem('sg_cache', JSON.stringify({price:p, time:now, hist:hist.slice(-60)})); }catch(e){}
  drawChart();
  if(abMonitoringOn){ updateSlTpDisplay(); updateTp5Display(); }
@@ -1150,16 +1365,140 @@ async function fetchGoldPriceWithFallback(){
  return null;
 }
 
-// Rough weekend check: gold spot market is closed roughly Fri 22:00 UTC to Sun 22:00 UTC.
-// This is an approximation for display purposes only, not authoritative session data.
+// Gold spot market hours (approx, PHT = UTC+8)
+// Open: Sunday 06:00 PHT (Sun 22:00 UTC) → Close: Saturday 05:00 PHT (Fri 21:00 UTC)
+// Uses browser time; once internet-connected the OS clock is usually NTP-synced.
+function getPHTParts(){
+ // Force Asia/Manila so display is always Philippine Time regardless of device timezone
+ try{
+  const fmt=new Intl.DateTimeFormat('en-PH',{timeZone:'Asia/Manila',weekday:'short',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,hourCycle:'h23'});
+  const parts=fmt.formatToParts(new Date());
+  const get=t=>parts.find(p=>p.type===t)?.value||'';
+  return {weekday:get('weekday'), hour:parseInt(get('hour'),10)||0, minute:parseInt(get('minute'),10)||0, second:parseInt(get('second'),10)||0};
+ }catch(e){
+  const d=new Date();
+  // fallback: assume device is already close to PHT or use UTC+8 offset
+  const pht=new Date(d.getTime()+(8*60-d.getTimezoneOffset())*60000);
+  return {weekday:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][pht.getDay()], hour:pht.getHours(), minute:pht.getMinutes(), second:pht.getSeconds()};
+ }
+}
+
+// World Trading Clock — accurate sessions (approximate forex/gold major sessions)
+// All times derived from real browser clock (NTP-synced when online)
+function getTimeInZone(timeZone){
+ try{
+  const fmt=new Intl.DateTimeFormat('en-GB',{timeZone,hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,hourCycle:'h23'});
+  return fmt.format(new Date());
+ }catch(e){ return '--:--:--'; }
+}
+function getHourInZone(timeZone){
+ try{
+  const fmt=new Intl.DateTimeFormat('en-GB',{timeZone,hour:'2-digit',hour12:false,hourCycle:'h23'});
+  return parseInt(fmt.format(new Date()),10);
+ }catch(e){ return -1; }
+}
+function isSessionOpen(timeZone, openH, closeH){
+ // openH/closeH in local hours of that zone. Handles overnight sessions.
+ const h=getHourInZone(timeZone);
+ if(h<0) return false;
+ if(openH<closeH) return h>=openH && h<closeH;
+ return h>=openH || h<closeH; // overnight
+}
+
+// Auto-detect which major session is currently most active for chart sync
+function getActiveTradingSession(){
+ const sessions=[
+  {name:'Sydney', tz:'Australia/Sydney', open:7, close:16},
+  {name:'Tokyo',  tz:'Asia/Tokyo',       open:9, close:18},
+  {name:'London', tz:'Europe/London',    open:8, close:17},
+  {name:'New York', tz:'America/New_York', open:8, close:17},
+ ];
+ const openOnes=[];
+ sessions.forEach(s=>{
+  if(isSessionOpen(s.tz, s.open, s.close)) openOnes.push(s.name);
+ });
+ if(openOnes.length===0) return 'Closed / Off-hours';
+ // Prefer overlap priority: NY > London > Tokyo > Sydney when multiple open
+ if(openOnes.includes('New York') && openOnes.includes('London')) return 'London + NY Overlap';
+ if(openOnes.includes('New York')) return 'New York';
+ if(openOnes.includes('London')) return 'London';
+ if(openOnes.includes('Tokyo')) return 'Tokyo';
+ if(openOnes.includes('Sydney')) return 'Sydney';
+ return openOnes.join(' + ');
+}
+function updateChartSession(){
+ const label=getActiveTradingSession();
+ const el=$('chartSessionBadge');
+ if(el){
+  el.textContent=label;
+  const closed=label.includes('Closed')||label.includes('Off-hours');
+  el.className=closed?'badge':'badge live';
+ }
+}
+
+function updateWorldClock(){
+ const sessions=[
+  {id:'Sydney', tz:'Australia/Sydney', open:7, close:16},
+  {id:'Tokyo',  tz:'Asia/Tokyo',       open:9, close:18},
+  {id:'London', tz:'Europe/London',    open:8, close:17},
+  {id:'NY',     tz:'America/New_York', open:8, close:17},
+ ];
+ sessions.forEach(s=>{
+  const localTime=getTimeInZone(s.tz);
+  const open=isSessionOpen(s.tz, s.open, s.close);
+  const timeEl=$(`wc${s.id}Time`);
+  const statusEl=$(`wc${s.id}Status`);
+  const itemEl=$(`wc${s.id}`);
+  if(timeEl) timeEl.textContent=localTime;
+  if(statusEl){
+   statusEl.textContent=open?'OPEN':'CLOSED';
+   statusEl.className='wc-status '+(open?'open':'closed');
+  }
+  if(itemEl) itemEl.className='wc-item '+(open?'open':'closed');
+ });
+}
+
+function getPHTTimeString(){
+ try{
+  return new Date().toLocaleTimeString('en-PH',{timeZone:'Asia/Manila',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false})+' PHT';
+ }catch(e){
+  return new Date().toLocaleTimeString('en-PH',{hour:'2-digit',minute:'2-digit',second:'2-digit'})+' PHT';
+ }
+}
 function isMarketLikelyClosed(){
- const now=new Date();
- const day=now.getUTCDay(); // 0=Sun,6=Sat
- const hour=now.getUTCHours();
- if(day===6) return true; // all Saturday
- if(day===0 && hour<22) return true; // Sunday before 22:00 UTC
- if(day===5 && hour>=22) return true; // Friday after 22:00 UTC
+ const p=getPHTParts();
+ const day=p.weekday; // Sun Mon ... Sat
+ const h=p.hour, m=p.minute;
+ // Closed all of Saturday
+ if(day==='Sat') return true;
+ // Sunday before 06:00 PHT still closed
+ if(day==='Sun' && (h<6 || (h===6 && m===0))) return true;
+ // Friday after 21:00 PHT (approx close) — treat as closed for signal purposes
+ if(day==='Fri' && h>=21) return true;
  return false;
+}
+function getMarketSessionLabel(){
+ if(isMarketLikelyClosed()) return 'WEEKEND / CLOSED';
+ const p=getPHTParts();
+ const h=p.hour;
+ // Rough session labels in PHT
+ if(h>=6 && h<12) return 'ASIA OPEN';
+ if(h>=12 && h<16) return 'LONDON OPEN';
+ if(h>=16 && h<21) return 'NY OPEN';
+ return 'OFF-HOURS';
+}
+function updateMarketBadges(){
+ const closed=isMarketLikelyClosed();
+ const wb=$('weekendBadge');
+ if(wb){
+  if(closed){
+   wb.textContent='WEEKEND CLOSE';
+   wb.className='badge';
+  }else{
+   wb.textContent=getMarketSessionLabel();
+   wb.className='badge live';
+  }
+ }
 }
 function setLiveStatus(mode, text){
  const dot=$('liveStatusDot'), label=$('liveStatusText');
@@ -1198,11 +1537,11 @@ async function fetchPrice(){
 
  // Top-of-card live status label
  if(result.stale){
-  setLiveStatus('stale', 'STALE $'+priceStr+' · '+result.source+' · '+now);
+  setLiveStatus('stale', 'STALE $'+priceStr+' · '+result.source+' · '+getPHTTimeString());
  }else if(isMarketLikelyClosed()){
-  setLiveStatus('closed', 'MARKET CLOSED (weekend) · last $'+priceStr+' · '+now);
+  setLiveStatus('closed', 'MARKET CLOSED · last $'+priceStr+' · '+getPHTTimeString());
  }else{
-  setLiveStatus('live', 'LIVE $'+priceStr+' · '+result.source+' · '+now);
+  setLiveStatus('live', 'LIVE $'+priceStr+' · '+result.source+' · '+getPHTTimeString());
  }
 }
 async function fetchExchangeRates(){
@@ -1298,7 +1637,22 @@ window.addEventListener('load', ()=>{
  fetchPrice(); fetchExchangeRates();
  setInterval(fetchExchangeRates,60000); setInterval(testDualSame18Candles,60000);
  mainTickHandle=setInterval(fetchPrice, mainTickMs);
- setInterval(()=>{ $('phTimeBadge').textContent=new Date().toLocaleTimeString('en-PH',{hour:'2-digit',minute:'2-digit',second:'2-digit'})+' PHT'; updateFwCountdown(); },1000);
+ setInterval(()=>{ 
+  if($('phTimeBadge')) $('phTimeBadge').textContent=getPHTTimeString(); 
+  updateMarketBadges(); 
+  updateWorldClock();
+  updateChartSession();
+  // news badge
+  const nw=checkNewsWindow();
+  const nb=$('newsWarnBadge');
+  if(nb){ nb.style.display=nw.active?'inline-flex':'none'; nb.textContent=nw.block?'NEWS BLOCK':'NEWS WARN'; }
+  updateFwCountdown(); 
+},1000);
+// immediate first paint
+if($('phTimeBadge')) $('phTimeBadge').textContent=getPHTTimeString();
+updateMarketBadges();
+updateWorldClock();
+updateChartSession();
 
  $('testDualBtn').onclick=()=>{const r=testDualSame18Candles(); alert(`Dual test — same 18 candles\nA:${r.a} B:${r.b} Both:${r.both}\n${r.both?'→ Prior B':r.b?'→ Trade B':r.a?'→ Trade A':'→ Monitoring'}`);};
  $('forceABtn').onclick=()=>testDualSame18Candles('A');
@@ -1331,6 +1685,23 @@ window.addEventListener('load', ()=>{
   soundAlertsOn=!soundAlertsOn; soundToggle.classList.toggle('on');
   if(soundAlertsOn) alertUser('enabled');
  };
+ const autoToggle=$('autoDecisionToggle');
+ if(autoToggle) autoToggle.onclick=()=>{
+  autoDecisionOn=!autoDecisionOn;
+  autoToggle.classList.toggle('on', autoDecisionOn);
+  localStorage.setItem('sg_auto_decision', autoDecisionOn?'on':'off');
+  if(autoDecisionOn){
+   startActiveTradeFromMaster();
+   alertUser('auto on');
+  }
+  haptic(8);
+ };
+ // restore
+ if(localStorage.getItem('sg_auto_decision')==='on'){
+  autoDecisionOn=true;
+  if(autoToggle) autoToggle.classList.add('on');
+ }
+
 
  // Strategy A/B monitoring on/off (Strategy C is unaffected — always runs)
  const abToggle=$('abMonitorToggle');
@@ -1356,18 +1727,51 @@ window.addEventListener('load', ()=>{
  };
 
  // Trade journal
+ // Real winrate tracking from journal
+ let journalStats={A:{wins:0,loss:0,be:0}, B:{wins:0,loss:0,be:0}};
+ function updateWinrateDisplay(){
+  ['A','B'].forEach(s=>{
+   const st=journalStats[s];
+   const total=st.wins+st.loss;
+   const wr=total>0? Math.round(st.wins/total*100):0;
+   const el=$(s==='A'?'stratAWin':'stratBWin');
+   if(el) el.textContent=total>0?(wr+'%'):'--%';
+  });
+  const allW=journalStats.A.wins+journalStats.B.wins;
+  const allL=journalStats.A.loss+journalStats.B.loss;
+  const allT=allW+allL;
+  const overall=allT>0? Math.round(allW/allT*100):0;
+  if($('winrateBadge')) $('winrateBadge').textContent=allT>0?('WINRATE '+overall+'%'):'WINRATE --%';
+ }
  if($('jrAddBtn')) $('jrAddBtn').onclick=()=>{
   const s=$('jrStrategy')?.value; const r=$('jrResult')?.value;
   const e=parseFloat($('jrEntry')?.value); const x=parseFloat($('jrExit')?.value);
   if(!s||!r||isNaN(e)||isNaN(x)){ alert('Fill all fields'); return; }
   const pnl=x-e; const txt=s+' '+r+' E:'+fmt2(e)+' X:'+fmt2(x)+' P/L:'+fmt2(pnl);
   const el=$('jrList'); if(el) el.innerHTML='<div class="journal-entry"><span>'+txt+'</span><span class="jr-del" onclick="this.parentElement.remove()">×</span></div>'+(el.innerHTML.includes('No entries')?'':el.innerHTML);
+  if(journalStats[s]){
+   if(r==='win') journalStats[s].wins++;
+   else if(r==='loss') journalStats[s].loss++;
+   else journalStats[s].be++;
+  }
+  updateWinrateDisplay();
+  try{ localStorage.setItem('sg_journal_stats', JSON.stringify(journalStats)); }catch(e){}
   $('jrEntry').value=''; $('jrExit').value='';
  };
+ // restore stats
+ try{
+  const saved=JSON.parse(localStorage.getItem('sg_journal_stats')||'{}');
+  if(saved.A) journalStats=saved;
+  updateWinrateDisplay();
+ }catch(e){}
+
 
  // Clear journal
  if($('jrClearBtn')) $('jrClearBtn').onclick=()=>{
   if($('jrList')) $('jrList').innerHTML='No entries yet';
+  journalStats={A:{wins:0,loss:0,be:0}, B:{wins:0,loss:0,be:0}};
+  updateWinrateDisplay();
+  try{ localStorage.setItem('sg_journal_stats', JSON.stringify(journalStats)); }catch(e){}
  };
 
  // Timeframe buttons
