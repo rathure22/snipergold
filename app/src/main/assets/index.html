@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Sniper Gold v5.3</title>
+<title>Sniper Gold v5.7</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
@@ -229,7 +229,7 @@ body.orange-theme{--accent:#ff8c00}
  <div class="sidebar-close-x" id="sidebarCloseBtn">✕</div>
  <div style="text-align:center;padding:6px 0 10px;border-bottom:1px solid var(--border);margin-bottom:10px">
   <div style="font-size:8px;font-weight:700;letter-spacing:0.5px;color:var(--muted)">Dev. JI NG SLOW×STONE™</div>
-  <div style="font-size:7px;font-weight:600;color:#555;margin-top:2px">Version v5.3</div>
+  <div style="font-size:7px;font-weight:600;color:#555;margin-top:2px">Version v5.7</div>
  </div>
  <div style="font-size:8px;font-weight:800;color:var(--muted);text-transform:uppercase;margin-bottom:8px">Function Status</div>
  <div id="functionCheckList" style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px;margin-bottom:10px"></div>
@@ -292,6 +292,12 @@ body.orange-theme{--accent:#ff8c00}
   <button class="btn btn-small btn-orange" id="jrAddBtn" style="width:100%">Add Journal Entry</button>
   <div id="jrList" style="margin-top:8px;max-height:140px;overflow-y:auto">No entries yet</div>
   <button class="btn btn-small btn-dark" id="jrClearBtn" style="width:100%;margin-top:6px">Clear Journal</button>
+ </div>
+
+ <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px;margin-bottom:10px">
+  <div style="font-size:8px;font-weight:800;color:var(--muted);text-transform:uppercase;margin-bottom:6px">Signal History (Auto)</div>
+  <div id="sigHistList" style="max-height:160px;overflow-y:auto;font-size:7px">No auto signals yet</div>
+  <button class="btn btn-small btn-dark" id="sigHistClearBtn" style="width:100%;margin-top:6px">Clear History</button>
  </div>
 
  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px;margin-bottom:10px">
@@ -572,7 +578,7 @@ body.orange-theme{--accent:#ff8c00}
 
 <div style="text-align:center;padding:14px 6px;margin-top:4px">
  <div style="font-size:8px;font-weight:700;letter-spacing:0.5px;color:var(--muted)">Dev. JI NG SLOW×STONE™</div>
- <div style="font-size:7px;font-weight:600;color:#555;margin-top:2px">Version v5.3</div>
+ <div style="font-size:7px;font-weight:600;color:#555;margin-top:2px">Version v5.7</div>
 </div>
 
 <script>
@@ -628,7 +634,24 @@ function updateMasterSignal(){
  }else{
   masterSignal={dir:'WAIT', source:null, entry:0, sl:0, tpBest:0, tpMed:0, tpRest:0, score:0, lot:0.01};
  }
- if(masterSignal.dir!==prevDir && masterSignal.dir!=='WAIT'){ alertUser('master '+masterSignal.dir); if(autoDecisionOn) startActiveTradeFromMaster(); }
+ if(masterSignal.dir!==prevDir && masterSignal.dir!=='WAIT'){
+  // Always log appearance for history (even if Auto Decision off)
+  if(!autoDecisionOn){
+   const lot=masterSignal.lot||lotFromScore(masterSignal.score||5);
+   const nowStr=(typeof getPHTTimeString==='function'?getPHTTimeString():new Date().toLocaleTimeString());
+   const sessNow=(typeof getActiveTradingSession==='function'?getActiveTradingSession():'');
+   floatPrevCleared=false;
+   pushSignalHistory({
+    dir:masterSignal.dir, entry:masterSignal.entry, sl:masterSignal.sl,
+    tp1:masterSignal.tpBest, tp2:masterSignal.tpMed, tp3:masterSignal.tpRest,
+    lot:lot, score:masterSignal.score||0,
+    time:nowStr, source:(masterSignal.source||'Signal')+' (manual watch)',
+    session:sessNow
+   });
+   spamNewSignal(masterSignal.dir);
+  }
+  if(autoDecisionOn) startActiveTradeFromMaster();
+ }
  renderFloatingWidget();
 }
 function renderFloatingWidget(){
@@ -638,9 +661,7 @@ function renderFloatingWidget(){
  if(dirEl){ dirEl.textContent=masterSignal.dir; dirEl.className='fw-dir '+(masterSignal.dir==='BUY'?'buy':masterSignal.dir==='SELL'?'sell':'wait'); }
  if(srcEl) srcEl.textContent=masterSignal.source||'No active signal — monitoring';
  if(body){
-  if(masterSignal.dir==='WAIT' && !activeTrade){
-   body.innerHTML='<div class="fw-row"><span>Status</span><span>Monitoring A, B &amp; C…</span></div>';
-  }else if(activeTrade && autoDecisionOn){
+  if(activeTrade && autoDecisionOn){
    const t=activeTrade;
    const be=t.beMoved?'BE ✓':'Open';
    body.innerHTML=
@@ -649,8 +670,9 @@ function renderFloatingWidget(){
     '<div class="fw-row"><span>SL '+(t.beMoved?'(BE)':'')+'</span><span style="color:var(--red)">$'+fmt2(t.sl)+'</span></div>'+
     '<div class="fw-row"><span>TP1</span><span style="color:var(--green)">$'+fmt2(t.tp1)+'</span></div>'+
     '<div class="fw-row"><span>TP2</span><span style="color:#ffaa00">$'+fmt2(t.tp2)+'</span></div>'+
+    '<div class="fw-row"><span>TP3</span><span style="color:#d4b87a">$'+fmt2(t.tp3||0)+'</span></div>'+
     '<div class="fw-row"><span>Status</span><span>'+be+(t.score?' · Score '+t.score:'')+'</span></div>';
-  }else{
+  }else if(masterSignal.dir==='BUY' || masterSignal.dir==='SELL'){
    const lot=masterSignal.lot||lotFromScore(masterSignal.score||5);
    body.innerHTML=
     '<div class="fw-row"><span>Lot (score '+ (masterSignal.score||'-') +')</span><span style="color:var(--accent)">'+lot.toFixed(2)+'</span></div>'+
@@ -659,6 +681,30 @@ function renderFloatingWidget(){
     '<div class="fw-row"><span>TP1</span><span style="color:var(--green)">$'+fmt2(masterSignal.tpBest)+'</span></div>'+
     '<div class="fw-row"><span>TP2</span><span style="color:#ffaa00">$'+fmt2(masterSignal.tpMed)+'</span></div>'+
     '<div class="fw-row"><span>TP3 (runner)</span><span style="color:#d4b87a">$'+fmt2(masterSignal.tpRest)+'</span></div>';
+  }else{
+   // WAIT — show previous on floating bar until NEXT SESSION starts (then disappear)
+   const prev = (typeof signalHistory!=='undefined' && signalHistory.length) ? signalHistory[signalHistory.length-1] : null;
+   const curSess = (typeof getActiveTradingSession==='function') ? getActiveTradingSession() : '';
+   // Session changed since last signal → clear previous from float
+   if(prev && prev.session && curSess && prev.session!==curSess){
+    floatPrevCleared=true;
+   }
+   // New signal just added in this session → allow show again
+   if(prev && prev.session && curSess && prev.session===curSess){
+    floatPrevCleared=false;
+   }
+   if(prev && !floatPrevCleared){
+    const col=prev.dir==='BUY'?'var(--green)':'var(--red)';
+    body.innerHTML=
+     '<div class="fw-row"><span style="color:'+col+'">PREVIOUS '+prev.dir+'</span><span>'+ (prev.time||'') +'</span></div>'+
+     '<div class="fw-row"><span>Lot</span><span>'+((prev.lot||0.01).toFixed(2))+' · Sc '+(prev.score||'-')+'</span></div>'+
+     '<div class="fw-row"><span>Entry</span><span>$'+fmt2(prev.entry)+'</span></div>'+
+     '<div class="fw-row"><span>SL</span><span style="color:var(--red)">$'+fmt2(prev.sl)+'</span></div>'+
+     '<div class="fw-row"><span>TP1 / TP2 / TP3</span><span style="color:var(--green)">$'+fmt2(prev.tp1||0)+' · $'+fmt2(prev.tp2||0)+' · $'+fmt2(prev.tp3||0)+'</span></div>'+
+     '<div class="fw-row"><span>Status</span><span>Until next session…</span></div>';
+   }else{
+    body.innerHTML='<div class="fw-row"><span>Status</span><span>Monitoring A, B &amp; C…</span></div>';
+   }
   }
  }
 }
@@ -691,6 +737,62 @@ function lotFromScore(score){
  if(score>=8) return 0.03;
  if(score>=6) return 0.02;
  return 0.01;
+}
+
+
+
+function spamNewSignal(dir){
+ // Sound + strong vibration pattern for next appearance
+ if(typeof alertUser==='function') alertUser('NEW '+dir);
+ try{
+  if(navigator.vibrate) navigator.vibrate([250,80,250,80,250,80,400]);
+ }catch(e){}
+ // Flash floating widget briefly
+ const fw=$('floatingWidget');
+ if(fw){
+  const prev=fw.style.boxShadow;
+  fw.style.boxShadow= dir==='BUY' ? '0 0 24px #00d084' : '0 0 24px #ff4a4a';
+  setTimeout(()=>{ fw.style.boxShadow=prev||''; }, 2500);
+ }
+ // Open sidebar history highlight is via ● NEW in list
+}
+
+// Signal History — auto record previous BUY/SELL
+
+let floatPrevSession=null; // session when previous was shown
+let floatPrevCleared=false; // cleared after session change
+let signalHistory=[];
+function loadSignalHistory(){
+ try{ signalHistory=JSON.parse(localStorage.getItem('sg_signal_history')||'[]'); }catch(e){ signalHistory=[]; }
+ if(!Array.isArray(signalHistory)) signalHistory=[];
+}
+function saveSignalHistory(){
+ try{ localStorage.setItem('sg_signal_history', JSON.stringify(signalHistory.slice(-50))); }catch(e){}
+}
+function renderSignalHistory(){
+ const el=$('sigHistList'); if(!el) return;
+ if(!signalHistory.length){ el.innerHTML='No auto signals yet'; return; }
+ const list=signalHistory.slice().reverse();
+ el.innerHTML=list.map((h,i)=>{
+  const col=h.dir==='BUY'?'var(--green)':'var(--red)';
+  const isNew=i===0; // newest on top
+  const bg=isNew?(h.dir==='BUY'?'#00d08422':'#ff4a4a22'):'#0a0907';
+  const border=isNew?('2px solid '+col):('1px solid #1a1a1a');
+  const tag=isNew?' <span style="color:'+col+';font-weight:800">● NEW</span>':'';
+  return '<div class="journal-entry" style="border-left:3px solid '+col+';background:'+bg+';border:'+border+';margin-bottom:6px">'+
+   '<span><b style="color:'+col+'">'+h.dir+'</b>'+tag+' · '+h.time+
+   '<br>Lot <b>'+(h.lot||0.01).toFixed(2)+'</b> · Score '+(h.score||'-')+
+   '<br>Entry $'+fmt2(h.entry)+' · SL $'+fmt2(h.sl)+
+   '<br>TP1 $'+fmt2(h.tp1||0)+' · TP2 $'+fmt2(h.tp2||0)+' · TP3 $'+fmt2(h.tp3||0)+
+   '</span></div>';
+ }).join('');
+}
+function pushSignalHistory(rec){
+ signalHistory.push(rec);
+ if(signalHistory.length>50) signalHistory=signalHistory.slice(-50);
+ saveSignalHistory();
+ renderSignalHistory();
+ if(typeof renderFloatingWidget==='function') renderFloatingWidget();
 }
 
 // Auto Decision mode
@@ -743,6 +845,25 @@ function startActiveTradeFromMaster(){
   score:masterSignal.score||0,
   beMoved:false
  };
+ // Auto record to history
+ const nowStr=(typeof getPHTTimeString==='function'?getPHTTimeString():new Date().toLocaleTimeString());
+ const sessNow=(typeof getActiveTradingSession==='function'?getActiveTradingSession():'');
+ floatPrevCleared=false;
+ pushSignalHistory({
+  dir:activeTrade.dir,
+  entry:activeTrade.entry,
+  sl:activeTrade.sl,
+  tp1:activeTrade.tp1,
+  tp2:activeTrade.tp2,
+  tp3:activeTrade.tp3,
+  lot:lot,
+  score:activeTrade.score,
+  time:nowStr,
+  source:masterSignal.source||'Auto',
+  session:sessNow
+ });
+ // Strong spam on next appearance
+ spamNewSignal(activeTrade.dir);
  console.log('Auto Decision active:', activeTrade.dir, 'lot', lot, 'score', activeTrade.score);
 }
 
@@ -1866,6 +1987,9 @@ updateChartSession();
  };
  if($('fwAlarmTestBtn')) $('fwAlarmTestBtn').onclick=(e)=>{ e.stopPropagation(); alertUser('test'); };
 
+ loadSignalHistory();
+ renderSignalHistory();
+ if($('sigHistClearBtn')) $('sigHistClearBtn').onclick=()=>{ signalHistory=[]; saveSignalHistory(); renderSignalHistory(); };
  setTimeout(checkAllFunctionsActive,1000);
 
 });
