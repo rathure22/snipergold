@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Sniper Gold v5.0</title>
+<title>Sniper Gold v5.1</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
@@ -473,11 +473,11 @@ body.orange-theme{--accent:#ff8c00}
   </div>
  </div>
  <div class="sig-box" id="patSigBox">
-  <div class="sig-label">Pattern + Guide Break Signal</div>
+  <div class="sig-label">Pattern + Structure + Pinbar Confluence</div>
   <div class="sig-value" id="patSigValue">WAIT</div>
-  <div class="sig-exp" id="patSigExp">⏳ Waiting for a detected pattern (W / M / Bull Flag / Bear Flag) to line up with a break of the guide high or low.</div>
+  <div class="sig-exp" id="patSigExp">⏳ Waiting for confluence: Pattern (W/M/Flag) + Guide break + Pinbar rejection + BOS/CHOCH (need score ≥5 + pattern).</div>
  </div>
- <div style="font-size:7px;color:#666;font-weight:600;margin-top:8px" id="patTpLabel">TP1–TP5 (from guide risk)</div>
+ <div style="font-size:7px;color:#666;font-weight:600;margin-top:8px" id="patTpLabel">TP1–TP5 (from confluence risk)</div>
  <div id="patTpList" style="margin-top:6px"></div>
  <div style="background:var(--card2);border-top:1px solid var(--border);margin-top:10px;padding-top:10px">
   <div style="font-size:7px;color:#666;font-weight:700;text-transform:uppercase;margin-bottom:6px">Update Speed</div>
@@ -620,7 +620,7 @@ function updateFwCountdown(){
  el.textContent='Next check: '+secs+'s';
 }
 
-// Pattern detection ported from SniperGold V9 (W/M/Bull-Flag/Bear-Flag on raw tick swings)
+// Strategy C v5.1 — upgraded: Pattern + Pinbar rejection + BOS/CHOCH structure (confluence)
 let sensitivity='normal'; // 'strict' | 'normal' | 'loose' — shared across Strategy A, B, and C
 const SENS_MULT={strict:1.7, normal:1.0, loose:0.5};
 function sensMult(){ return SENS_MULT[sensitivity]||1.0; }
@@ -631,9 +631,6 @@ function detectPatterns(prices){
   if(last[i]<last[i-1]&&last[i]<last[i-2]&&last[i]<last[i+1]&&last[i]<last[i+2]) lows.push(last[i]);
   if(last[i]>last[i-1]&&last[i]>last[i-2]&&last[i]>last[i+1]&&last[i]>last[i+2]) highs.push(last[i]);
  }
- // Adaptive volatility baseline: average tick-to-tick movement in the current window,
- // instead of a hardcoded dollar amount that assumes much bigger swings than real
- // short-interval gold ticks usually show.
  const diffs=[]; for(let i=1;i<last.length;i++) diffs.push(Math.abs(last[i]-last[i-1]));
  const avgMove=diffs.length? diffs.reduce((a,b)=>a+b,0)/diffs.length : 0.05;
  const wobbleThresh=Math.max(0.05, avgMove*3*sensMult());
@@ -644,14 +641,76 @@ function detectPatterns(prices){
  const range=s.length? (Math.max(...s)-Math.min(...s)) : 0;
  const momThresh=Math.max(0.04, avgMove*2.5*sensMult());
  const rangeThresh=Math.max(0.08, avgMove*5*sensMult());
- return {w, m, bf: up>momThresh && range<rangeThresh, be: up<-momThresh && range<rangeThresh};
+ return {w, m, bf: up>momThresh && range<rangeThresh, be: up<-momThresh && range<rangeThresh, avgMove};
 }
+
+// Pinbar / rejection on latest OHLC candle vs guide high/low
+function detectPinbar(candle, guideHigh, guideLow, avgMove){
+ if(!candle) return {bullPin:false, bearPin:false, reason:''};
+ const body=Math.abs(candle.close-candle.open);
+ const range=candle.high-candle.low || 0.01;
+ const upperWick=candle.high - Math.max(candle.open,candle.close);
+ const lowerWick=Math.min(candle.open,candle.close) - candle.low;
+ const minWick=Math.max(0.15, (avgMove||0.08)*2.2*sensMult());
+
+ const bullPin = lowerWick >= minWick &&
+                 lowerWick > body*1.8 &&
+                 lowerWick > upperWick*1.3 &&
+                 candle.close > (candle.low + range*0.55) &&
+                 (candle.low <= guideLow + (avgMove||0.1)*1.5);
+
+ const bearPin = upperWick >= minWick &&
+                 upperWick > body*1.8 &&
+                 upperWick > lowerWick*1.3 &&
+                 candle.close < (candle.high - range*0.55) &&
+                 (candle.high >= guideHigh - (avgMove||0.1)*1.5);
+
+ let reason='';
+ if(bullPin) reason='Bullish pinbar rejection near guide low';
+ if(bearPin) reason='Bearish pinbar rejection near guide high';
+ return {bullPin, bearPin, reason};
+}
+
+// Simple BOS / CHOCH structure bias from recent candles
+function detectStructure(candles){
+ if(!candles || candles.length<8) return {bosUp:false, bosDown:false, chochUp:false, chochDown:false, bias:'neutral'};
+ const recent=candles.slice(-12);
+ const swings=[];
+ for(let i=2;i<recent.length-2;i++){
+  const c=recent[i];
+  if(c.high>=recent[i-1].high && c.high>=recent[i-2].high && c.high>=recent[i+1].high && c.high>=recent[i+2].high)
+   swings.push({type:'H', price:c.high, idx:i});
+  if(c.low<=recent[i-1].low && c.low<=recent[i-2].low && c.low<=recent[i+1].low && c.low<=recent[i+2].low)
+   swings.push({type:'L', price:c.low, idx:i});
+ }
+ if(swings.length<3) return {bosUp:false, bosDown:false, chochUp:false, chochDown:false, bias:'neutral'};
+
+ const last=recent[recent.length-1];
+ const prevHighs=swings.filter(s=>s.type==='H').slice(-3);
+ const prevLows=swings.filter(s=>s.type==='L').slice(-3);
+
+ let bosUp=false, bosDown=false, chochUp=false, chochDown=false, bias='neutral';
+
+ if(prevHighs.length>=2){
+  const lastHH=prevHighs[prevHighs.length-1].price;
+  const prevHH=prevHighs[prevHighs.length-2].price;
+  if(last.close>lastHH && lastHH>prevHH) bosUp=true;
+  if(last.close>lastHH && lastHH<prevHH) chochUp=true;
+ }
+ if(prevLows.length>=2){
+  const lastLL=prevLows[prevLows.length-1].price;
+  const prevLL=prevLows[prevLows.length-2].price;
+  if(last.close<lastLL && lastLL<prevLL) bosDown=true;
+  if(last.close<lastLL && lastLL>prevLL) chochDown=true;
+ }
+
+ if(bosUp||chochUp) bias='bullish';
+ else if(bosDown||chochDown) bias='bearish';
+ return {bosUp, bosDown, chochUp, chochDown, bias};
+}
+
 function updatePatternStrategy(cur){
- // Compute the guide range from the window BEFORE this tick, so the
- // current price can actually break above/below it. (Previously the
- // current price was included in its own guide window, which made a
- // "break" mathematically impossible — guideHigh/Low always equalled
- // or contained the current price.)
+ // Guide from prior window so current price can break it
  const haveGuide=patternPrices.length>=18;
  if(haveGuide){
   const priorWindow=patternPrices.slice(-18);
@@ -659,9 +718,15 @@ function updatePatternStrategy(cur){
  }
  patternPrices.push(cur);
  if(patternPrices.length>90) patternPrices.shift();
- if(!haveGuide) return; // not enough prior ticks yet for a guide window
+ if(!haveGuide) return;
+
+ const avgMove = (function(){
+  const diffs=[]; for(let i=1;i<patternPrices.length;i++) diffs.push(Math.abs(patternPrices[i]-patternPrices[i-1]));
+  return diffs.length? diffs.reduce((a,b)=>a+b,0)/diffs.length : 0.08;
+ })();
+
  patRisk=Math.max(0.30, (guideHigh-guideLow)/3);
- patEntry=cur; patSL=guideLow;
+ patEntry=cur;
 
  if($('guideHighBadge')) $('guideHighBadge').textContent='GUIDE HIGH '+fmt2(guideHigh);
  if($('guideLowBadge')) $('guideLowBadge').textContent='GUIDE LOW '+fmt2(guideLow);
@@ -673,19 +738,72 @@ function updatePatternStrategy(cur){
  setPat('patBF', pat.bf, 'FLAG');
  setPat('patBE', pat.be, 'FLAG');
 
+ // Latest candle for pinbar + structure
+ const candles = getLast18Candles();
+ const lastCandle = candles.length ? candles[candles.length-1] : null;
+ const pin = detectPinbar(lastCandle, guideHigh, guideLow, avgMove);
+ const struct = detectStructure(candles);
+
  const above=cur>guideHigh, below=cur<guideLow;
- let sig='WAIT', bull=false, reason='';
- if((pat.w||pat.bf)&&above){ sig='BUY'; bull=true; reason='W / Bull Flag pattern + break above guide high '+fmt2(guideHigh); }
- else if((pat.m||pat.be)&&below){ sig='SELL'; bull=false; reason='M / Bear Flag pattern + break below guide low '+fmt2(guideLow); }
+ let sig='WAIT', bull=false, reason='', confNotes=[];
+
+ // === Confluence scoring (patterns primary, pinbar + structure confirm) ===
+ let buyScore=0, sellScore=0;
+
+ // Primary: classic patterns
+ if(pat.w){ buyScore+=3; confNotes.push('Double Bottom (W)'); }
+ if(pat.bf){ buyScore+=2; confNotes.push('Bull Flag'); }
+ if(pat.m){ sellScore+=3; confNotes.push('Double Top (M)'); }
+ if(pat.be){ sellScore+=2; confNotes.push('Bear Flag'); }
+
+ // Guide break
+ if(above){ buyScore+=2; confNotes.push('break above guide high'); }
+ if(below){ sellScore+=2; confNotes.push('break below guide low'); }
+
+ // Pinbar rejection (strong confirmation)
+ if(pin.bullPin){ buyScore+=3; confNotes.push(pin.reason); }
+ if(pin.bearPin){ sellScore+=3; confNotes.push(pin.reason); }
+
+ // Structure (BOS / CHOCH)
+ if(struct.bosUp){ buyScore+=2; confNotes.push('BOS up'); }
+ if(struct.chochUp){ buyScore+=2; confNotes.push('CHOCH up'); }
+ if(struct.bosDown){ sellScore+=2; confNotes.push('BOS down'); }
+ if(struct.chochDown){ sellScore+=2; confNotes.push('CHOCH down'); }
+ if(struct.bias==='bullish') buyScore+=1;
+ if(struct.bias==='bearish') sellScore+=1;
+
+ // Only fire when pattern exists + at least one confirmation (pinbar or structure or break)
+ const hasBuyPattern = pat.w || pat.bf;
+ const hasSellPattern = pat.m || pat.be;
+ const buyConfirmed = hasBuyPattern && (pin.bullPin || struct.bosUp || struct.chochUp || above);
+ const sellConfirmed = hasSellPattern && (pin.bearPin || struct.bosDown || struct.chochDown || below);
+
+ if(buyConfirmed && buyScore>=5 && buyScore>sellScore){
+  sig='BUY'; bull=true;
+  patSL = Math.min(guideLow, lastCandle ? lastCandle.low : guideLow) - avgMove*0.3;
+  reason = confNotes.join(' + ');
+ }else if(sellConfirmed && sellScore>=5 && sellScore>buyScore){
+  sig='SELL'; bull=false;
+  patSL = Math.max(guideHigh, lastCandle ? lastCandle.high : guideHigh) + avgMove*0.3;
+  reason = confNotes.join(' + ');
+ }
 
  const box=$('patSigBox'), val=$('patSigValue'), exp=$('patSigExp');
  if(box&&val&&exp){
-  if(sig==='BUY'){ box.className='sig-box buy'; val.className='sig-value buy'; val.textContent='BUY';
-   exp.innerHTML='✅ <b>BUY — pattern + guide break</b><br>• '+reason+'<br>• Entry '+fmt2(patEntry)+' · SL '+fmt2(patSL)+' · Risk '+fmt2(patRisk); }
-  else if(sig==='SELL'){ box.className='sig-box sell'; val.className='sig-value sell'; val.textContent='SELL';
-   exp.innerHTML='✅ <b>SELL — pattern + guide break</b><br>• '+reason+'<br>• Entry '+fmt2(patEntry)+' · SL '+fmt2(patSL)+' · Risk '+fmt2(patRisk); }
-  else{ box.className='sig-box'; val.className='sig-value'; val.textContent='WAIT';
-   exp.innerHTML='⏳ <b>Waiting</b><br>• High: '+fmt2(guideHigh)+' needs break<br>• Low: '+fmt2(guideLow)+' needs break<br>• Current: '+fmt2(cur); }
+  if(sig==='BUY'){
+   box.className='sig-box buy'; val.className='sig-value buy'; val.textContent='BUY';
+   exp.innerHTML='✅ <b>BUY — confluence</b><br>• '+reason+'<br>• Score '+buyScore+' · Entry '+fmt2(patEntry)+' · SL '+fmt2(patSL)+' · Risk '+fmt2(Math.abs(patEntry-patSL));
+  }else if(sig==='SELL'){
+   box.className='sig-box sell'; val.className='sig-value sell'; val.textContent='SELL';
+   exp.innerHTML='✅ <b>SELL — confluence</b><br>• '+reason+'<br>• Score '+sellScore+' · Entry '+fmt2(patEntry)+' · SL '+fmt2(patSL)+' · Risk '+fmt2(Math.abs(patEntry-patSL));
+  }else{
+   box.className='sig-box'; val.className='sig-value'; val.textContent='WAIT';
+   let waitMsg='⏳ <b>Waiting for confluence</b><br>• High: '+fmt2(guideHigh)+' · Low: '+fmt2(guideLow)+'<br>• Current: '+fmt2(cur);
+   if(pin.bullPin||pin.bearPin) waitMsg+='<br>• '+pin.reason;
+   if(struct.bias!=='neutral') waitMsg+='<br>• Structure bias: '+struct.bias;
+   waitMsg+='<br>• BuyScore '+buyScore+' / SellScore '+sellScore+' (need ≥5 + pattern)';
+   exp.innerHTML=waitMsg;
+  }
  }
  renderPatternTP(bull);
  lastPatternSignal=sig;
