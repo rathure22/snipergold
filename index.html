@@ -591,6 +591,7 @@ body.orange-theme{--accent:#ff8c00}
   <div class="strat-box"><div class="strat-label">Strategy A Winrate</div><div class="strat-value a" id="stratAWin">--%</div></div>
   <div class="strat-box"><div class="strat-label">Strategy B Winrate</div><div class="strat-value b" id="stratBWin">--%</div></div>
  </div>
+ <div style="font-size:6px;color:#666;margin-top:4px" id="winrateSourceNote">Journal: 0 logged · Backtest: 0 simulated</div>
  <div style="font-size:8px;font-weight:600;color:#666;margin-top:10px;line-height:1.4">
   Replay loads a constructed 18-bar setup that satisfies the AND rule so you can verify confirmation. Resume scan returns to ranging/monitoring mode.
   <br><br>
@@ -910,6 +911,36 @@ function slTpForBacktest(strategy, dir, candles){
  }
 }
 
+// Winrate state — combines manual Trade Journal entries with the last
+// automated backtest run, so stratAWin/stratBWin reflect BOTH sources
+// instead of manual-only. Declared at top level (not inside the
+// DOMContentLoaded closure) so runBacktest() can write to it directly.
+let journalStats={A:{wins:0,loss:0,be:0}, B:{wins:0,loss:0,be:0}};
+let backtestStats={A:{wins:0,loss:0}, B:{wins:0,loss:0}};
+function updateWinrateDisplay(){
+ ['A','B'].forEach(s=>{
+  const combinedWins=journalStats[s].wins+backtestStats[s].wins;
+  const combinedLoss=journalStats[s].loss+backtestStats[s].loss;
+  const total=combinedWins+combinedLoss;
+  const wr=total>0? Math.round(combinedWins/total*100):0;
+  const el=$(s==='A'?'stratAWin':'stratBWin');
+  if(el) el.textContent=total>0?(wr+'%'):'--%';
+ });
+ const allW=journalStats.A.wins+journalStats.B.wins+backtestStats.A.wins+backtestStats.B.wins;
+ const allL=journalStats.A.loss+journalStats.B.loss+backtestStats.A.loss+backtestStats.B.loss;
+ const allT=allW+allL;
+ const overall=allT>0? Math.round(allW/allT*100):0;
+ if($('winrateBadge')) $('winrateBadge').textContent=allT>0?('WINRATE '+overall+'%'):'WINRATE --%';
+ const src=$('winrateSourceNote');
+ if(src) src.textContent='Journal: '+(journalStats.A.wins+journalStats.A.loss+journalStats.B.wins+journalStats.B.loss)+' logged · Backtest: '+(backtestStats.A.wins+backtestStats.A.loss+backtestStats.B.wins+backtestStats.B.loss)+' simulated';
+}
+try{
+ const savedJ=JSON.parse(localStorage.getItem('sg_journal_stats')||'{}');
+ if(savedJ.A) journalStats=savedJ;
+ const savedBt=JSON.parse(localStorage.getItem('sg_backtest_stats')||'{}');
+ if(savedBt.A) backtestStats=savedBt;
+}catch(e){}
+
 function runBacktest(){
  const el=$('backtestResult'); if(!el) return;
  if(typeof hist==='undefined' || hist.length<40){
@@ -991,6 +1022,13 @@ function runBacktest(){
   el.innerHTML='No Strategy A or B signals fired anywhere in the '+hist.length+' collected bars — nothing to backtest yet.';
   return;
  }
+
+ // Auto-populate the Strategy A/B Winrate boxes from this run — this is
+ // the "automatic" connection: no manual journal typing needed anymore.
+ backtestStats.A={wins:stats.A.wins, loss:stats.A.losses};
+ backtestStats.B={wins:stats.B.wins, loss:stats.B.losses};
+ try{ localStorage.setItem('sg_backtest_stats', JSON.stringify(backtestStats)); }catch(e){}
+ if(typeof updateWinrateDisplay==='function') updateWinrateDisplay();
 
  el.innerHTML=
   '<b>Bars replayed:</b> '+hist.length+' (~'+Math.round(hist.length)+' min of real session data — still a small sample, not a validated edge)'+
@@ -1684,15 +1722,32 @@ function updateTp5Display(){
  if($('tpRiskValue')) $('tpRiskValue').textContent='$'+fmt2(risk)+' risk';
 }
 
+// A hung/slow server otherwise stalls fetch() forever — the browser has
+// no built-in timeout. This wraps every request with AbortController so
+// a dead API times out cleanly instead of silently freezing price updates.
+const FETCH_TIMEOUT_MS=8000;
+async function fetchWithTimeout(url, options={}){
+ const controller=new AbortController();
+ const timer=setTimeout(()=>controller.abort(), FETCH_TIMEOUT_MS);
+ try{
+  return await fetch(url, {...options, signal:controller.signal});
+ }catch(e){
+  if(e.name==='AbortError') throw new Error('Timeout after '+(FETCH_TIMEOUT_MS/1000)+'s: '+url);
+  throw e;
+ }finally{
+  clearTimeout(timer);
+ }
+}
+
 async function fetchWithCorsFallback(url){
- try{ const r=await fetch(url,{cache:"no-store",mode:"cors"}); if(!r.ok) throw new Error("HTTP "+r.status); return await r.json(); }
- catch(e){ const proxy="https://api.allorigins.win/raw?url="+encodeURIComponent(url); const r2=await fetch(proxy,{cache:"no-store"}); return await r2.json(); }
+ try{ const r=await fetchWithTimeout(url,{cache:"no-store",mode:"cors"}); if(!r.ok) throw new Error("HTTP "+r.status); return await r.json(); }
+ catch(e){ const proxy="https://api.allorigins.win/raw?url="+encodeURIComponent(url); const r2=await fetchWithTimeout(proxy,{cache:"no-store"}); return await r2.json(); }
 }
 
 // --- Gold price sources, tried in order. First one that returns a sane price wins. ---
 async function fetchFromXaus(){
  // No API key, CORS fully open, no proxy needed.
- const r=await fetch('https://xaus.com/api/v1/spot?compact=1',{cache:"no-store",mode:"cors"});
+ const r=await fetchWithTimeout('https://xaus.com/api/v1/spot?compact=1',{cache:"no-store",mode:"cors"});
  if(!r.ok) throw new Error('xaus.com HTTP '+r.status);
  const d=await r.json();
  const p=parseFloat(d.spot_usd_oz);
@@ -1708,7 +1763,7 @@ async function fetchFromGoldApi(){
 }
 async function fetchFromGoldPriceDev(){
  // No API key needed for the anonymous tier (rate-limited: 100 req/hour/IP).
- const r=await fetch('https://api.goldprice.dev/v1/prices?symbol=XAU-USD-SPOT',{cache:"no-store",mode:"cors"});
+ const r=await fetchWithTimeout('https://api.goldprice.dev/v1/prices?symbol=XAU-USD-SPOT',{cache:"no-store",mode:"cors"});
  if(!r.ok) throw new Error('goldprice.dev HTTP '+r.status);
  const d=await r.json();
  const p=parseFloat(d.symbols?.[0]?.price);
@@ -2092,22 +2147,9 @@ updateChartSession();
  };
 
  // Trade journal
- // Real winrate tracking from journal
- let journalStats={A:{wins:0,loss:0,be:0}, B:{wins:0,loss:0,be:0}};
- function updateWinrateDisplay(){
-  ['A','B'].forEach(s=>{
-   const st=journalStats[s];
-   const total=st.wins+st.loss;
-   const wr=total>0? Math.round(st.wins/total*100):0;
-   const el=$(s==='A'?'stratAWin':'stratBWin');
-   if(el) el.textContent=total>0?(wr+'%'):'--%';
-  });
-  const allW=journalStats.A.wins+journalStats.B.wins;
-  const allL=journalStats.A.loss+journalStats.B.loss;
-  const allT=allW+allL;
-  const overall=allT>0? Math.round(allW/allT*100):0;
-  if($('winrateBadge')) $('winrateBadge').textContent=allT>0?('WINRATE '+overall+'%'):'WINRATE --%';
- }
+ // Manual entries add into the global journalStats; the winrate boxes
+ // (updateWinrateDisplay, declared globally above runBacktest) combine
+ // this with backtestStats automatically.
  if($('jrAddBtn')) $('jrAddBtn').onclick=()=>{
   const s=$('jrStrategy')?.value; const r=$('jrResult')?.value;
   const e=parseFloat($('jrEntry')?.value); const x=parseFloat($('jrExit')?.value);
