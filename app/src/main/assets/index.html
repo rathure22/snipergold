@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Sniper Gold v5.9.1 · Sifting Primary · 45s REST</title>
+<title>Sniper Gold v5.9 · Terminal</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
@@ -241,7 +241,7 @@ body.orange-theme{--accent:#ff8c00}
   <div class="fw-row"><span>Status</span><span>Monitoring A, B &amp; C…</span></div>
  </div>
  <div class="fw-countdown-row">
-  <span id="fwCountdown">Next check: 45s</span>
+  <span id="fwCountdown">Next check: --s</span>
   <button class="fw-alarm-btn" id="fwAlarmTestBtn">🔔 Test Alarm</button>
  </div>
 </div>
@@ -358,7 +358,7 @@ body.orange-theme{--accent:#ff8c00}
  </div>
  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px;margin-bottom:8px">
   <div style="font-size:8px;font-weight:800;color:var(--muted);text-transform:uppercase;margin-bottom:6px">Gold-API 1-Min OHLC (60s refresh)</div>
-  <div style="display:flex;gap:4px;margin-bottom:6px"><span class="badge green" id="goldActiveStatus">● 4349.70</span><span style="font-size:7px;color:#666" id="refreshCountdown">45s</span></div>
+  <div style="display:flex;gap:4px;margin-bottom:6px"><span class="badge green" id="goldActiveStatus">● 4349.70</span><span style="font-size:7px;color:#666" id="refreshCountdown">60s</span></div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:6px">
    <div style="background:#0a0907;padding:5px;border-radius:6px;border:1px solid #1a1a1a"><div style="font-size:6px;color:#666">OPEN</div><div style="font-size:10px;font-weight:800" id="ohlcOpen">--</div></div>
    <div style="background:#0a0907;padding:5px;border-radius:6px;border:1px solid #1a1a1a"><div style="font-size:6px;color:#666">HIGH</div><div style="font-size:10px;font-weight:800;color:var(--green)" id="ohlcHigh">--</div></div>
@@ -449,7 +449,7 @@ body.orange-theme{--accent:#ff8c00}
     <span style="font-family:'JetBrains Mono',monospace;font-size:7px;color:#666" id="goldLastFetch">Last fetch: 4349.70</span>
     <span style="font-size:7px;color:#00ff88;font-weight:800" id="goldRefreshStatus">60s refresh</span>
     <span class="badge" id="goldActiveStatus2" style="background:#00ff8820;border-color:#00ff88;color:#00ff88">4349.70</span>
-    <span style="font-size:7px;color:#666" id="refreshCountdown2">Next 45s</span>
+    <span style="font-size:7px;color:#666" id="refreshCountdown2">Next 60s</span>
   </div>
   <div style="margin-top:8px;display:flex;gap:6px">
     <button class="btn btn-small" style="background:#00ff88;color:#000;font-weight:800" id="testGoldLiveBtn">Test Gold-API Feed</button>
@@ -480,7 +480,7 @@ body.orange-theme{--accent:#ff8c00}
  </div>
  <div class="gold-tracker" id="goldTracker">
   <div class="gold-tracker-head"><div><div class="gold-tracker-title">GOLD TRACKER · XAU/USD · TERMINAL</div><div class="gold-tracker-price" id="trackerPrice">$----</div><div class="gold-tracker-change" id="trackerChange">Waiting for real quote…</div></div><div class="gold-tracker-live" id="trackerLive">● 1s LIVE</div></div>
-  <div class="gold-tracker-source" id="trackerSource">SiftingIO PRIMARY · REST 45s fallback</div>
+  <div class="gold-tracker-source" id="trackerSource">3 SOURCE · 1s · SiftingIO / REST</div>
   <div class="gold-tracker-grid">
    <div class="gold-tracker-stat"><span>Open</span><b id="trackerOpen">--</b></div>
    <div class="gold-tracker-stat"><span>High</span><b id="trackerHigh" class="support-line">--</b></div>
@@ -508,7 +508,7 @@ body.orange-theme{--accent:#ff8c00}
   <div style="font-size:7px;color:#888;line-height:1.35;margin:4px 0 7px">Real historical OHLCV + optional WebSocket stream. Your API key stays in this browser only.</div>
   <div style="display:flex;gap:5px;align-items:center"><input id="siftingKey" type="password" placeholder="SiftingIO API key" autocomplete="off" style="flex:1;min-width:0;background:#080b0a;color:#ddd;border:1px solid #26332d;border-radius:7px;padding:7px;font-size:8px"><button id="saveSiftingKey" class="btn btn-dark" style="padding:7px 8px;font-size:7px">SAVE</button></div>
   <div style="display:flex;gap:5px;margin-top:6px;flex-wrap:wrap"><button id="loadHistoryBtn" class="btn btn-orange" style="padding:6px 8px;font-size:7px">LOAD 30D HISTORY</button><button id="streamBtn" class="btn btn-green" style="padding:6px 8px;font-size:7px">CONNECT STREAM</button><button id="clearSiftingKey" class="btn btn-dark" style="padding:6px 8px;font-size:7px">CLEAR KEY</button></div>
-  <div id="dataEngineStatus" style="font-size:7px;color:#888;margin-top:6px">● REST 45s · SiftingIO primary when key set</div>
+  <div id="dataEngineStatus" style="font-size:7px;color:#888;margin-top:6px">● REST fallback active · live 1s polling</div>
  </div>
  <div class="chart-wrap" id="chartWrap">
   <div class="pull-hint" id="pullHint"></div>
@@ -658,12 +658,12 @@ body.orange-theme{--accent:#ff8c00}
  <div style="background:var(--card2);border-top:1px solid var(--border);margin-top:10px;padding-top:10px">
   <div style="font-size:7px;color:#666;font-weight:700;text-transform:uppercase;margin-bottom:6px">Update Speed</div>
   <div class="speed-row">
-   <div class="speed-btn" data-ms="15000">15s</div>
+   <div class="speed-btn active" data-ms="1000">1s</div>
+   <div class="speed-btn" data-ms="5000">5s</div>
+   <div class="speed-btn" data-ms="10000">10s</div>
    <div class="speed-btn" data-ms="30000">30s</div>
-   <div class="speed-btn active" data-ms="45000">45s</div>
-   <div class="speed-btn" data-ms="60000">60s</div>
   </div>
-  <div style="font-size:6px;color:#666;margin-top:6px">REST default 45s to avoid free-API rate limits. When SiftingIO WebSocket is connected, live 1s ticks are primary and REST polling pauses.</div>
+  <div style="font-size:6px;color:#666;margin-top:6px">Faster = more API calls to gold-api.com/xaus.com/goldprice.dev. Very fast settings (1s) risk rate-limits on free tiers — use with caution, ideally short sessions only.</div>
  </div>
 </div>
  </div>
@@ -687,7 +687,7 @@ let patternPrices=[];
 let guideHigh=0, guideLow=0, patEntry=0, patSL=0, patRisk=0;
 let lastPatternSignal='WAIT';
 let lastConfluenceScore=0;
-let mainTickMs=45000, mainTickHandle=null; // 45s REST default — SiftingIO stream is primary when connected
+let mainTickMs=1000, mainTickHandle=null;
 let goldSourceCursor=0;
 const MAX_REAL_BARS=43200; // retain up to 30 days of real/historical 1-minute candles
 let abMonitoringOn=true; // Strategy A/B on/off — Strategy C always runs independently
@@ -1974,56 +1974,255 @@ function loadSiftingKey(){try{siftingKey=localStorage.getItem('sg_sifting_key')|
 function saveSiftingKey(){const v=($('siftingKey')?.value||'').trim();siftingKey=v;try{v?localStorage.setItem('sg_sifting_key',v):localStorage.removeItem('sg_sifting_key');}catch(e){}setDataEngineStatus(v?'SiftingIO key saved locally':'No SiftingIO key');}
 function normalizeHistoricalBars(payload){const rows=Array.isArray(payload)?payload:(payload?.data||payload?.bars||payload?.results||[]);return rows.map(x=>{const t=x.t??x.time??x.timestamp??x.ts;const time=typeof t==='string'?Date.parse(t):(Number(t)<1e12?Number(t)*1000:Number(t));return{open:Number(x.o??x.open),high:Number(x.h??x.high),low:Number(x.l??x.low),close:Number(x.c??x.close),time};}).filter(x=>Number.isFinite(x.time)&&[x.open,x.high,x.low,x.close].every(Number.isFinite)&&x.high>=x.low&&x.high>=x.open&&x.high>=x.close&&x.low<=x.open&&x.low<=x.close);}
 async function loadTrueHistoricalData(){if(historicalLoading)return;if(!siftingKey)loadSiftingKey();if(!siftingKey){setDataEngineStatus('Enter a SiftingIO API key first');return;}historicalLoading=true;setDataEngineStatus('Loading real 1-minute history…');try{const end=new Date(),start=new Date(end.getTime()-30*86400000);let cursor='',all=[],pages=0;do{const u=new URL('https://api.sifting.io/v1/hist/commodities/XAUUSD/bars');u.searchParams.set('interval','1m');u.searchParams.set('start',start.toISOString());u.searchParams.set('end',end.toISOString());u.searchParams.set('limit','2000');if(cursor)u.searchParams.set('cursor',cursor);const r=await fetch(u,{headers:{'X-API-Key':siftingKey},cache:'no-store'});if(!r.ok)throw Error('History HTTP '+r.status);const d=await r.json();all.push(...normalizeHistoricalBars(d));cursor=d?.meta?.next_cursor||d?.next_cursor||'';pages++;if(pages>=30)break;}while(cursor);if(!all.length)throw Error('No historical bars returned');const map=new Map(hist.map(b=>[b.time,b]));all.forEach(b=>map.set(b.time,b));hist=[...map.values()].sort((a,b)=>a.time-b.time).slice(-MAX_REAL_BARS);lastPrice=hist.at(-1).close;firstLiveTickAt=hist[0].time;try{localStorage.setItem('sg_cache',JSON.stringify({version:'real-historical-v1',real:true,price:lastPrice,time:Date.now(),hist}));}catch(e){}if($('priceEl'))$('priceEl').textContent='$'+fmt2(lastPrice);if($('barsEl'))$('barsEl').textContent=hist.length.toLocaleString()+' real bars · historical';drawChart();updateTerminalMetrics();updateGoldTracker(lastPrice,'SiftingIO historical');setDataEngineStatus('Loaded '+hist.length.toLocaleString()+' real 1m bars · '+pages+' page(s)',true);}catch(e){console.error(e);setDataEngineStatus('History failed: '+e.message);}historicalLoading=false;}
-function connectSiftingStream(){if(!siftingKey)loadSiftingKey();if(!siftingKey){setDataEngineStatus('Enter a SiftingIO API key first');return;}if(siftingWs){try{siftingWs.close()}catch(e){}}try{siftingWs=new WebSocket('wss://stream.sifting.io/ws/v1?key='+encodeURIComponent(siftingKey));siftingWs.onopen=()=>{siftingStreamOn=true;if(mainTickHandle){clearInterval(mainTickHandle);mainTickHandle=null;}siftingWs.send(JSON.stringify({op:'subscribe',product:'com',symbols:['XAUUSD']}));setDataEngineStatus('WebSocket XAUUSD stream connected',true);};siftingWs.onmessage=e=>{try{const d=JSON.parse(e.data);if(d.type==='tick'&&d.symbol==='XAUUSD'){const p=Number(d.price),t=Date.parse(d.computed_at)||Date.now();if(p>1000&&p<10000){pushTick(p,t);updateGoldTracker(p,'SiftingIO WebSocket');}}}catch(err){}};siftingWs.onerror=()=>{siftingStreamOn=false;if(!mainTickHandle){mainTickHandle=setInterval(fetchPrice,mainTickMs||45000);}setDataEngineStatus('WebSocket error · REST fallback active')};siftingWs.onclose=()=>{siftingStreamOn=false;if(!mainTickHandle){mainTickHandle=setInterval(fetchPrice,mainTickMs||45000);}setDataEngineStatus('WebSocket closed · REST fallback active')};}catch(e){setDataEngineStatus('WebSocket failed · REST fallback active')}}
+function connectSiftingStream(){if(!siftingKey)loadSiftingKey();if(!siftingKey){setDataEngineStatus('Enter a SiftingIO API key first');return;}if(siftingWs){try{siftingWs.close()}catch(e){}}try{siftingWs=new WebSocket('wss://stream.sifting.io/ws/v1?key='+encodeURIComponent(siftingKey));siftingWs.onopen=()=>{siftingStreamOn=true;if(mainTickHandle){clearInterval(mainTickHandle);mainTickHandle=null;}siftingWs.send(JSON.stringify({op:'subscribe',product:'com',symbols:['XAUUSD']}));setDataEngineStatus('WebSocket XAUUSD stream connected',true);};siftingWs.onmessage=e=>{try{const d=JSON.parse(e.data);if(d.type==='tick'&&d.symbol==='XAUUSD'){const p=Number(d.price),t=Date.parse(d.computed_at)||Date.now();if(p>1000&&p<10000){pushTick(p,t);updateGoldTracker(p,'SiftingIO WebSocket');}}}catch(err){}};siftingWs.onerror=()=>{siftingStreamOn=false;if(!mainTickHandle){mainTickHandle=setInterval(fetchPrice,mainTickMs);}setDataEngineStatus('WebSocket error · REST fallback active')};siftingWs.onclose=()=>{siftingStreamOn=false;if(!mainTickHandle){mainTickHandle=setInterval(fetchPrice,mainTickMs);}setDataEngineStatus('WebSocket closed · REST fallback active')};}catch(e){setDataEngineStatus('WebSocket failed · REST fallback active')}}
 function disconnectSiftingStream(){if(siftingWs){try{siftingWs.close()}catch(e){}}siftingWs=null;siftingStreamOn=false;setDataEngineStatus('WebSocket off · REST fallback active')}
-
-async function fetchFromSiftingRest(){
- if(!siftingKey){ loadSiftingKey(); }
- if(!siftingKey) throw new Error('no sifting key');
- // Prefer latest bar/tick endpoint patterns; fall back gracefully
- const urls=[
-  'https://api.sifting.io/v1/spot/commodities/XAUUSD',
-  'https://api.sifting.io/v1/quotes/XAUUSD',
-  'https://api.sifting.io/v1/hist/commodities/XAUUSD/bars?interval=1m&limit=1'
- ];
- let lastErr;
- for(const url of urls){
-  try{
-   const r=await fetch(url,{headers:{'X-API-Key':siftingKey},cache:'no-store'});
-   if(!r.ok) throw new Error('HTTP '+r.status);
-   const d=await r.json();
-   let p=parseFloat(d.price||d.spot||d.close||d?.data?.price||d?.bars?.[0]?.close||d?.data?.bars?.[0]?.c);
-   if(!(p>0) && Array.isArray(d)) p=parseFloat(d[0]?.close||d[0]?.c||d[0]?.price);
-   if(!(p>0)) throw new Error('bad price');
-   return {price:p, stale:false};
-  }catch(e){ lastErr=e; }
- }
- throw lastErr||new Error('sifting rest failed');
-}
-
 const GOLD_SOURCES=[
- {name:'SiftingIO', fn:fetchFromSiftingRest, primary:true},
  {name:'xaus.com', fn:fetchFromXaus},
  {name:'gold-api.com', fn:fetchFromGoldApi},
  {name:'goldprice.dev', fn:fetchFromGoldPriceDev},
 ];
 async function fetchGoldPriceWithFallback(){
- // Primary: SiftingIO when key present; else free sources (rotated) every mainTickMs (45s default)
- if(!siftingKey) try{ loadSiftingKey(); }catch(e){}
- const sources=[];
- if(siftingKey) sources.push({name:'SiftingIO', fn:fetchFromSiftingRest});
- for(const s of GOLD_SOURCES){ if(s.name!=='SiftingIO') sources.push(s); }
- // If only GOLD_SOURCES has SiftingIO already, dedupe by name
- const seen=new Set(); const list=[];
- for(const s of sources){ if(seen.has(s.name)) continue; seen.add(s.name); list.push(s); }
- for(let step=0;step<list.length;step++){
-  const src=list[step];
+ // One real quote check every second, rotating the three free sources.
+ // If the selected source fails, immediately fall through to the other two.
+ for(let step=0;step<GOLD_SOURCES.length;step++){
+  const idx=(goldSourceCursor+step)%GOLD_SOURCES.length;
+  const src=GOLD_SOURCES[idx];
   try{
    const r=await src.fn();
-   if(r && r.price>1000 && r.price<10000) return {...r, source:src.name};
-  }catch(e){ console.warn(src.name+' failed:', e.message||e); }
+   if(r.price>1000 && r.price<10000){ goldSourceCursor=(idx+1)%GOLD_SOURCES.length; return {...r, source:src.name}; }
+  }catch(e){ console.warn(src.name+' failed:', e.message); }
  }
  return null;
+}
+
+// Gold spot market hours (approx, PHT = UTC+8)
+// Open: Sunday 06:00 PHT (Sun 22:00 UTC) → Close: Saturday 05:00 PHT (Fri 21:00 UTC)
+// Uses browser time; once internet-connected the OS clock is usually NTP-synced.
+function getPHTParts(){
+ // Force Asia/Manila so display is always Philippine Time regardless of device timezone
+ try{
+  const fmt=new Intl.DateTimeFormat('en-PH',{timeZone:'Asia/Manila',weekday:'short',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,hourCycle:'h23'});
+  const parts=fmt.formatToParts(new Date());
+  const get=t=>parts.find(p=>p.type===t)?.value||'';
+  return {weekday:get('weekday'), hour:parseInt(get('hour'),10)||0, minute:parseInt(get('minute'),10)||0, second:parseInt(get('second'),10)||0};
+ }catch(e){
+  const d=new Date();
+  // fallback: assume device is already close to PHT or use UTC+8 offset
+  const pht=new Date(d.getTime()+(8*60-d.getTimezoneOffset())*60000);
+  return {weekday:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][pht.getDay()], hour:pht.getHours(), minute:pht.getMinutes(), second:pht.getSeconds()};
+ }
+}
+
+// World Trading Clock — accurate sessions (approximate forex/gold major sessions)
+// All times derived from real browser clock (NTP-synced when online)
+function getTimeInZone(timeZone){
+ try{
+  const fmt=new Intl.DateTimeFormat('en-GB',{timeZone,hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,hourCycle:'h23'});
+  return fmt.format(new Date());
+ }catch(e){ return '--:--:--'; }
+}
+function getHourInZone(timeZone){
+ try{
+  const fmt=new Intl.DateTimeFormat('en-GB',{timeZone,hour:'2-digit',hour12:false,hourCycle:'h23'});
+  return parseInt(fmt.format(new Date()),10);
+ }catch(e){ return -1; }
+}
+function isSessionOpen(timeZone, openH, closeH){
+ // openH/closeH in local hours of that zone. Handles overnight sessions.
+ const h=getHourInZone(timeZone);
+ if(h<0) return false;
+ if(openH<closeH) return h>=openH && h<closeH;
+ return h>=openH || h<closeH; // overnight
+}
+
+// Auto-detect which major session is currently most active for chart sync
+function getActiveTradingSession(){
+ const sessions=[
+  {name:'Sydney', tz:'Australia/Sydney', open:7, close:16},
+  {name:'Tokyo',  tz:'Asia/Tokyo',       open:9, close:18},
+  {name:'London', tz:'Europe/London',    open:8, close:17},
+  {name:'New York', tz:'America/New_York', open:8, close:17},
+ ];
+ const openOnes=[];
+ sessions.forEach(s=>{
+  if(isSessionOpen(s.tz, s.open, s.close)) openOnes.push(s.name);
+ });
+ if(openOnes.length===0) return 'Closed / Off-hours';
+ // Prefer overlap priority: NY > London > Tokyo > Sydney when multiple open
+ if(openOnes.includes('New York') && openOnes.includes('London')) return 'London + NY Overlap';
+ if(openOnes.includes('New York')) return 'New York';
+ if(openOnes.includes('London')) return 'London';
+ if(openOnes.includes('Tokyo')) return 'Tokyo';
+ if(openOnes.includes('Sydney')) return 'Sydney';
+ return openOnes.join(' + ');
+}
+function updateChartSession(){
+ const label=getActiveTradingSession();
+ const el=$('chartSessionBadge');
+ if(el){
+  el.textContent=label;
+  const closed=label.includes('Closed')||label.includes('Off-hours');
+  el.className=closed?'badge':'badge live';
+ }
+}
+
+function updateWorldClock(){
+ const sessions=[
+  {id:'Sydney', tz:'Australia/Sydney', open:7, close:16},
+  {id:'Tokyo',  tz:'Asia/Tokyo',       open:9, close:18},
+  {id:'London', tz:'Europe/London',    open:8, close:17},
+  {id:'NY',     tz:'America/New_York', open:8, close:17},
+ ];
+ sessions.forEach(s=>{
+  const localTime=getTimeInZone(s.tz);
+  const open=isSessionOpen(s.tz, s.open, s.close);
+  const timeEl=$(`wc${s.id}Time`);
+  const statusEl=$(`wc${s.id}Status`);
+  const itemEl=$(`wc${s.id}`);
+  if(timeEl) timeEl.textContent=localTime;
+  if(statusEl){
+   statusEl.textContent=open?'OPEN':'CLOSED';
+   statusEl.className='wc-status '+(open?'open':'closed');
+  }
+  if(itemEl) itemEl.className='wc-item '+(open?'open':'closed');
+ });
+}
+
+function getPHTTimeString(){
+ try{
+  return new Date().toLocaleTimeString('en-PH',{timeZone:'Asia/Manila',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false})+' PHT';
+ }catch(e){
+  return new Date().toLocaleTimeString('en-PH',{hour:'2-digit',minute:'2-digit',second:'2-digit'})+' PHT';
+ }
+}
+function isMarketLikelyClosed(){
+ const p=getPHTParts();
+ const day=p.weekday; // Sun Mon ... Sat
+ const h=p.hour, m=p.minute;
+ // Closed all of Saturday
+ if(day==='Sat') return true;
+ // Sunday before 06:00 PHT still closed
+ if(day==='Sun' && (h<6 || (h===6 && m===0))) return true;
+ // Friday after 21:00 PHT (approx close) — treat as closed for signal purposes
+ if(day==='Fri' && h>=21) return true;
+ return false;
+}
+function getMarketSessionLabel(){
+ if(isMarketLikelyClosed()) return 'WEEKEND / CLOSED';
+ const p=getPHTParts();
+ const h=p.hour;
+ // Rough session labels in PHT
+ if(h>=6 && h<12) return 'ASIA OPEN';
+ if(h>=12 && h<16) return 'LONDON OPEN';
+ if(h>=16 && h<21) return 'NY OPEN';
+ return 'OFF-HOURS';
+}
+function updateMarketBadges(){
+ const closed=isMarketLikelyClosed();
+ const wb=$('weekendBadge');
+ if(wb){
+  if(closed){
+   wb.textContent='WEEKEND CLOSE';
+   wb.className='badge';
+  }else{
+   wb.textContent=getMarketSessionLabel();
+   wb.className='badge live';
+  }
+ }
+}
+function setLiveStatus(mode, text){
+ const dot=$('liveStatusDot'), label=$('liveStatusText');
+ if(!dot||!label) return;
+ dot.className=''; label.className='';
+ dot.classList.add('is-'+mode); label.classList.add('is-'+mode);
+ label.textContent=text;
+}
+
+
+// Terminal metrics: RSI(14), SMA20, S/R, momentum bars
+function calcRSI(closes, period){
+ period=period||14;
+ if(!closes||closes.length<period+1) return 50;
+ let gains=0, losses=0;
+ for(let i=closes.length-period;i<closes.length;i++){
+  const d=closes[i]-closes[i-1];
+  if(d>=0) gains+=d; else losses-=d;
+ }
+ if(losses===0) return 100;
+ const rs=gains/losses;
+ return 100-(100/(1+rs));
+}
+function calcSMA(closes, period){
+ if(!closes||closes.length<period) return closes&&closes.length?closes[closes.length-1]:0;
+ const slice=closes.slice(-period);
+ return slice.reduce((a,b)=>a+b,0)/slice.length;
+}
+function updateTerminalMetrics(){
+ if(typeof hist==='undefined'||hist.length<5) return;
+ const agg=(typeof aggregateCandles==='function')?aggregateCandles(hist, currentTimeframe||1):hist;
+ const vis=agg.slice(-40);
+ if(!vis.length) return;
+ const closes=vis.map(c=>c.close);
+ const last=vis[vis.length-1];
+ const rsi=calcRSI(closes,14);
+ const sma=calcSMA(closes,20);
+ const res=Math.max(...vis.map(c=>c.high));
+ const sup=Math.min(...vis.map(c=>c.low));
+ const zone=res-sup;
+ const bull=last.close>=sma;
+ const rsiEl=$('rsiPill');
+ if(rsiEl){
+  rsiEl.textContent='RSI(14): '+rsi.toFixed(1)+(rsi>55?' ▲':rsi<45?' ▼':' ─');
+  rsiEl.style.color=rsi>60?'var(--green)':rsi<40?'var(--red)':'#ccc';
+ }
+ if($('resLabel')) $('resLabel').textContent='R '+fmt2(res);
+ if($('supLabel')) $('supLabel').textContent='S '+fmt2(sup);
+ if($('sma20Label')) $('sma20Label').textContent='SMA20 '+fmt2(sma);
+ const tb=$('trendBadge');
+ if(tb){
+  tb.textContent=bull?'BULLISH':'BEARISH';
+  tb.className='badge '+(bull?'live':'');
+  tb.style.borderColor=bull?'var(--green)':'var(--red)';
+  tb.style.color=bull?'var(--green)':'var(--red)';
+ }
+ if($('trackerClose')) $('trackerClose').textContent=fmt2(last.close);
+ if($('trackerDirection')){
+  $('trackerDirection').textContent=bull?'BULL':'BEAR';
+  $('trackerDirection').style.color=bull?'var(--green)':'var(--red)';
+ }
+ const zs=$('zoneStatus'), zm=$('zoneMeta'), zf=$('zoneFill');
+ if(zs) zs.textContent=(bull?'BULLISH':'BEARISH')+' · ZONE '+fmt2(zone);
+ if(zm) zm.textContent='TIGHT '+(zone<1.5?'YES':'NO')+' · '+(currentTimeframe||1)+'m';
+ if(zf) zf.style.width=Math.min(100, Math.max(8, (zone/5)*100))+'%';
+ // momentum bars from RSI-like series
+ const mb=$('momBars');
+ if(mb){
+  const vals=[];
+  for(let i=Math.max(15,closes.length-16);i<closes.length;i++){
+   vals.push(calcRSI(closes.slice(0,i+1),14));
+  }
+  mb.innerHTML=vals.map((v,i)=>{
+   const h=Math.max(4, Math.min(28, ((v-30)/40)*28+4));
+   const up=v>50;
+   const last=i===vals.length-1;
+   return '<div class="mom-bar'+(last?' last':'')+'" style="height:'+h+'px;background:'+(up?'var(--green)':'var(--red)')+'"></div>';
+  }).join('');
+ }
+}
+
+function updateGoldTracker(p, source){
+ const price=$('trackerPrice'), ch=$('trackerChange'), src=$('trackerSource'), live=$('trackerLive');
+ const last=hist.length?hist[hist.length-1]:null;
+ if(price) price.textContent='$'+fmt2(p);
+ if(ch){ const prev=hist.length>1?hist[hist.length-2].close:(last?.open||p); const d=p-prev; ch.textContent=(d>=0?'▲ +':'▼ ')+fmt2(d); ch.style.color=d>=0?'var(--green)':'var(--red)'; }
+ if(src) src.textContent='LIVE · '+source+' · 3-source fallback · quote check 1s';
+ if(live) live.textContent='● 1s LIVE';
+ if(last){
+  if($('trackerOpen')) $('trackerOpen').textContent='$'+fmt2(last.open);
+  if($('trackerHigh')) $('trackerHigh').textContent='$'+fmt2(last.high);
+  if($('trackerLow')) $('trackerLow').textContent='$'+fmt2(last.low);
+  const dir=p>=last.open?'UP':'DOWN'; const el=$('trackerDirection'); if(el){el.textContent=dir;el.style.color=dir==='UP'?'var(--green)':'var(--red)';}
+ }
 }
 
 async function fetchPrice(){
@@ -2159,14 +2358,6 @@ window.addEventListener('load', ()=>{
  drawChart();
  testDualSame18Candles(); updateSlTpDisplay(); updateTp5Display();
  fetchPrice(); fetchExchangeRates();
- // Primary path: auto-connect SiftingIO WebSocket when key saved
- loadSiftingKey();
- if(siftingKey){
-  try{ connectSiftingStream(); setDataEngineStatus('SiftingIO primary · connecting stream…', true); }catch(e){}
- }else{
-  setDataEngineStatus('REST 45s mode · add SiftingIO key for 1s primary stream');
- }
-
  setInterval(fetchExchangeRates,60000); setInterval(testDualSame18Candles,60000);
  mainTickHandle=setInterval(fetchPrice, mainTickMs);
  setInterval(()=>{ 
