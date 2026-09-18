@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Sniper Gold v5.9 · Terminal</title>
+<title>Sniper Gold v5.8</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
@@ -12,13 +12,6 @@
 body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;font-weight:600;padding:6px;font-size:10px;line-height:1.4;letter-spacing:0.1px}
 .hdr,.xau-card,.dual-card,.strat-card,.world-clock-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:14px;margin:6px 0}
 .world-clock-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:12px;margin:6px 0}
-.page-wrap{display:block}
-.main-col,.side-col{min-width:0}
-@media(min-width:900px){
- .page-wrap{display:grid;grid-template-columns:1.3fr 1fr;gap:14px;align-items:start}
- .main-col .xau-card{margin-top:0}
- .side-col .world-clock-card,.side-col .dual-card,.side-col .sl-tp-card,.side-col .candle-engine,.side-col .pattern-card{margin-top:0}
-}
 .wc-title{font-size:8px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
 .wc-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .wc-item{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:8px;text-align:center}
@@ -46,22 +39,6 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 .xau-badge.high{background:#d4b87a18;border:1px solid #d4b87a30;color:#d4b87a}
 .xau-badge.low{background:#ff4a4a18;border:1px solid #ff4a4a30;color:var(--red)}
 .xau-badge.bars{background:#1a1a1a;border:1px solid var(--border);color:var(--muted)}
-.gold-tracker{background:#0b0f0d;border:1px solid #00d08455;border-radius:16px;padding:11px;margin:10px 0;box-shadow:0 0 14px #00d08410}.gold-tracker-head{display:flex;justify-content:space-between;align-items:center;gap:8px}.gold-tracker-title{font-size:9px;font-weight:800;letter-spacing:.7px;color:#d4b87a;text-transform:uppercase}.gold-tracker-price{font-family:'Sora',sans-serif;font-size:25px;font-weight:800;color:var(--green);margin-top:3px}.gold-tracker-change{font-size:8px;font-weight:800;margin-top:2px}.gold-tracker-source{font-size:7px;color:#777;margin-top:5px}.gold-tracker-live{font-size:7px;font-weight:800;color:var(--green);border:1px solid #00d08455;border-radius:20px;padding:4px 7px;white-space:nowrap}.gold-tracker-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:8px}.gold-tracker-stat{background:#111511;border:1px solid #1f3026;border-radius:9px;padding:6px}.gold-tracker-stat span{display:block;font-size:6px;color:#777;text-transform:uppercase}.gold-tracker-stat b{display:block;font-size:8px;margin-top:2px}.chart-direction{display:flex;justify-content:space-between;align-items:center;font-size:8px;font-weight:800;margin-top:6px}.direction-up{color:var(--green)}.direction-down{color:var(--red)}.support-line{color:#00d084}.resistance-line{color:#ff4a4a}
-.term-panel{background:#0f1a24;border:1px solid #1f2a36;border-radius:14px;padding:10px;margin:8px 0}
-.term-row{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
-.term-label{font-size:7px;font-weight:800;letter-spacing:.8px;color:#666;text-transform:uppercase}
-.term-val{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700}
-.term-bull{color:var(--green)}
-.term-bear{color:var(--red)}
-.mom-bars{display:flex;align-items:flex-end;gap:2px;height:28px;margin-top:8px}
-.mom-bar{flex:1;border-radius:2px;min-height:3px;opacity:.65;transition:height .3s}
-.mom-bar.last{opacity:1;box-shadow:0 0 8px rgba(0,208,132,.45)}
-.rsi-pill{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:12px;background:#0a0907;border:1px solid #1a1a1a;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800}
-.sr-line{font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:700}
-.zone-bar{position:relative;height:32px;border-radius:10px;background:#0a0e12;border:1px solid #1e2d3a;overflow:hidden;margin-top:8px}
-.zone-fill{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,rgba(0,208,132,.2),rgba(0,208,132,.05));transition:width 1s}
-.zone-inner{position:relative;z-index:1;height:100%;display:flex;align-items:center;justify-content:space-between;padding:0 10px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800}
-
 .chart-wrap{background:#0f0e0c;border:1px solid var(--border);border-radius:16px;padding:10px;margin:10px 0}
 .chart-wrap canvas{width:100%!important;height:240px!important}
 .btn-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
@@ -183,7 +160,6 @@ body.orange-theme{--accent:#ff8c00}
 .tf-btn{flex:1;padding:6px;background:var(--card2);border:1px solid var(--border);border-radius:10px;text-align:center;font-size:8px;font-weight:700;color:var(--muted);cursor:pointer}
 .tf-btn.active{border-color:var(--accent);color:var(--accent);background:#ff8c0012}
 .live-data-line{font-size:7px;color:#666;font-weight:600;margin-top:4px}
-.logs-bar{background:#0b0f0d;border:1px solid var(--border);border-radius:12px;padding:8px 10px;margin:8px 0;color:#9aa39e;font-size:8px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.logs-bar .log-live{color:var(--green)}.logs-bar .log-bear{color:var(--red)}.logs-bar .log-bull{color:var(--green)}
 .pattern-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:14px;margin:6px 0}
 .pattern-title{font-size:9px;font-weight:800;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:10px}
 .pattern-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
@@ -253,7 +229,7 @@ body.orange-theme{--accent:#ff8c00}
  <div class="sidebar-close-x" id="sidebarCloseBtn">✕</div>
  <div style="text-align:center;padding:6px 0 10px;border-bottom:1px solid var(--border);margin-bottom:10px">
   <div style="font-size:8px;font-weight:700;letter-spacing:0.5px;color:var(--muted)">Dev. JI NG SLOW×STONE™</div>
-  <div style="font-size:7px;font-weight:600;color:#555;margin-top:2px">Version v5.9 Pro · Historical OHLCV / MTF / WebSocket</div>
+  <div style="font-size:7px;font-weight:600;color:#555;margin-top:2px">Version v5.8</div>
  </div>
  <div style="font-size:8px;font-weight:800;color:var(--muted);text-transform:uppercase;margin-bottom:8px">Function Status</div>
  <div id="functionCheckList" style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px;margin-bottom:10px"></div>
@@ -457,96 +433,6 @@ body.orange-theme{--accent:#ff8c00}
   </div>
 </div>
 
-<div class="page-wrap">
- <div class="main-col">
-<div class="xau-card">
- <div style="font-size:8px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase">XAU/USD</div>
- <div id="liveStatusRow" style="display:flex;align-items:center;gap:6px;margin-top:6px">
-  <span id="liveStatusDot" style="width:8px;height:8px;border-radius:50%;background:#666;display:inline-block"></span>
-  <span id="liveStatusText" style="font-size:9px;font-weight:800;letter-spacing:0.5px;color:var(--muted);text-transform:uppercase">Connecting…</span>
- </div>
- <div class="xau-price" id="priceEl">$4349.80</div>
- <div style="font-size:10px;font-weight:600;color:var(--muted);margin-top:4px" id="lastUpd">Last update --:--:--</div>
- <div class="xau-badges">
-  <span class="xau-badge high" id="highEl">HIGH $4351.31</span>
-  <span class="xau-badge low" id="lowEl">LOW $4349.08</span>
-  <span class="xau-badge bars" id="barsEl">41 bars</span>
-  <span class="xau-badge bars" id="goldLastFetch2">Gold: 4349.70</span>
-  <span class="xau-badge bars" id="forexLastFetch">Forex: 62.67</span>
- </div>
- <div style="display:flex;justify-content:space-between;align-items:center;margin:8px 0 4px">
-  <span style="font-size:7px;font-weight:700;color:#666;text-transform:uppercase">Chart · Session Sync</span>
-  <span class="badge live" id="chartSessionBadge">Detecting…</span>
- </div>
- <div class="gold-tracker" id="goldTracker">
-  <div class="gold-tracker-head"><div><div class="gold-tracker-title">GOLD TRACKER · XAU/USD · TERMINAL</div><div class="gold-tracker-price" id="trackerPrice">$----</div><div class="gold-tracker-change" id="trackerChange">Waiting for real quote…</div></div><div class="gold-tracker-live" id="trackerLive">● 1s LIVE</div></div>
-  <div class="gold-tracker-source" id="trackerSource">3 SOURCE · 1s · SiftingIO / REST</div>
-  <div class="gold-tracker-grid">
-   <div class="gold-tracker-stat"><span>Open</span><b id="trackerOpen">--</b></div>
-   <div class="gold-tracker-stat"><span>High</span><b id="trackerHigh" class="support-line">--</b></div>
-   <div class="gold-tracker-stat"><span>Low</span><b id="trackerLow" class="resistance-line">--</b></div>
-   <div class="gold-tracker-stat"><span>Close</span><b id="trackerClose">--</b></div>
-  </div>
-  <div class="term-row" style="margin-top:8px">
-   <span class="rsi-pill" id="rsiPill">RSI(14): --</span>
-   <span class="sr-line resistance-line" id="resLabel">R --</span>
-   <span class="sr-line support-line" id="supLabel">S --</span>
-   <span class="badge" id="trendBadge">TREND --</span>
-   <span class="term-val" id="sma20Label" style="color:#888">SMA20 --</span>
-  </div>
-  <div class="zone-bar" id="zoneBar">
-   <div class="zone-fill" id="zoneFill" style="width:40%"></div>
-   <div class="zone-inner">
-    <span id="zoneStatus">SCAN · WAIT</span>
-    <span id="zoneMeta" style="color:#666;font-size:8px">Zone --</span>
-   </div>
-  </div>
-  <div class="mom-bars" id="momBars"></div>
- </div>
- <div class="data-engine" id="dataEngine" style="margin:8px 0;padding:9px;border:1px solid #26332d;border-radius:12px;background:#0d1210">
-  <div style="font-size:8px;font-weight:800;letter-spacing:.4px;color:var(--green);text-transform:uppercase">⚙ Market Data Engine</div>
-  <div style="font-size:7px;color:#888;line-height:1.35;margin:4px 0 7px">Real historical OHLCV + optional WebSocket stream. Your API key stays in this browser only.</div>
-  <div style="display:flex;gap:5px;align-items:center"><input id="siftingKey" type="password" placeholder="SiftingIO API key" autocomplete="off" style="flex:1;min-width:0;background:#080b0a;color:#ddd;border:1px solid #26332d;border-radius:7px;padding:7px;font-size:8px"><button id="saveSiftingKey" class="btn btn-dark" style="padding:7px 8px;font-size:7px">SAVE</button></div>
-  <div style="display:flex;gap:5px;margin-top:6px;flex-wrap:wrap"><button id="loadHistoryBtn" class="btn btn-orange" style="padding:6px 8px;font-size:7px">LOAD 30D HISTORY</button><button id="streamBtn" class="btn btn-green" style="padding:6px 8px;font-size:7px">CONNECT STREAM</button><button id="clearSiftingKey" class="btn btn-dark" style="padding:6px 8px;font-size:7px">CLEAR KEY</button></div>
-  <div id="dataEngineStatus" style="font-size:7px;color:#888;margin-top:6px">● REST fallback active · live 1s polling</div>
- </div>
- <div class="chart-wrap" id="chartWrap">
-  <div class="pull-hint" id="pullHint"></div>
-  <canvas id="chart"></canvas>
-  <div id="chartDirection" class="chart-direction direction-up">📈 WAITING FOR REAL DATA</div>
- </div>
- <div class="tf-row">
-  <div class="tf-btn active" id="tf1Btn" data-tf="1">1m</div>
-  <div class="tf-btn" id="tf5Btn" data-tf="5">5m</div>
-  <div class="tf-btn" id="tf15Btn" data-tf="15">15m</div>
-  <div class="tf-btn" id="tf60Btn" data-tf="60">1H</div>
-  <div class="tf-btn" id="tf240Btn" data-tf="240">4H</div>
-  <div class="tf-btn" id="tf1440Btn" data-tf="1440">1D</div>
- </div>
- <div class="btn-row">
-  <button class="btn btn-orange" id="refreshBtn">↻ Refresh quote</button>
-  <button class="btn btn-orange" id="replayBuyBtn">Replay BUY</button>
-  <button class="btn btn-red" id="replaySellBtn">Replay SELL</button>
-  <button class="btn btn-dark" id="resumeBtn">Resume scan</button>
- </div>
- <div class="mode-row">
-  <div class="mode-btn active" id="bothLiveBtn"><div class="mode-label">BOTH A+B</div><div class="mode-value" style="color:var(--accent)">🔥 Live</div></div>
-  <div class="mode-btn" id="aScalpBtn"><div class="mode-label">A: 1:1 Scalp</div><div class="mode-value">Select</div></div>
-  <div class="mode-btn" id="bLondonBtn"><div class="mode-label">B: 1:2 London/NY</div><div class="mode-value">Select</div></div>
- </div>
- <div class="strat-grid">
-  <div class="strat-box"><div class="strat-label">Strategy A Winrate</div><div class="strat-value a" id="stratAWin">--%</div></div>
-  <div class="strat-box"><div class="strat-label">Strategy B Winrate</div><div class="strat-value b" id="stratBWin">--%</div></div>
- </div>
- <div style="font-size:6px;color:#666;margin-top:4px" id="winrateSourceNote">Journal: 0 logged · Backtest: 0 simulated</div>
- <div style="font-size:8px;font-weight:600;color:#666;margin-top:10px;line-height:1.4">
-  Replay loads a constructed 18-bar setup that satisfies the AND rule so you can verify confirmation. Resume scan returns to ranging/monitoring mode.
-  <br><br>
-  <strong>Note:</strong> when there isn't enough real price history yet, candle data and signals shown here are simulated placeholders (not live market data). Don't use this tool's signals as the basis for real trading decisions.
- </div>
-</div>
- </div>
- <div class="side-col">
 <div class="world-clock-card" id="worldClockCard">
  <div class="wc-title">World Trading Clock</div>
  <div class="wc-grid" id="worldClockGrid">
@@ -556,6 +442,7 @@ body.orange-theme{--accent:#ff8c00}
   <div class="wc-item" id="wcNY"><div class="wc-city">New York</div><div class="wc-time" id="wcNYTime">--:--</div><div class="wc-status" id="wcNYStatus">--</div></div>
  </div>
 </div>
+
 <div class="dual-card">
  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
   <div style="font-size:8px;font-weight:800;color:var(--muted);text-transform:uppercase">Dual Strategy — 18-Candle Analysis</div>
@@ -590,6 +477,7 @@ body.orange-theme{--accent:#ff8c00}
   <button class="btn btn-small btn-dark" id="checkAllBtn">Check All Functions</button>
  </div>
 </div>
+
 <div class="sl-tp-card" id="slTpCard">
  <div class="sl-tp-title">Stop-Loss / Take-Profit — A (1:1) vs B (1:2)</div>
  <div class="sl-tp-grid">
@@ -623,18 +511,11 @@ body.orange-theme{--accent:#ff8c00}
   <button class="btn btn-small btn-dark" id="showSlTpBtn">Show Strategy</button>
  </div>
 </div>
-<div class="candle-engine" id="candleEngineCard">
- <div class="candle-engine-title">CANDLE PATTERNS</div>
- <div class="candle-latest neutral" id="candleLatestPattern">WAIT · need more real OHLC candles</div>
- <div class="candle-tags" id="candlePatternTags"></div>
- <div class="candle-note">Real OHLC patterns: Doji, Hammer, Shooting Star, Marubozu, Engulfing, Harami, Stars, Soldiers/Crows and Tweezers.</div>
-</div>
-<div class="logs-bar" id="patternLogsBar"><span class="log-live">LOG</span> · Pattern monitor ready · waiting for real OHLC data</div>
 
 <div class="pattern-card" id="patternCard">
- <div class="pattern-title">STRATEGY C — PATTERN GUIDE</div>
+ <div class="pattern-title">Strategy C — Pattern + Guide (18-tick window)</div>
  <div style="display:flex;gap:6px;flex-wrap:wrap">
-  <span class="badge live" id="patternLiveBadge">1S GUIDE</span>
+  <span class="badge live" id="patternLiveBadge">1-SEC-STYLE GUIDE</span>
   <span class="badge" id="guideHighBadge">GUIDE HIGH --</span>
   <span class="badge" id="guideLowBadge">GUIDE LOW --</span>
  </div>
@@ -651,27 +532,75 @@ body.orange-theme{--accent:#ff8c00}
  <div class="sig-box" id="patSigBox">
   <div class="sig-label">Pattern + Structure + Pinbar Confluence</div>
   <div class="sig-value" id="patSigValue">WAIT</div>
-  <div class="sig-exp" id="patSigExp">Waiting for pattern + guide break + pinbar + BOS/CHOCH (score ≥5).</div>
+  <div class="sig-exp" id="patSigExp">⏳ Waiting for confluence: Pattern (W/M/Flag) + Guide break + Pinbar rejection + BOS/CHOCH (need score ≥5 + pattern).</div>
  </div>
  <div style="font-size:7px;color:#666;font-weight:600;margin-top:8px" id="patTpLabel">TP1–TP5 (from confluence risk)</div>
  <div id="patTpList" style="margin-top:6px"></div>
  <div style="background:var(--card2);border-top:1px solid var(--border);margin-top:10px;padding-top:10px">
   <div style="font-size:7px;color:#666;font-weight:700;text-transform:uppercase;margin-bottom:6px">Update Speed</div>
   <div class="speed-row">
-   <div class="speed-btn active" data-ms="1000">1s</div>
-   <div class="speed-btn" data-ms="5000">5s</div>
+   <div class="speed-btn" data-ms="1000">1s</div>
+   <div class="speed-btn active" data-ms="5000">5s</div>
    <div class="speed-btn" data-ms="10000">10s</div>
    <div class="speed-btn" data-ms="30000">30s</div>
   </div>
   <div style="font-size:6px;color:#666;margin-top:6px">Faster = more API calls to gold-api.com/xaus.com/goldprice.dev. Very fast settings (1s) risk rate-limits on free tiers — use with caution, ideally short sessions only.</div>
  </div>
 </div>
+
+<div class="xau-card">
+ <div style="font-size:8px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase">XAU/USD</div>
+ <div id="liveStatusRow" style="display:flex;align-items:center;gap:6px;margin-top:6px">
+  <span id="liveStatusDot" style="width:8px;height:8px;border-radius:50%;background:#666;display:inline-block"></span>
+  <span id="liveStatusText" style="font-size:9px;font-weight:800;letter-spacing:0.5px;color:var(--muted);text-transform:uppercase">Connecting…</span>
+ </div>
+ <div class="xau-price" id="priceEl">$4349.80</div>
+ <div style="font-size:10px;font-weight:600;color:var(--muted);margin-top:4px" id="lastUpd">Last update --:--:--</div>
+ <div class="xau-badges">
+  <span class="xau-badge high" id="highEl">HIGH $4351.31</span>
+  <span class="xau-badge low" id="lowEl">LOW $4349.08</span>
+  <span class="xau-badge bars" id="barsEl">41 bars</span>
+  <span class="xau-badge bars" id="goldLastFetch2">Gold: 4349.70</span>
+  <span class="xau-badge bars" id="forexLastFetch">Forex: 62.67</span>
+ </div>
+ <div style="display:flex;justify-content:space-between;align-items:center;margin:8px 0 4px">
+  <span style="font-size:7px;font-weight:700;color:#666;text-transform:uppercase">Chart · Session Sync</span>
+  <span class="badge live" id="chartSessionBadge">Detecting…</span>
+ </div>
+ <div class="chart-wrap" id="chartWrap">
+  <div class="pull-hint" id="pullHint"></div>
+  <canvas id="chart"></canvas>
+ </div>
+ <div class="tf-row">
+  <div class="tf-btn active" id="tf1Btn" data-tf="1">1m</div>
+  <div class="tf-btn" id="tf5Btn" data-tf="5">5m</div>
+  <div class="tf-btn" id="tf15Btn" data-tf="15">15m</div>
+ </div>
+ <div class="btn-row">
+  <button class="btn btn-orange" id="refreshBtn">↻ Refresh quote</button>
+  <button class="btn btn-orange" id="replayBuyBtn">Replay BUY</button>
+  <button class="btn btn-red" id="replaySellBtn">Replay SELL</button>
+  <button class="btn btn-dark" id="resumeBtn">Resume scan</button>
+ </div>
+ <div class="mode-row">
+  <div class="mode-btn active" id="bothLiveBtn"><div class="mode-label">BOTH A+B</div><div class="mode-value" style="color:var(--accent)">🔥 Live</div></div>
+  <div class="mode-btn" id="aScalpBtn"><div class="mode-label">A: 1:1 Scalp</div><div class="mode-value">Select</div></div>
+  <div class="mode-btn" id="bLondonBtn"><div class="mode-label">B: 1:2 London/NY</div><div class="mode-value">Select</div></div>
+ </div>
+ <div class="strat-grid">
+  <div class="strat-box"><div class="strat-label">Strategy A Winrate</div><div class="strat-value a" id="stratAWin">--%</div></div>
+  <div class="strat-box"><div class="strat-label">Strategy B Winrate</div><div class="strat-value b" id="stratBWin">--%</div></div>
+ </div>
+ <div style="font-size:8px;font-weight:600;color:#666;margin-top:10px;line-height:1.4">
+  Replay loads a constructed 18-bar setup that satisfies the AND rule so you can verify confirmation. Resume scan returns to ranging/monitoring mode.
+  <br><br>
+  <strong>Note:</strong> when there isn't enough real price history yet, candle data and signals shown here are simulated placeholders (not live market data). Don't use this tool's signals as the basis for real trading decisions.
  </div>
 </div>
 
 <div style="text-align:center;padding:14px 6px;margin-top:4px">
  <div style="font-size:8px;font-weight:700;letter-spacing:0.5px;color:var(--muted)">Dev. JI NG SLOW×STONE™</div>
- <div style="font-size:7px;font-weight:600;color:#555;margin-top:2px">Version v5.9 Pro · Historical OHLCV / MTF / WebSocket</div>
+ <div style="font-size:7px;font-weight:600;color:#555;margin-top:2px">Version v5.8</div>
 </div>
 
 <script>
@@ -687,9 +616,7 @@ let patternPrices=[];
 let guideHigh=0, guideLow=0, patEntry=0, patSL=0, patRisk=0;
 let lastPatternSignal='WAIT';
 let lastConfluenceScore=0;
-let mainTickMs=1000, mainTickHandle=null;
-let goldSourceCursor=0;
-const MAX_REAL_BARS=43200; // retain up to 30 days of real/historical 1-minute candles
+let mainTickMs=5000, mainTickHandle=null;
 let abMonitoringOn=true; // Strategy A/B on/off — Strategy C always runs independently
 let lastADir=null, lastBDir=null;
 let masterSignal={dir:'WAIT', source:null, entry:0, sl:0, tpBest:0, tpMed:0, tpRest:0, score:0, lot:0.01};
@@ -943,168 +870,54 @@ function pushSignalHistory(rec){
 }
 
 
-// Typical retail XAU/USD spread. Applied half on entry, half on exit —
-// this is the #1 thing a "winrate" number is worthless without.
-const BACKTEST_SPREAD=0.30;
-// How many 1-min bars a simulated trade is allowed to stay open before
-// it's marked "open/timeout" instead of forced to a fake result.
-const BACKTEST_MAX_HOLD=30;
-
-function slTpForBacktest(strategy, dir, candles){
- // Mirrors updateSlTpDisplay()'s formulas exactly, but direction-aware
- // (the live display always assumed a BUY; that's a separate bug from
- // the backtest one, worth fixing too, but kept in scope here so the
- // backtest's SL/TP is at least self-consistent for both directions).
- const entry=candles[candles.length-1].close;
- if(strategy==='A'){
-  const last5=candles.slice(-5);
-  if(dir==='BUY'){
-   const sl=Math.min(...last5.map(c=>c.low));
-   const risk=entry-sl;
-   return {entry, sl, tp:entry+risk*1.0, risk};
-  }else{
-   const sl=Math.max(...last5.map(c=>c.high));
-   const risk=sl-entry;
-   return {entry, sl, tp:entry-risk*1.0, risk};
-  }
- }else{
-  const last5=candles.slice(-5);
-  const low5=Math.min(...last5.map(c=>c.low)), high5=Math.max(...last5.map(c=>c.high));
-  const buffer=(high5-low5)*0.1;
-  if(dir==='BUY'){
-   const sl=low5-buffer;
-   const risk=entry-sl;
-   return {entry, sl, tp:entry+risk*2.0, risk};
-  }else{
-   const sl=high5+buffer;
-   const risk=sl-entry;
-   return {entry, sl, tp:entry-risk*2.0, risk};
-  }
- }
-}
-
-// Winrate state — combines manual Trade Journal entries with the last
-// automated backtest run, so stratAWin/stratBWin reflect BOTH sources
-// instead of manual-only. Declared at top level (not inside the
-// DOMContentLoaded closure) so runBacktest() can write to it directly.
-let journalStats={A:{wins:0,loss:0,be:0}, B:{wins:0,loss:0,be:0}};
-let backtestStats={A:{wins:0,loss:0}, B:{wins:0,loss:0}};
-function updateWinrateDisplay(){
- ['A','B'].forEach(s=>{
-  const combinedWins=journalStats[s].wins+backtestStats[s].wins;
-  const combinedLoss=journalStats[s].loss+backtestStats[s].loss;
-  const total=combinedWins+combinedLoss;
-  const wr=total>0? Math.round(combinedWins/total*100):0;
-  const el=$(s==='A'?'stratAWin':'stratBWin');
-  if(el) el.textContent=total>0?(wr+'%'):'--%';
- });
- const allW=journalStats.A.wins+journalStats.B.wins+backtestStats.A.wins+backtestStats.B.wins;
- const allL=journalStats.A.loss+journalStats.B.loss+backtestStats.A.loss+backtestStats.B.loss;
- const allT=allW+allL;
- const overall=allT>0? Math.round(allW/allT*100):0;
- if($('winrateBadge')) $('winrateBadge').textContent=allT>0?('WINRATE '+overall+'%'):'WINRATE --%';
- const src=$('winrateSourceNote');
- if(src) src.textContent='Journal: '+(journalStats.A.wins+journalStats.A.loss+journalStats.B.wins+journalStats.B.loss)+' logged · Backtest: '+(backtestStats.A.wins+backtestStats.A.loss+backtestStats.B.wins+backtestStats.B.loss)+' simulated';
-}
-try{
- const savedJ=JSON.parse(localStorage.getItem('sg_journal_stats')||'{}');
- if(savedJ.A) journalStats=savedJ;
- const savedBt=JSON.parse(localStorage.getItem('sg_backtest_stats')||'{}');
- if(savedBt.A) backtestStats=savedBt;
-}catch(e){}
-
 function runBacktest(){
  const el=$('backtestResult'); if(!el) return;
- if(typeof hist==='undefined' || hist.length<120){
-  el.innerHTML='Need more candle history (≥120 bars = at least 2 hours on 1m; this is still a small-sample smoke test, not real edge validation).';
+ if(typeof hist==='undefined' || hist.length<30){
+  el.innerHTML='Need more candle history (≥30 bars). Keep app open to collect data.';
   return;
  }
-
- const stats={A:{wins:0,losses:0,open:0,grossWin:0,grossLoss:0}, B:{wins:0,losses:0,open:0,grossWin:0,grossLoss:0}};
- let equity=0, peak=0, maxDD=0;
- const trades=[];
-
- let i=18;
- while(i<hist.length-1){
-  const window=hist.slice(Math.max(0,i-17), i+1); // same 18-candle window shape as getLast18Candles()
-  // Reuse the ACTUAL live strategy functions — no separate proxy rule.
-  const resA=analyseOptionA(window);
-  const resB=analyseOptionB(window);
-
-  // If both fire on the same bar, keep them as two independent simulated
-  // trades (that's what the live dual-card would actually show you).
-  const fires=[];
-  if(resA.match && resA.dir) fires.push({strategy:'A', dir:resA.dir});
-  if(resB.match && resB.dir) fires.push({strategy:'B', dir:resB.dir});
-
-  if(fires.length===0){ i++; continue; }
-
-  let advanceTo=i+1;
-  fires.forEach(f=>{
-   const st=slTpForBacktest(f.strategy, f.dir, window);
-   const spreadAdj=f.dir==='BUY'? BACKTEST_SPREAD/2 : -BACKTEST_SPREAD/2;
-   const entryFilled=st.entry+spreadAdj;
-
-   let outcome='open', resolvedAt=Math.min(i+BACKTEST_MAX_HOLD, hist.length-1);
-   for(let j=i+1;j<=Math.min(i+BACKTEST_MAX_HOLD, hist.length-1);j++){
-    const c=hist[j];
-    // Wick-based (high/low), not close-only — a close-only check misses
-    // intrabar SL hits and overstates winrate.
-    // SL checked before TP on the same bar (conservative assumption:
-    // we don't know true intrabar order, so don't give the trade the
-    // benefit of the doubt).
-    if(f.dir==='BUY'){
-     if(c.low<=st.sl){ outcome='loss'; resolvedAt=j; break; }
-     if(c.high>=st.tp){ outcome='win'; resolvedAt=j; break; }
-    }else{
-     if(c.high>=st.sl){ outcome='loss'; resolvedAt=j; break; }
-     if(c.low<=st.tp){ outcome='win'; resolvedAt=j; break; }
-    }
-   }
-
-   const s=stats[f.strategy];
-   if(outcome==='win'){
-    const pnl=Math.abs(st.tp-entryFilled);
-    s.wins++; s.grossWin+=pnl; equity+=pnl;
-   }else if(outcome==='loss'){
-    const pnl=Math.abs(entryFilled-st.sl);
-    s.losses++; s.grossLoss+=pnl; equity-=pnl;
+ // Replay simplified Strategy C-like rules on hist
+ let wins=0, losses=0, be=0, signals=0;
+ const closes=hist.map(c=>c.close);
+ for(let i=20;i<hist.length-5;i++){
+  const window=closes.slice(i-18,i);
+  const gH=Math.max(...window), gL=Math.min(...window);
+  const cur=closes[i];
+  const above=cur>gH, below=cur<gL;
+  if(!above && !below) continue;
+  // crude pattern: momentum of last 3
+  const mom=closes[i]-closes[i-3];
+  let dir=null;
+  if(above && mom>0) dir='BUY';
+  if(below && mom<0) dir='SELL';
+  if(!dir) continue;
+  signals++;
+  const entry=cur;
+  const risk=Math.max(0.3,(gH-gL)/3);
+  const sl=dir==='BUY'?gL-0.1:gH+0.1;
+  const tp=dir==='BUY'?entry+risk*2:entry-risk*2;
+  // look ahead 5 bars
+  let hit='open';
+  for(let j=i+1;j<Math.min(i+6,hist.length);j++){
+   const p=closes[j];
+   if(dir==='BUY'){
+    if(p<=sl){ hit='loss'; break; }
+    if(p>=tp){ hit='win'; break; }
    }else{
-    s.open++; // ran past BACKTEST_MAX_HOLD bars without hitting either — excluded from winrate
+    if(p>=sl){ hit='loss'; break; }
+    if(p<=tp){ hit='win'; break; }
    }
-   peak=Math.max(peak, equity);
-   maxDD=Math.max(maxDD, peak-equity);
-   trades.push({strategy:f.strategy, dir:f.dir, outcome});
-   advanceTo=Math.max(advanceTo, resolvedAt+1); // don't overlap a fresh signal inside a trade still playing out
-  });
-
-  i=advanceTo;
+  }
+  if(hit==='win') wins++;
+  else if(hit==='loss') losses++;
+  else be++;
  }
-
- function line(label, s){
-  const total=s.wins+s.losses, wr=total?s.wins/total*100:0, pf=s.grossLoss?s.grossWin/s.grossLoss:(s.grossWin?Infinity:0);
-  const avgW=s.wins?s.grossWin/s.wins:0, avgL=s.losses?s.grossLoss/s.losses:0, exp=total?(s.grossWin-s.grossLoss)/total:0, rr=avgL?avgW/avgL:0;
-  return '<b>'+label+':</b> '+s.wins+'W / '+s.losses+'L / '+s.open+' timeout · Winrate '+(total?wr.toFixed(1)+'%':'n/a')+' · PF '+(total?(pf===Infinity?'∞':pf.toFixed(2)):'n/a')+' · Avg W $'+avgW.toFixed(2)+' · Avg L $'+avgL.toFixed(2)+' · Expectancy $'+exp.toFixed(2)+' · R:R '+(rr?rr.toFixed(2):'n/a')+' · Net $'+(s.grossWin-s.grossLoss).toFixed(2);
- }
-
- if(trades.length===0){
-  el.innerHTML='No Strategy A or B signals fired anywhere in the '+hist.length+' collected bars — nothing to backtest yet.';
-  return;
- }
-
- // Auto-populate the Strategy A/B Winrate boxes from this run — this is
- // the "automatic" connection: no manual journal typing needed anymore.
- backtestStats.A={wins:stats.A.wins, loss:stats.A.losses};
- backtestStats.B={wins:stats.B.wins, loss:stats.B.losses};
- try{ localStorage.setItem('sg_backtest_stats', JSON.stringify(backtestStats)); }catch(e){}
- if(typeof updateWinrateDisplay==='function') updateWinrateDisplay();
-
- el.innerHTML=
-  '<b>Bars replayed:</b> '+hist.length.toLocaleString()+' real 1m bars · multi-timeframe engine · no synthetic candles'+
-  '<br>'+line('Strategy A', stats.A)+
-  '<br>'+line('Strategy B', stats.B)+
-  '<br><b>Max drawdown (equity $):</b> $'+maxDD.toFixed(2)+
-  '<br><span style="color:#666">Replays the live analyseOptionA()/analyseOptionB() functions directly (not a separate proxy rule) · '+BACKTEST_SPREAD.toFixed(2)+' spread applied · SL/TP checked against candle wicks, SL priority on same-bar hits · max '+BACKTEST_MAX_HOLD+'-bar hold before a signal counts as timed-out.</span>';
+ const total=wins+losses;
+ const wr=total>0?Math.round(wins/total*100):0;
+ el.innerHTML='<b>Bars:</b> '+hist.length+' · <b>Signals:</b> '+signals+
+  '<br><span style="color:var(--green)">Wins: '+wins+'</span> · <span style="color:var(--red)">Losses: '+losses+'</span> · BE/Open: '+be+
+  '<br><b>Winrate:</b> '+(total?wr+'%':'n/a')+
+  '<br><span style="color:#666">Simple 18-bar break + momentum, 5-bar horizon, 1:2 TP. Not full Strategy C.</span>';
 }
 
 // Auto Decision mode
@@ -1540,7 +1353,7 @@ function applyGreenTheme(){
  const apiBadge=$('apiBadge');
  if(apiBadge) apiBadge.classList.add('green-active');
  localStorage.setItem('sg_theme','green');
- drawChart(); updateTerminalMetrics();
+ drawChart();
 }
 
 function applyOrangeTheme(){
@@ -1581,164 +1394,32 @@ function aggregateCandles(candles, minutesPerBar){
  if(bucket) groups.push(bucket);
  return groups;
 }
-
-function candleBody(c){return Math.abs(c.close-c.open);}
-function candleRange(c){return Math.max(0.000001,c.high-c.low);}
-function candleUpper(c){return c.high-Math.max(c.open,c.close);}
-function candleLower(c){return Math.min(c.open,c.close)-c.low;}
-function isBull(c){return c.close>c.open;}
-function isBear(c){return c.close<c.open;}
-function detectCandlestickPatterns(candles){
- const out=[]; if(!candles||candles.length<1) return out;
- const n=candles.length, c=candles[n-1], p=n>1?candles[n-2]:null, p2=n>2?candles[n-3]:null;
- const r=candleRange(c), b=candleBody(c), up=candleUpper(c), lo=candleLower(c), small=b/r<0.12;
- const near=(a,bv,t=.002)=>Math.abs(a-bv)<=Math.max(r*t,0.15);
- // Single-candle patterns
- if(small){
-   out.push('Doji');
-   if(lo/r>.62 && up/r<.12) out.push('Dragonfly Doji');
-   if(up/r>.62 && lo/r<.12) out.push('Gravestone Doji');
- }
- if(lo>=b*2 && lo/r>.45 && up/r<.25) out.push(isBull(c)?'Hammer':'Hanging Man');
- if(up>=b*2 && up/r>.45 && lo/r<.25) out.push(isBear(c)?'Shooting Star':'Inverted Hammer');
- if(b/r>.82){ out.push(isBull(c)?'Bullish Marubozu':'Bearish Marubozu'); }
- // Two-candle patterns
- if(p){
-   if(isBull(c)&&isBear(p)&&c.open<=p.close&&c.close>=p.open) out.push('Bullish Engulfing');
-   if(isBear(c)&&isBull(p)&&c.open>=p.close&&c.close<=p.open) out.push('Bearish Engulfing');
-   if(isBull(p)&&isBear(c)&&c.open<p.open&&c.close>c.open&&c.close<p.close&&c.close>p.open) out.push('Dark Cloud Cover');
-   if(isBear(p)&&isBull(c)&&c.open>p.open&&c.close>p.close&&c.open<p.close) out.push('Piercing Line');
-   if(Math.max(c.open,c.close)<Math.max(p.open,p.close)&&Math.min(c.open,c.close)>Math.min(p.open,p.close)) out.push('Harami');
-   if(isBull(p)&&isBear(c)&&near(c.high,p.high,.004)) out.push('Tweezer Top');
-   if(isBear(p)&&isBull(c)&&near(c.low,p.low,.004)) out.push('Tweezer Bottom');
- }
- // Three-candle patterns
- if(p&&p2){
-   const r2=candleRange(p2), b2=candleBody(p2), r1=candleRange(p), b1=candleBody(p);
-   const p2Bear=isBear(p2), p2Bull=isBull(p2), pBear=isBear(p), pBull=isBull(p);
-   if(p2Bear && b2/r2>.5 && b1/r1<.35 && isBull(c) && c.close>(p2.open+p2.close)/2) out.push('Morning Star');
-   if(p2Bull && b2/r2>.5 && b1/r1<.35 && isBear(c) && c.close<(p2.open+p2.close)/2) out.push('Evening Star');
-   if(p2Bull&&pBull&&isBull(c)&&c.close>p.close&&p.close>p2.close&&c.open>=p.open-b1*.5&&p.open>=p2.open-b2*.5) out.push('Three White Soldiers');
-   if(p2Bear&&pBear&&isBear(c)&&c.close<p.close&&p.close<p2.close&&c.open<=p.open+b1*.5&&p.open<=p2.open+b2*.5) out.push('Three Black Crows');
- }
- return [...new Set(out)];
-}
-function updateCandlePatternUI(patterns,last){
- const latest=$('candleLatestPattern'), tags=$('candlePatternTags'); if(!latest||!tags) return;
- tags.innerHTML='';
- if(!patterns.length){latest.className='candle-latest neutral'; latest.textContent='No major pattern on latest real candle'; const log=$('patternLogsBar'); if(log) log.innerHTML='<span class="log-live">LOG</span> · No major pattern · real OHLC'; return;}
- const bullNames=['Bullish Engulfing','Piercing Line','Hammer','Inverted Hammer','Morning Star','Three White Soldiers','Tweezer Bottom','Dragonfly Doji','Bullish Marubozu'];
- const bearNames=['Bearish Engulfing','Dark Cloud Cover','Shooting Star','Hanging Man','Evening Star','Three Black Crows','Tweezer Top','Gravestone Doji','Bearish Marubozu'];
- const bull=patterns.some(x=>bullNames.includes(x)), bear=patterns.some(x=>bearNames.includes(x));
- latest.className='candle-latest '+(bull&&!bear?'bull':bear&&!bull?'bear':'neutral');
- latest.textContent=patterns.join(' · ');
- patterns.forEach(x=>{const d=document.createElement('span'); d.className='candle-tag '+(bullNames.includes(x)?'bull':bearNames.includes(x)?'bear':'neutral'); d.textContent=x; tags.appendChild(d);});
- const log=$('patternLogsBar'); if(log){ log.innerHTML='<span class="'+(bull&&!bear?'log-bull':bear&&!bull?'log-bear':'log-live')+'">LOG</span> · '+patterns.join(' · ')+' · real OHLC'; }
-}
-
 function drawChart(){
  if(!ctx || hist.length===0) return;
  const W=$('chart').offsetWidth, H=240;
  ctx.clearRect(0,0,W,H);
  const agg=aggregateCandles(hist, currentTimeframe);
- const vis=agg.slice(-80);
+ const vis=agg.slice(-41);
  if(vis.length===0) return;
- const rawMin=Math.min(...vis.map(x=>x.low)), rawMax=Math.max(...vis.map(x=>x.high));
- const pad=Math.max((rawMax-rawMin)*0.10,0.5);
- const min=rawMin-pad, max=rawMax+pad, range=max-min||1;
- const py=v=>H-(v-min)/range*H;
- const bw=Math.max(2,Math.min(14,W/vis.length*0.72));
- ctx.font='700 9px Inter,sans-serif';
- // Grid
- ctx.strokeStyle='#24302b'; ctx.lineWidth=0.6;
- for(let g=1;g<5;g++){const gy=H*g/5;ctx.beginPath();ctx.moveTo(0,gy);ctx.lineTo(W,gy);ctx.stroke();}
- for(let g=1;g<6;g++){const gx=W*g/6;ctx.beginPath();ctx.moveTo(gx,0);ctx.lineTo(gx,H);ctx.stroke();}
- // Real BOS levels
- const bosHigh=Math.max(...vis.slice(-18).map(x=>x.high));
- const bosLow=Math.min(...vis.slice(-18).map(x=>x.low));
- // Support/resistance clusters from real pivots
- const pivL=[],pivH=[];
- for(let i=2;i<vis.length-2;i++){
-  if(vis[i].low<=vis[i-1].low&&vis[i].low<=vis[i+1].low)pivL.push(vis[i].low);
-  if(vis[i].high>=vis[i-1].high&&vis[i].high>=vis[i+1].high)pivH.push(vis[i].high);
- }
- const cluster=(arr,tol)=>{const out=[];arr.slice().reverse().forEach(v=>{let z=out.find(x=>Math.abs(x-v)<=tol);if(z){z.sum+=v;z.n++;z.level=z.sum/z.n;}else out.push({level:v,sum:v,n:1});});return out.filter(x=>x.n>=2).sort((a,b)=>b.n-a.n).slice(0,2).map(x=>x.level);};
- const tol=Math.max((rawMax-rawMin)*0.025,0.35);
- const supports=cluster(pivL,tol),resistances=cluster(pivH,tol);
- // Candles: true OHLC only. Pattern candles are highlighted, not fabricated.
- const allPatterns=detectCandlestickPatterns(vis);
+ const min=Math.min(...vis.map(x=>x.low))-1, max=Math.max(...vis.map(x=>x.high))+1;
+ const range=max-min||1;
+ const bw=W/vis.length*0.6;
  vis.forEach((c,i)=>{
-  const x=(i+0.5)*W/vis.length,yO=py(c.open),yC=py(c.close),yH=py(c.high),yL=py(c.low);
-  const bull=c.close>=c.open,color=bull?'#00d084':'#ff4a4a',recent=i>=Math.max(0,vis.length-3);
-  if(recent){ctx.shadowBlur=10;ctx.shadowColor=color;}
-  ctx.strokeStyle=color;ctx.lineWidth=recent?1.5:1;ctx.beginPath();ctx.moveTo(x,yH);ctx.lineTo(x,yL);ctx.stroke();
-  ctx.fillStyle=color;const bodyH=Math.max(2,Math.abs(yO-yC));ctx.fillRect(x-bw/2,Math.min(yO,yC),bw,bodyH);ctx.shadowBlur=0;
-  // Mark recognized patterns only on the latest candle. This keeps the chart clean.
-  if(i===vis.length-1 && allPatterns.length){
-    ctx.strokeStyle='#ffcf70';ctx.lineWidth=1;ctx.beginPath();ctx.arc(x,Math.max(7,yH-6),3,0,Math.PI*2);ctx.stroke();
-  }
+  const x=(i+0.5)*W/vis.length;
+  const yO=H-(c.open-min)/range*H, yC=H-(c.close-min)/range*H, yH=H-(c.high-min)/range*H, yL=H-(c.low-min)/range*H;
+  const isBull=c.close>c.open;
+  const bullColor=currentTheme==='green'?'#00d084':'#ff8c00'; const bearColor='#ff4a4a';
+  ctx.strokeStyle=isBull?bullColor:bearColor; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(x,yH); ctx.lineTo(x,yL); ctx.stroke();
+  ctx.fillStyle=isBull?bullColor:bearColor;
+  ctx.fillRect(x-bw/2, Math.min(yO,yC), bw, Math.abs(yO-yC)||2);
  });
- // Current price
- const last=vis[vis.length-1],lastY=py(last.close);
- ctx.setLineDash([5,4]);ctx.strokeStyle=last.close>=last.open?'#00d084':'#ff4a4a';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(0,lastY);ctx.lineTo(W,lastY);ctx.stroke();ctx.setLineDash([]);
- // BOS
- ctx.setLineDash([5,5]);ctx.strokeStyle='#ff8c00';ctx.beginPath();ctx.moveTo(0,py(bosHigh));ctx.lineTo(W,py(bosHigh));ctx.stroke();ctx.strokeStyle='#ff4a4a';ctx.beginPath();ctx.moveTo(0,py(bosLow));ctx.lineTo(W,py(bosLow));ctx.stroke();ctx.setLineDash([]);
- ctx.fillStyle='#ff8c00';ctx.fillText('BOS HIGH',4,Math.max(10,py(bosHigh)-5));ctx.fillStyle='#ff4a4a';ctx.fillText('BOS LOW',4,Math.min(H-4,py(bosLow)+12));
- supports.forEach(level=>{const y=py(level);ctx.setLineDash([2,5]);ctx.strokeStyle='#00d08499';ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='#00d084';ctx.fillText('SUPPORT',4,Math.max(10,y-4));});
- resistances.forEach(level=>{const y=py(level);ctx.setLineDash([2,5]);ctx.strokeStyle='#ff4a4a99';ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='#ff4a4a';ctx.fillText('RESISTANCE',4,Math.max(10,y-4));});
- // Trend arrows: UP TREND → peak → DOWN TREND → trough → UP TREND (real swing points, no fabricated data)
- (function drawTrendArrows(){
-  if(vis.length<10) return;
-  const arrow=(x1,y1,x2,y2,color)=>{
-   ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=2;
-   ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
-   const ang=Math.atan2(y2-y1,x2-x1),hl=7;
-   ctx.beginPath();ctx.moveTo(x2,y2);
-   ctx.lineTo(x2-hl*Math.cos(ang-Math.PI/6),y2-hl*Math.sin(ang-Math.PI/6));
-   ctx.lineTo(x2-hl*Math.cos(ang+Math.PI/6),y2-hl*Math.sin(ang+Math.PI/6));
-   ctx.closePath();ctx.fill();
-  };
-  const label=(x,y,text,color,ang)=>{
-   ctx.save();ctx.translate(x,y);if(ang>Math.PI/2||ang<-Math.PI/2)ang+=Math.PI;ctx.rotate(ang);
-   ctx.font='800 9px Inter,sans-serif';ctx.fillStyle=color;ctx.textAlign='center';
-   ctx.fillText(text,0,-6);ctx.restore();
-  };
-  let peakIdx=0; for(let i=1;i<vis.length;i++){ if(vis[i].high>vis[peakIdx].high) peakIdx=i; }
-  let troughIdx=peakIdx; for(let i=peakIdx;i<vis.length;i++){ if(vis[i].low<vis[troughIdx].low) troughIdx=i; }
-  // Leg 1: start → peak
-  if(peakIdx>=4){
-   const x1=0.5*W/vis.length, y1=py(vis[0].low);
-   const x2=(peakIdx+0.5)*W/vis.length, y2=py(vis[peakIdx].high)-6;
-   arrow(x1,y1,x2,y2,'#00d084');
-   label((x1+x2)/2,(y1+y2)/2,'UP TREND','#00d084',Math.atan2(y2-y1,x2-x1));
-  }
-  // Leg 2: peak → trough
-  if(troughIdx>peakIdx+3){
-   const x1=(peakIdx+0.5)*W/vis.length, y1=py(vis[peakIdx].high)+8;
-   const x2=(troughIdx+0.5)*W/vis.length, y2=py(vis[troughIdx].low)-8;
-   arrow(x1,y1,x2,y2,'#ff4a4a');
-   label((x1+x2)/2,(y1+y2)/2,'DOWN TREND','#ff4a4a',Math.atan2(y2-y1,x2-x1));
-  }
-  // Leg 3: trough → last (recovery)
-  if(vis.length-1>troughIdx+3 && last.close>=vis[troughIdx].low){
-   const x1=(troughIdx+0.5)*W/vis.length, y1=py(vis[troughIdx].low)+6;
-   const x2=(vis.length-1+0.5)*W/vis.length, y2=py(last.close)-6;
-   arrow(x1,y1,x2,y2,'#00d084');
-   label((x1+x2)/2,(y1+y2)/2,'UP TREND','#00d084',Math.atan2(y2-y1,x2-x1));
-  }
- })();
- // Header + current price pill
- ctx.fillStyle='#ddd';ctx.font='700 10px Inter,sans-serif';ctx.fillText('XAU/USD · '+(currentTimeframe===1?'1m':currentTimeframe===5?'5m':currentTimeframe===15?'15m':currentTimeframe===60?'1H':currentTimeframe===240?'4H':'1D'),8,18);
- ctx.fillStyle='#777';ctx.font='600 8px Inter,sans-serif';ctx.fillText(vis.length+' real bars',8,31);
- ctx.fillStyle=last.close>=last.open?'#00d084':'#ff4a4a';ctx.fillRect(W-82,Math.max(4,lastY-9),78,18);ctx.fillStyle='#07100b';ctx.font='800 9px Inter,sans-serif';ctx.fillText('$'+fmt2(last.close),W-77,Math.max(16,lastY+4));
- // Time labels
- ctx.fillStyle='#666';ctx.font='600 8px Inter,sans-serif';const labelIdx=[0,Math.floor(vis.length/2),vis.length-1];labelIdx.forEach(i=>{if(i<0)return;const d=new Date(vis[i].time);const t=d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',hour12:false});ctx.fillText(t,Math.max(2,(i+0.5)*W/vis.length-12),H-4);});
- // Pattern UI
- updateCandlePatternUI(allPatterns,last);
- const n=Math.min(6,vis.length),first=vis[vis.length-n].close,lastClose=last.close,up=lastClose>=first,dirEl=$('chartDirection');
- if(dirEl){dirEl.className='chart-direction '+(up?'direction-up':'direction-down');dirEl.textContent=(up?'📈 UP':'📉 DOWN')+' · real price direction';}
+ ctx.setLineDash([4,4]); ctx.strokeStyle=currentTheme==='green'?'#00d084':'#ff8c00';
+ ctx.beginPath(); ctx.moveTo(0, H*0.25); ctx.lineTo(W, H*0.25); ctx.stroke();
+ ctx.strokeStyle='#ff4a4a'; ctx.beginPath(); ctx.moveTo(0, H*0.75); ctx.lineTo(W, H*0.75); ctx.stroke(); ctx.setLineDash([]);
+ ctx.fillStyle='#ff8c00'; ctx.font='700 9px Inter,sans-serif'; ctx.fillText('BOS high',4,H*0.25-4);
+ ctx.fillStyle='#ff4a4a'; ctx.fillText('BOS low',4,H*0.75+12);
 }
-
 function checkPriceAlert(p){
  if(priceAlert.above!=null && !priceAlert.firedAbove && p>=priceAlert.above){
   priceAlert.firedAbove=true; alertUser('above'); 
@@ -1770,14 +1451,14 @@ function logConnection(source, ok){
  if(connLog.length>50) connLog=connLog.slice(-50);
  renderConnLog();
 }
-function pushTick(p, tickTime){
+function pushTick(p){
  lastPrice=p;
- const now=Number.isFinite(tickTime)?tickTime:Date.now();
+ const now=Date.now();
  if(!firstLiveTickAt) firstLiveTickAt=now;
  liveTickCount++;
  if(hist.length===0 || now-hist[hist.length-1].time>60000){
   hist.push({open:p, high:p, low:p, close:p, time:now});
-  if(hist.length>MAX_REAL_BARS) hist.shift();
+  if(hist.length>300) hist.shift();
  }else{
   const last=hist[hist.length-1];
   last.high=Math.max(last.high,p); last.low=Math.min(last.low,p); last.close=p;
@@ -1788,14 +1469,14 @@ function pushTick(p, tickTime){
   const highs=hist.map(x=>x.high), lows=hist.map(x=>x.low);
   $('highEl').textContent='HIGH $'+fmt2(Math.max(...highs));
   $('lowEl').textContent='LOW $'+fmt2(Math.min(...lows));
-  $('barsEl').textContent=hist.length+' bars · history retained';
+  $('barsEl').textContent=hist.length+' bars';
  }
  checkPriceAlert(p);
  updateLiveDataStatus();
  updatePatternStrategy(p); // Strategy C — always runs, independent of the A/B toggle
  manageActiveTrade(p);
  updateVolumeProxy(p);
- try{ localStorage.setItem('sg_cache', JSON.stringify({version:'real-1s-v3-10h-history', real:true, price:p, time:now, hist:hist.slice(-MAX_REAL_BARS)})); }catch(e){}
+ try{ localStorage.setItem('sg_cache', JSON.stringify({price:p, time:now, hist:hist.slice(-60)})); }catch(e){}
  drawChart();
  if(abMonitoringOn){ updateSlTpDisplay(); updateTp5Display(); }
  testDualSame18Candles();
@@ -1805,7 +1486,10 @@ function pushTick(p, tickTime){
 function getLast18Candles(){
  if(hist.length>=18) return hist.slice(-18);
  if(hist.length>0) return hist.slice(-Math.min(hist.length,18));
- return [];
+ // Not enough real history yet — placeholder candles for display only.
+ let mock=[], price=4349.80;
+ for(let i=0;i<18;i++){ const o=price+(Math.random()-0.5)*2; const c=o+(Math.random()-0.5)*3; const h=Math.max(o,c)+Math.random()*1.5; const l=Math.min(o,c)-Math.random()*1.5; mock.push({open:o,high:h,low:l,close:c,time:Date.now()-(18-i)*60000}); price=c; }
+ return mock;
 }
 function avgCandleRange(candles, n){
  const recent=candles.slice(-(n||10));
@@ -1920,32 +1604,15 @@ function updateTp5Display(){
  if($('tpRiskValue')) $('tpRiskValue').textContent='$'+fmt2(risk)+' risk';
 }
 
-// A hung/slow server otherwise stalls fetch() forever — the browser has
-// no built-in timeout. This wraps every request with AbortController so
-// a dead API times out cleanly instead of silently freezing price updates.
-const FETCH_TIMEOUT_MS=8000;
-async function fetchWithTimeout(url, options={}){
- const controller=new AbortController();
- const timer=setTimeout(()=>controller.abort(), FETCH_TIMEOUT_MS);
- try{
-  return await fetch(url, {...options, signal:controller.signal});
- }catch(e){
-  if(e.name==='AbortError') throw new Error('Timeout after '+(FETCH_TIMEOUT_MS/1000)+'s: '+url);
-  throw e;
- }finally{
-  clearTimeout(timer);
- }
-}
-
 async function fetchWithCorsFallback(url){
- try{ const r=await fetchWithTimeout(url,{cache:"no-store",mode:"cors"}); if(!r.ok) throw new Error("HTTP "+r.status); return await r.json(); }
- catch(e){ const proxy="https://api.allorigins.win/raw?url="+encodeURIComponent(url); const r2=await fetchWithTimeout(proxy,{cache:"no-store"}); return await r2.json(); }
+ try{ const r=await fetch(url,{cache:"no-store",mode:"cors"}); if(!r.ok) throw new Error("HTTP "+r.status); return await r.json(); }
+ catch(e){ const proxy="https://api.allorigins.win/raw?url="+encodeURIComponent(url); const r2=await fetch(proxy,{cache:"no-store"}); return await r2.json(); }
 }
 
 // --- Gold price sources, tried in order. First one that returns a sane price wins. ---
 async function fetchFromXaus(){
  // No API key, CORS fully open, no proxy needed.
- const r=await fetchWithTimeout('https://xaus.com/api/v1/spot?compact=1',{cache:"no-store",mode:"cors"});
+ const r=await fetch('https://xaus.com/api/v1/spot?compact=1',{cache:"no-store",mode:"cors"});
  if(!r.ok) throw new Error('xaus.com HTTP '+r.status);
  const d=await r.json();
  const p=parseFloat(d.spot_usd_oz);
@@ -1961,35 +1628,23 @@ async function fetchFromGoldApi(){
 }
 async function fetchFromGoldPriceDev(){
  // No API key needed for the anonymous tier (rate-limited: 100 req/hour/IP).
- const r=await fetchWithTimeout('https://api.goldprice.dev/v1/prices?symbol=XAU-USD-SPOT',{cache:"no-store",mode:"cors"});
+ const r=await fetch('https://api.goldprice.dev/v1/prices?symbol=XAU-USD-SPOT',{cache:"no-store",mode:"cors"});
  if(!r.ok) throw new Error('goldprice.dev HTTP '+r.status);
  const d=await r.json();
  const p=parseFloat(d.symbols?.[0]?.price);
  if(!(p>0)) throw new Error('goldprice.dev bad price');
  return {price:p, stale: !!d.symbols?.[0]?.is_stale};
 }
-let siftingWs=null,siftingStreamOn=false,siftingKey='',historicalLoading=false;
-function setDataEngineStatus(msg,good=false){const el=$('dataEngineStatus');if(el){el.textContent=(good?'● ':'○ ')+msg;el.style.color=good?'var(--green)':'#888';}}
-function loadSiftingKey(){try{siftingKey=localStorage.getItem('sg_sifting_key')||'';}catch(e){}const el=$('siftingKey');if(el&&siftingKey)el.value=siftingKey;}
-function saveSiftingKey(){const v=($('siftingKey')?.value||'').trim();siftingKey=v;try{v?localStorage.setItem('sg_sifting_key',v):localStorage.removeItem('sg_sifting_key');}catch(e){}setDataEngineStatus(v?'SiftingIO key saved locally':'No SiftingIO key');}
-function normalizeHistoricalBars(payload){const rows=Array.isArray(payload)?payload:(payload?.data||payload?.bars||payload?.results||[]);return rows.map(x=>{const t=x.t??x.time??x.timestamp??x.ts;const time=typeof t==='string'?Date.parse(t):(Number(t)<1e12?Number(t)*1000:Number(t));return{open:Number(x.o??x.open),high:Number(x.h??x.high),low:Number(x.l??x.low),close:Number(x.c??x.close),time};}).filter(x=>Number.isFinite(x.time)&&[x.open,x.high,x.low,x.close].every(Number.isFinite)&&x.high>=x.low&&x.high>=x.open&&x.high>=x.close&&x.low<=x.open&&x.low<=x.close);}
-async function loadTrueHistoricalData(){if(historicalLoading)return;if(!siftingKey)loadSiftingKey();if(!siftingKey){setDataEngineStatus('Enter a SiftingIO API key first');return;}historicalLoading=true;setDataEngineStatus('Loading real 1-minute history…');try{const end=new Date(),start=new Date(end.getTime()-30*86400000);let cursor='',all=[],pages=0;do{const u=new URL('https://api.sifting.io/v1/hist/commodities/XAUUSD/bars');u.searchParams.set('interval','1m');u.searchParams.set('start',start.toISOString());u.searchParams.set('end',end.toISOString());u.searchParams.set('limit','2000');if(cursor)u.searchParams.set('cursor',cursor);const r=await fetch(u,{headers:{'X-API-Key':siftingKey},cache:'no-store'});if(!r.ok)throw Error('History HTTP '+r.status);const d=await r.json();all.push(...normalizeHistoricalBars(d));cursor=d?.meta?.next_cursor||d?.next_cursor||'';pages++;if(pages>=30)break;}while(cursor);if(!all.length)throw Error('No historical bars returned');const map=new Map(hist.map(b=>[b.time,b]));all.forEach(b=>map.set(b.time,b));hist=[...map.values()].sort((a,b)=>a.time-b.time).slice(-MAX_REAL_BARS);lastPrice=hist.at(-1).close;firstLiveTickAt=hist[0].time;try{localStorage.setItem('sg_cache',JSON.stringify({version:'real-historical-v1',real:true,price:lastPrice,time:Date.now(),hist}));}catch(e){}if($('priceEl'))$('priceEl').textContent='$'+fmt2(lastPrice);if($('barsEl'))$('barsEl').textContent=hist.length.toLocaleString()+' real bars · historical';drawChart();updateTerminalMetrics();updateGoldTracker(lastPrice,'SiftingIO historical');setDataEngineStatus('Loaded '+hist.length.toLocaleString()+' real 1m bars · '+pages+' page(s)',true);}catch(e){console.error(e);setDataEngineStatus('History failed: '+e.message);}historicalLoading=false;}
-function connectSiftingStream(){if(!siftingKey)loadSiftingKey();if(!siftingKey){setDataEngineStatus('Enter a SiftingIO API key first');return;}if(siftingWs){try{siftingWs.close()}catch(e){}}try{siftingWs=new WebSocket('wss://stream.sifting.io/ws/v1?key='+encodeURIComponent(siftingKey));siftingWs.onopen=()=>{siftingStreamOn=true;if(mainTickHandle){clearInterval(mainTickHandle);mainTickHandle=null;}siftingWs.send(JSON.stringify({op:'subscribe',product:'com',symbols:['XAUUSD']}));setDataEngineStatus('WebSocket XAUUSD stream connected',true);};siftingWs.onmessage=e=>{try{const d=JSON.parse(e.data);if(d.type==='tick'&&d.symbol==='XAUUSD'){const p=Number(d.price),t=Date.parse(d.computed_at)||Date.now();if(p>1000&&p<10000){pushTick(p,t);updateGoldTracker(p,'SiftingIO WebSocket');}}}catch(err){}};siftingWs.onerror=()=>{siftingStreamOn=false;if(!mainTickHandle){mainTickHandle=setInterval(fetchPrice,mainTickMs);}setDataEngineStatus('WebSocket error · REST fallback active')};siftingWs.onclose=()=>{siftingStreamOn=false;if(!mainTickHandle){mainTickHandle=setInterval(fetchPrice,mainTickMs);}setDataEngineStatus('WebSocket closed · REST fallback active')};}catch(e){setDataEngineStatus('WebSocket failed · REST fallback active')}}
-function disconnectSiftingStream(){if(siftingWs){try{siftingWs.close()}catch(e){}}siftingWs=null;siftingStreamOn=false;setDataEngineStatus('WebSocket off · REST fallback active')}
 const GOLD_SOURCES=[
  {name:'xaus.com', fn:fetchFromXaus},
  {name:'gold-api.com', fn:fetchFromGoldApi},
  {name:'goldprice.dev', fn:fetchFromGoldPriceDev},
 ];
 async function fetchGoldPriceWithFallback(){
- // One real quote check every second, rotating the three free sources.
- // If the selected source fails, immediately fall through to the other two.
- for(let step=0;step<GOLD_SOURCES.length;step++){
-  const idx=(goldSourceCursor+step)%GOLD_SOURCES.length;
-  const src=GOLD_SOURCES[idx];
+ for(const src of GOLD_SOURCES){
   try{
    const r=await src.fn();
-   if(r.price>1000 && r.price<10000){ goldSourceCursor=(idx+1)%GOLD_SOURCES.length; return {...r, source:src.name}; }
+   if(r.price>1000 && r.price<10000) return {...r, source:src.name};
   }catch(e){ console.warn(src.name+' failed:', e.message); }
  }
  return null;
@@ -2138,93 +1793,6 @@ function setLiveStatus(mode, text){
  label.textContent=text;
 }
 
-
-// Terminal metrics: RSI(14), SMA20, S/R, momentum bars
-function calcRSI(closes, period){
- period=period||14;
- if(!closes||closes.length<period+1) return 50;
- let gains=0, losses=0;
- for(let i=closes.length-period;i<closes.length;i++){
-  const d=closes[i]-closes[i-1];
-  if(d>=0) gains+=d; else losses-=d;
- }
- if(losses===0) return 100;
- const rs=gains/losses;
- return 100-(100/(1+rs));
-}
-function calcSMA(closes, period){
- if(!closes||closes.length<period) return closes&&closes.length?closes[closes.length-1]:0;
- const slice=closes.slice(-period);
- return slice.reduce((a,b)=>a+b,0)/slice.length;
-}
-function updateTerminalMetrics(){
- if(typeof hist==='undefined'||hist.length<5) return;
- const agg=(typeof aggregateCandles==='function')?aggregateCandles(hist, currentTimeframe||1):hist;
- const vis=agg.slice(-40);
- if(!vis.length) return;
- const closes=vis.map(c=>c.close);
- const last=vis[vis.length-1];
- const rsi=calcRSI(closes,14);
- const sma=calcSMA(closes,20);
- const res=Math.max(...vis.map(c=>c.high));
- const sup=Math.min(...vis.map(c=>c.low));
- const zone=res-sup;
- const bull=last.close>=sma;
- const rsiEl=$('rsiPill');
- if(rsiEl){
-  rsiEl.textContent='RSI(14): '+rsi.toFixed(1)+(rsi>55?' ▲':rsi<45?' ▼':' ─');
-  rsiEl.style.color=rsi>60?'var(--green)':rsi<40?'var(--red)':'#ccc';
- }
- if($('resLabel')) $('resLabel').textContent='R '+fmt2(res);
- if($('supLabel')) $('supLabel').textContent='S '+fmt2(sup);
- if($('sma20Label')) $('sma20Label').textContent='SMA20 '+fmt2(sma);
- const tb=$('trendBadge');
- if(tb){
-  tb.textContent=bull?'BULLISH':'BEARISH';
-  tb.className='badge '+(bull?'live':'');
-  tb.style.borderColor=bull?'var(--green)':'var(--red)';
-  tb.style.color=bull?'var(--green)':'var(--red)';
- }
- if($('trackerClose')) $('trackerClose').textContent=fmt2(last.close);
- if($('trackerDirection')){
-  $('trackerDirection').textContent=bull?'BULL':'BEAR';
-  $('trackerDirection').style.color=bull?'var(--green)':'var(--red)';
- }
- const zs=$('zoneStatus'), zm=$('zoneMeta'), zf=$('zoneFill');
- if(zs) zs.textContent=(bull?'BULLISH':'BEARISH')+' · ZONE '+fmt2(zone);
- if(zm) zm.textContent='TIGHT '+(zone<1.5?'YES':'NO')+' · '+(currentTimeframe||1)+'m';
- if(zf) zf.style.width=Math.min(100, Math.max(8, (zone/5)*100))+'%';
- // momentum bars from RSI-like series
- const mb=$('momBars');
- if(mb){
-  const vals=[];
-  for(let i=Math.max(15,closes.length-16);i<closes.length;i++){
-   vals.push(calcRSI(closes.slice(0,i+1),14));
-  }
-  mb.innerHTML=vals.map((v,i)=>{
-   const h=Math.max(4, Math.min(28, ((v-30)/40)*28+4));
-   const up=v>50;
-   const last=i===vals.length-1;
-   return '<div class="mom-bar'+(last?' last':'')+'" style="height:'+h+'px;background:'+(up?'var(--green)':'var(--red)')+'"></div>';
-  }).join('');
- }
-}
-
-function updateGoldTracker(p, source){
- const price=$('trackerPrice'), ch=$('trackerChange'), src=$('trackerSource'), live=$('trackerLive');
- const last=hist.length?hist[hist.length-1]:null;
- if(price) price.textContent='$'+fmt2(p);
- if(ch){ const prev=hist.length>1?hist[hist.length-2].close:(last?.open||p); const d=p-prev; ch.textContent=(d>=0?'▲ +':'▼ ')+fmt2(d); ch.style.color=d>=0?'var(--green)':'var(--red)'; }
- if(src) src.textContent='LIVE · '+source+' · 3-source fallback · quote check 1s';
- if(live) live.textContent='● 1s LIVE';
- if(last){
-  if($('trackerOpen')) $('trackerOpen').textContent='$'+fmt2(last.open);
-  if($('trackerHigh')) $('trackerHigh').textContent='$'+fmt2(last.high);
-  if($('trackerLow')) $('trackerLow').textContent='$'+fmt2(last.low);
-  const dir=p>=last.open?'UP':'DOWN'; const el=$('trackerDirection'); if(el){el.textContent=dir;el.style.color=dir==='UP'?'var(--green)':'var(--red)';}
- }
-}
-
 async function fetchPrice(){
  nextTickAt=Date.now()+mainTickMs;
  const result=await fetchGoldPriceWithFallback();
@@ -2239,7 +1807,6 @@ async function fetchPrice(){
  logConnection(result.source, true);
  const p=result.price;
  pushTick(p);
- updateGoldTracker(p, result.source);
  const priceStr=p.toFixed(2);
  const tag=result.source+(result.stale?' (stale)':'');
  if($('apiBadge')) $('apiBadge').textContent=tag+' $'+priceStr;
@@ -2324,7 +1891,6 @@ function checkAllFunctionsActive(){
   {id:'showSlTpBtn', name:'Show SL/TP button'},
   {id:'testGoldLiveBtn', name:'Test Gold-API button'},
   {id:'greenThemeBackBtn', name:'Reset green theme button'},
-  {id:'candleEngineCard', name:'Candlestick pattern engine'},
   {id:'patternCard', name:'Strategy C pattern card'},
   {id:'patW', name:'W pattern indicator'},
   {id:'patM', name:'M pattern indicator'},
@@ -2348,13 +1914,9 @@ function checkAllFunctionsActive(){
 }
 
 window.addEventListener('load', ()=>{
- loadSiftingKey();
- if($('saveSiftingKey'))$('saveSiftingKey').onclick=saveSiftingKey;
- if($('loadHistoryBtn'))$('loadHistoryBtn').onclick=loadTrueHistoricalData;
- if($('streamBtn'))$('streamBtn').onclick=()=>siftingStreamOn?disconnectSiftingStream():connectSiftingStream();
- if($('clearSiftingKey'))$('clearSiftingKey').onclick=()=>{disconnectSiftingStream();siftingKey='';try{localStorage.removeItem('sg_sifting_key')}catch(e){}if($('siftingKey'))$('siftingKey').value='';setDataEngineStatus('SiftingIO key cleared');};
-
  initChart();
+ let p=4349.80;
+ for(let i=0;i<41;i++){ const o=p+(Math.random()-0.5)*1.5; const c=o+(Math.random()-0.5)*2; const h=Math.max(o,c)+Math.random()*1; const l=Math.min(o,c)-Math.random()*1; hist.push({open:o,high:h,low:l,close:c,time:Date.now()-(41-i)*60000}); p=c; }
  drawChart();
  testDualSame18Candles(); updateSlTpDisplay(); updateTp5Display();
  fetchPrice(); fetchExchangeRates();
@@ -2365,7 +1927,6 @@ window.addEventListener('load', ()=>{
   updateMarketBadges(); 
   updateWorldClock();
   updateChartSession();
-  if(typeof updateTerminalMetrics==='function') updateTerminalMetrics();
   // news badge
   const nw=checkNewsWindow();
   const nb=$('newsWarnBadge');
@@ -2451,9 +2012,22 @@ updateChartSession();
  };
 
  // Trade journal
- // Manual entries add into the global journalStats; the winrate boxes
- // (updateWinrateDisplay, declared globally above runBacktest) combine
- // this with backtestStats automatically.
+ // Real winrate tracking from journal
+ let journalStats={A:{wins:0,loss:0,be:0}, B:{wins:0,loss:0,be:0}};
+ function updateWinrateDisplay(){
+  ['A','B'].forEach(s=>{
+   const st=journalStats[s];
+   const total=st.wins+st.loss;
+   const wr=total>0? Math.round(st.wins/total*100):0;
+   const el=$(s==='A'?'stratAWin':'stratBWin');
+   if(el) el.textContent=total>0?(wr+'%'):'--%';
+  });
+  const allW=journalStats.A.wins+journalStats.B.wins;
+  const allL=journalStats.A.loss+journalStats.B.loss;
+  const allT=allW+allL;
+  const overall=allT>0? Math.round(allW/allT*100):0;
+  if($('winrateBadge')) $('winrateBadge').textContent=allT>0?('WINRATE '+overall+'%'):'WINRATE --%';
+ }
  if($('jrAddBtn')) $('jrAddBtn').onclick=()=>{
   const s=$('jrStrategy')?.value; const r=$('jrResult')?.value;
   const e=parseFloat($('jrEntry')?.value); const x=parseFloat($('jrExit')?.value);
@@ -2486,7 +2060,7 @@ updateChartSession();
  };
 
  // Timeframe buttons
- [$('tf1Btn'), $('tf5Btn'), $('tf15Btn'), $('tf60Btn'), $('tf240Btn'), $('tf1440Btn')].forEach(btn=>{
+ [$('tf1Btn'), $('tf5Btn'), $('tf15Btn')].forEach(btn=>{
   if(btn) btn.onclick=function(){ document.querySelectorAll('.tf-btn').forEach(b=>b.classList.remove('active'));
    this.classList.add('active'); currentTimeframe=parseInt(this.dataset.tf); drawChart(); };
  });
@@ -2543,7 +2117,7 @@ updateChartSession();
 
  // Restore cache if offline on first load
  try{ const cached=JSON.parse(localStorage.getItem('sg_cache')||'{}');
-  if(cached.real===true && (cached.version==='real-1s-v1'||cached.version==='real-1s-v2-long-history'||cached.version==='real-1s-v3-10h-history'||cached.version==='real-historical-v1'||cached.version==='real-1s-v3-10h-history') && cached.price && cached.hist && cached.hist.length>0){ hist=cached.hist; lastPrice=cached.price; 
+  if(cached.price && cached.hist && cached.hist.length>0){ hist=cached.hist; lastPrice=cached.price; 
    if($('priceEl')) $('priceEl').textContent='$'+fmt2(cached.price);
    liveTickCount=hist.length; firstLiveTickAt=Date.now()-hist.length*60000;
   }
